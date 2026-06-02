@@ -25,7 +25,9 @@ input,select,textarea,button{font-family:inherit;}
 .brand{font-family:'Nunito',sans-serif;font-size:26px;font-weight:400;color:var(--t);}
 .brand strong{font-weight:800;}
 .brand .dot{color:var(--pink);}
-.hdr-sub{margin-top:8px;font-size:12px;color:var(--t2);border-top:0.5px solid var(--bd);padding-top:8px;}
+.hdr-sub{margin-top:8px;font-size:12px;color:var(--t2);border-top:0.5px solid var(--bd);padding-top:8px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;}
+.back-btn{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--t3);background:none;border:0.5px solid var(--bd);border-radius:20px;padding:3px 10px;cursor:pointer;transition:all .15s;}
+.back-btn:hover{color:var(--pkd);border-color:var(--pink);}
 .nav{display:flex;background:var(--sf);border:0.5px solid var(--bd);border-radius:var(--rl);overflow:hidden;margin-bottom:4px;}
 .ntab{flex:1;padding:11px 6px;font-size:13px;font-weight:500;cursor:pointer;text-align:center;color:var(--t2);background:rgba(185,0,89,.04);border-right:0.5px solid var(--bd);border-bottom:2px solid transparent;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:5px;}
 .ntab:last-child{border-right:none;}
@@ -91,6 +93,7 @@ input,select,textarea,button{font-family:inherit;}
 .fl{font-size:12px;color:var(--t2);margin-bottom:4px;display:block;font-weight:500;}
 .fg{margin-bottom:12px;}
 .fr{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.fr3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
 input[type=text],input[type=date],select,textarea{width:100%;padding:8px 11px;border:0.5px solid var(--bd);border-radius:var(--r);background:var(--bg);color:var(--t);font-size:13px;outline:none;transition:border-color .15s;}
 input:focus,select:focus,textarea:focus{border-color:var(--pink);background:var(--sf);}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:5px;}
@@ -118,6 +121,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--pink);background:var(
 .mbg.on{display:flex;}
 .modal{background:var(--sf);border-radius:var(--rl);padding:22px;width:360px;max-width:90vw;}
 .modal h3{font-size:15px;font-weight:600;margin-bottom:14px;}
+/* LOGIN */
 .lw{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--bg);padding:16px;}
 .lbox{background:var(--sf);border:0.5px solid var(--bd);border-radius:var(--rl);padding:32px;width:400px;max-width:100%;box-shadow:0 2px 16px rgba(0,0,0,.06);}
 .lbrand{font-family:'Nunito',sans-serif;font-size:36px;font-weight:400;margin-bottom:6px;display:block;text-align:center;}
@@ -127,14 +131,17 @@ input:focus,select:focus,textarea:focus{border-color:var(--pink);background:var(
 .lbox .fg{margin-bottom:14px;}
 .lbox .btn{margin-top:6px;}
 .lnote{font-size:11px;color:var(--t3);margin-top:12px;line-height:1.5;text-align:center;}
+/* FILTRO ANUAL */
 .yr-pills{display:flex;gap:5px;flex-wrap:wrap;}
 .yr-pill{font-size:11px;padding:3px 10px;border-radius:20px;border:0.5px solid var(--bd);background:var(--bg);color:var(--t2);cursor:pointer;transition:all .15s;}
 .yr-pill:hover{border-color:var(--pink);color:var(--pink);}
 .yr-pill.on{background:var(--pink);color:#fff;border-color:var(--pink);}
+/* BARRAS VERTICAIS */
 .vbar-wrap{display:flex;align-items:flex-end;gap:6px;height:120px;margin-top:8px;padding-bottom:2px;}
 .vbar-col{display:flex;flex-direction:column;align-items:center;flex:1;gap:3px;min-width:0;}
 .vbar-lbl{font-size:9px;color:var(--t3);text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:100%;}
 .vbar-val{font-size:10px;color:var(--t2);font-weight:600;}
+/* PENDENTES */
 .pend-wrap{border:0.5px solid var(--bd);border-radius:var(--r);overflow:hidden;margin-bottom:12px;}
 .pend-hdr{background:var(--bg);padding:8px 12px;font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--t3);border-bottom:0.5px solid var(--bd);display:flex;align-items:center;justify-content:space-between;}
 .pend-item{display:flex;align-items:center;gap:8px;padding:8px 12px;border-bottom:0.5px solid var(--bd);}
@@ -143,6 +150,9 @@ input:focus,select:focus,textarea:focus{border-color:var(--pink);background:var(
 .pend-obs{font-size:11px;color:var(--t3);margin-top:2px;}
 .pend-links{display:flex;gap:4px;flex-wrap:wrap;margin-top:2px;}
 .pend-link{font-size:11px;color:var(--bltx);text-decoration:none;background:var(--blbg);padding:1px 7px;border-radius:20px;}
+.pend-tipo{font-size:10px;padding:2px 7px;border-radius:20px;font-weight:600;flex-shrink:0;}
+.tipo-ativ{background:var(--blbg);color:var(--bltx);}
+.tipo-proj{background:#f0e6f8;color:#6b21a8;}
 .ss{font-size:11px;padding:3px 7px;border-radius:20px;border:0.5px solid var(--bd);background:var(--bg);color:var(--t);cursor:pointer;width:auto;flex-shrink:0;max-width:155px;}
 .rmb{background:none;border:none;color:var(--t3);cursor:pointer;font-size:16px;line-height:1;padding:0 2px;flex-shrink:0;}
 .rmb:hover{color:#c00;}
@@ -165,13 +175,16 @@ input:focus,select:focus,textarea:focus{border-color:var(--pink);background:var(
 .pi-date{font-size:11px;font-weight:800;color:#9b2d52;letter-spacing:.05em;text-transform:uppercase;margin-bottom:9px;border-bottom:1.5px dashed #f0a0be;padding-bottom:5px;}
 .pi-item{font-size:11.5px;color:#4a1028;padding:3.5px 0;border-bottom:1px solid rgba(180,60,100,.1);display:flex;align-items:baseline;gap:5px;line-height:1.35;}
 .pi-item:last-child{border-bottom:none;}
+/* Riscado quando Finalizado */
+.pi-item.done .pi-nome{text-decoration:line-through;opacity:.55;}
+.pi-item.done .pi-dot{background:#aaa;}
 .pi-dot{width:5px;height:5px;border-radius:50%;background:#da0075;flex-shrink:0;margin-top:5px;}
 .pi-nome{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .pi-hora{font-size:10px;color:#9b2d52;font-weight:700;white-space:nowrap;flex-shrink:0;}
 .pi-empty{font-size:11px;color:#c08090;text-align:center;padding:6px 0;font-style:italic;}
 @media(max-width:700px){
   .kpis{grid-template-columns:1fr 1fr;}
-  .charts,.fr{grid-template-columns:1fr;}
+  .charts,.fr,.fr3{grid-template-columns:1fr;}
   .ntab span{display:none;}
   .hdr-t{flex-direction:column;gap:6px;text-align:center;}
   #postit{display:none!important;}
@@ -207,7 +220,13 @@ input:focus,select:focus,textarea:focus{border-color:var(--pink);background:var(
       <div class="brand">meu<strong>tudo</strong><span class="dot">.</span></div>
       <span style="font-size:11px;color:var(--t3);" id="tsEl"></span>
     </div>
-    <div class="hdr-sub">Gestão de atividades e demandas &nbsp;·&nbsp; <span id="nEl">Jessica Nascimento — Agente de Ops. III</span></div>
+    <div class="hdr-sub">
+      <span>Gestão de atividades e demandas &nbsp;·&nbsp; <span id="nEl">—</span></span>
+      <button class="back-btn" onclick="voltarLogin()">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        Voltar ao menu
+      </button>
+    </div>
   </div>
   <nav class="nav">
     <div class="ntab on" onclick="goTab('ger',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="12" width="4" height="9"/><rect x="10" y="7" width="4" height="14"/><rect x="17" y="3" width="4" height="18"/></svg><span>Gerencial</span></div>
@@ -218,10 +237,6 @@ input:focus,select:focus,textarea:focus{border-color:var(--pink);background:var(
 
   <!-- GERENCIAL -->
   <div class="scr on" id="scr-ger">
-    <div class="tb" style="margin-bottom:14px;">
-      <span style="font-size:12px;color:var(--t2);font-weight:500;">Visualizando:</span>
-      <select class="fsel" id="selUsr" onchange="trocaUsr()" style="min-width:200px;"><option value="todos">Todos</option></select>
-    </div>
     <div class="kpis">
       <div class="kpi"><div class="kl">Total atividades</div><div class="kv" id="kT">—</div><div class="ks" id="kTS">carregando...</div></div>
       <div class="kpi"><div class="kl">Finalizadas</div><div class="kv" id="kF">—</div><div class="ks" id="kFS"></div></div>
@@ -243,9 +258,11 @@ input:focus,select:focus,textarea:focus{border-color:var(--pink);background:var(
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
       <div class="rb">
-        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:10px;">
           <div class="slbl" style="margin:0;">Tempo em reunião</div>
-          <div style="display:flex;gap:8px;">
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <!-- NOVO: filtro de ano para reunião -->
+            <div class="yr-pills" id="yrPillsReuTabela"></div>
             <select class="fsel" id="selRM" onchange="renderReu()" style="font-size:11px;padding:4px 8px;"></select>
             <select class="fsel" id="selRV" onchange="renderReu()" style="font-size:11px;padding:4px 8px;"><option value="mes">Por mês</option><option value="dia">Por dia</option></select>
           </div>
@@ -314,23 +331,40 @@ input:focus,select:focus,textarea:focus{border-color:var(--pink);background:var(
       </div>
       <div style="border:0.5px solid var(--bd);border-radius:var(--r);padding:14px;margin-bottom:13px;">
         <div class="slbl" style="margin-bottom:10px;">Atividade</div>
-        <div class="fg"><label class="fl">Descrição</label><input type="text" id="rAtiv" placeholder="Clique em um chip acima ou escreva aqui..."></div>
-        <div class="fr">
-          <div class="fg"><label class="fl">Status</label>
-            <select id="rSt"><option>Finalizado</option><option>Tempo de trabalho</option><option>Em andamento</option><option>Não Iniciado</option><option>Aguardando retorno Dock</option><option>Aguardando retorno Excelência</option></select>
+        <!-- NOVO: grade 3 colunas: Tipo | Descrição | Status -->
+        <div class="fr3" style="margin-bottom:0;">
+          <div class="fg">
+            <label class="fl">Tipo</label>
+            <select id="rTipo" onchange="toggleTipo()">
+              <option value="atividade">Atividade</option>
+              <option value="projeto">Projeto</option>
+            </select>
           </div>
-          <div class="fg"><label class="fl">Observação</label><input type="text" id="rObs" placeholder="Contexto, horário..."></div>
+          <div class="fg" style="grid-column:span 2;">
+            <label class="fl">Descrição</label>
+            <input type="text" id="rAtiv" placeholder="Clique em um chip acima ou escreva aqui...">
+          </div>
         </div>
-        <div class="fg">
-          <label class="fl">Anexo ou link</label>
-          <div id="lPrev" class="lp"></div>
-          <button type="button" class="atb" onclick="abrirM()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>Adicionar link / planilha</button>
+        <!-- Campos só para Atividade -->
+        <div id="camposAtiv">
+          <div class="fr">
+            <div class="fg"><label class="fl">Status</label>
+              <select id="rSt"><option>Finalizado</option><option>Tempo de trabalho</option><option>Em andamento</option><option>Não Iniciado</option><option>Aguardando retorno Dock</option><option>Aguardando retorno Excelência</option></select>
+            </div>
+            <div class="fg"><label class="fl">Observação</label><input type="text" id="rObs" placeholder="Contexto, horário..."></div>
+          </div>
+          <div class="fg">
+            <label class="fl">Anexo ou link</label>
+            <div id="lPrev" class="lp"></div>
+            <button type="button" class="atb" onclick="abrirM()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>Adicionar link / planilha</button>
+          </div>
         </div>
         <button class="btn bp" onclick="addAv()">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>
           Adicionar ao registro do dia
         </button>
       </div>
+      <!-- PENDENTES -->
       <div class="pend-wrap" id="pendWrap" style="display:none;">
         <div class="pend-hdr">
           <span id="pendH">Aguardando envio</span>
@@ -354,7 +388,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--pink);background:var(
   <div id="piBody"><div class="pi-empty">Nenhuma atividade salva hoje.</div></div>
 </div>
 
-<!-- MODAL -->
+<!-- MODAL LINK -->
 <div class="mbg" id="mBg">
   <div class="modal">
     <h3>Adicionar link / planilha</h3>
@@ -370,154 +404,46 @@ input:focus,select:focus,textarea:focus{border-color:var(--pink);background:var(
 
 <script>
 // ══ ATUALIZE COM A URL DA NOVA IMPLANTAÇÃO ═══════════════════
-const SURL  = "https://script.google.com/macros/s/AKfycbwir0Vi4ZX_dyBKDFyHRhxzm2S0YRytB_XtMupEb6Xl_1IX3uaDwvur-nr67t44jPY-/exec";
+const SURL  = "https://script.google.com/macros/s/AKfycby3tGa3gewYAeiWPgk5igNPP8sEG09do4k7LnIUGz6GtD_SB1lf85B9C_YHw33h31ND/exec";
 const PRINC = "Jessica Nascimento";
 // ═════════════════════════════════════════════════════════════
 
 let usr="",vis=false,regs=[],dems=[],links=[],dia=[];
 let mf="todos",df="todos",bf="",ug="todos";
-let _ci=0,yrAtiv="todos",yrReu="todos",_gerData=null;
+let _ci=0,yrAtiv="todos",yrReu="todos",yrReuTabela="todos",_gerData=null;
 let piSalvas=[];
 
 const MORD={JANEIRO:1,FEVEREIRO:2,"MARÇO":3,ABRIL:4,MAIO:5,JUNHO:6,JULHO:7,AGOSTO:8,SETEMBRO:9,OUTUBRO:10,NOVEMBRO:11,DEZEMBRO:12};
 const SOPT=["Finalizado","Tempo de trabalho","Em andamento","Não Iniciado","Aguardando retorno Dock","Aguardando retorno Excelência"];
 
 // ── JSONP com timeout ──────────────────────────────────────
-function api(params, cb, timeoutMs) {
-  const name = "_c"+(++_ci);
-  const myIdx = _ci;
-  let done = false;
-  const qs = Object.entries(params).map(([k,v])=>k+"="+encodeURIComponent(v)).join("&");
-
-  let timer = null;
-  if(timeoutMs){
-    timer = setTimeout(()=>{
-      if(done) return;
-      done = true;
-      delete window[name];
-      const s = document.getElementById("_s"+myIdx);
-      if(s) s.remove();
-      cb({_timeout: true});
-    }, timeoutMs);
-  }
-
-  window[name] = function(d){
-    if(done) return;
-    done = true;
-    if(timer) clearTimeout(timer);
-    delete window[name];
-    const s = document.getElementById("_s"+myIdx);
-    if(s) s.remove();
-    cb(d);
-  };
-
-  const s = document.createElement("script");
-  s.id = "_s"+myIdx;
-  s.src = SURL+"?"+qs+"&callback="+name;
-  s.onerror = function(){
-    if(done) return;
-    done = true;
-    if(timer) clearTimeout(timer);
-    delete window[name];
-    s.remove();
-    cb({error:"Erro de conexão"});
-  };
+function api(params,cb,timeoutMs){
+  const name="_c"+(++_ci);
+  const myIdx=_ci;
+  let done=false;
+  const qs=Object.entries(params).map(([k,v])=>k+"="+encodeURIComponent(v)).join("&");
+  let timer=null;
+  if(timeoutMs){timer=setTimeout(()=>{if(done)return;done=true;delete window[name];const s=document.getElementById("_s"+myIdx);if(s)s.remove();cb({_timeout:true});},timeoutMs);}
+  window[name]=function(d){if(done)return;done=true;if(timer)clearTimeout(timer);delete window[name];const s=document.getElementById("_s"+myIdx);if(s)s.remove();cb(d);};
+  const s=document.createElement("script");
+  s.id="_s"+myIdx;s.src=SURL+"?"+qs+"&callback="+name;
+  s.onerror=function(){if(done)return;done=true;if(timer)clearTimeout(timer);delete window[name];s.remove();cb({error:"Erro de conexão"});};
   document.head.appendChild(s);
 }
 
-// ── SALVAR com fallback por polling ───────────────────────
-// Envia os dados e, se não receber resposta em 10s,
-// consulta a planilha para checar se foi salvo mesmo assim
-function salvar(){
-  if(!dia.length){toast("Adicione pelo menos uma atividade antes de salvar.");return;}
-  const data = document.getElementById("rData").value;
-  const ativs = dia.map(a=>({
-    data: a.data||data, atividade: a.atividade, status: a.status,
-    observacao: a.observacao||"",
-    linkNome: a.links&&a.links[0]?a.links[0].nome:"",
-    linkUrl:  a.links&&a.links[0]?a.links[0].url:""
-  }));
-
-  const btn = document.getElementById("btnS");
-  const btnOrigHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Salvar todas as atividades na planilha`;
-  btn.disabled = true;
-  btn.innerHTML = `<span class="spin"></span> Salvando ${ativs.length} atividade${ativs.length!==1?"s":""}...`;
-
-  // Primeira atividade que enviamos — usada para verificar se chegou na planilha
-  const primeiraAtiv = ativs[0].atividade;
-  const primeiraData = ativs[0].data;
-
-  function onSucesso(ins, ign){
-    const msg = "✓ "+ins+" atividade"+(ins!==1?"s":"")+" salva"+(ins!==1?"s":"")+"!"
-      + (ign>0?" ("+ign+" duplicada"+(ign!==1?"s":"")+" ignorada"+(ign!==1?"s":"")+")":"");
-    toast(msg);
-    piSalvas = [...piSalvas, ...dia];
-    try{localStorage.setItem("mu_pi", JSON.stringify(piSalvas));}catch(e){}
-    dia = [];
-    try{localStorage.removeItem("mu_rasc");}catch(e){}
-    renderPend();
-    renderPostIt();
-    carHis();
-    carGer();
-    btn.disabled = false;
-    btn.innerHTML = btnOrigHTML;
-  }
-
-  function onFalha(msg){
-    toast("Erro: "+msg);
-    btn.disabled = false;
-    btn.innerHTML = btnOrigHTML;
-  }
-
-  // Envia os dados com timeout de 12 segundos
-  api({
-    action: "saveAtividades",
-    usuario: usr,
-    dados: encodeURIComponent(JSON.stringify(ativs))
-  }, (d)=>{
-    // Resposta chegou normalmente
-    if(d && d._timeout){
-      // Timeout — verifica na planilha se foi salvo
-      btn.innerHTML = `<span class="spin"></span> Verificando...`;
-      verificarSeSalvou(primeiraAtiv, primeiraData, ativs.length, onSucesso, onFalha);
-      return;
-    }
-    if(d && d.ok){
-      onSucesso(d.inseridas||0, d.ignoradas||0);
-    } else {
-      // Resposta veio mas com erro — ainda verifica, pois pode ter salvo antes do erro
-      verificarSeSalvou(primeiraAtiv, primeiraData, ativs.length, onSucesso, onFalha);
-    }
-  }, 12000);
-}
-
-// Consulta getAtividades e verifica se a primeira atividade do lote está lá
-function verificarSeSalvou(nomeAtiv, dataAtiv, qtd, onSucesso, onFalha){
-  api({action:"getAtividades", usuario:usr}, (d)=>{
-    if(!d || d.error){
-      onFalha("sem resposta do servidor");
-      return;
-    }
-    const rows = d.rows || [];
-    // Formata a data para comparar no mesmo formato dd/MM/yyyy
-    let dataFmt = "";
-    try{
-      const dt = new Date(dataAtiv+"T12:00:00");
-      dataFmt = dt.toLocaleDateString("pt-BR");
-    }catch(e){ dataFmt = dataAtiv; }
-
-    const encontrou = rows.some(r =>
-      r.atividade && r.atividade.trim().toLowerCase() === nomeAtiv.trim().toLowerCase() &&
-      r.data === dataFmt
-    );
-
-    if(encontrou){
-      // Foi salvo com sucesso, só o callback que falhou
-      onSucesso(qtd, 0);
-    } else {
-      onFalha("não foi possível confirmar o salvamento. Verifique a planilha.");
-    }
-  }, 10000);
+// ── VOLTAR AO LOGIN ────────────────────────────────────────
+function voltarLogin(){
+  if(!confirm("Deseja sair e voltar à tela de login?"))return;
+  usr="";vis=false;
+  piSalvas=[];
+  try{localStorage.removeItem("mu_pi");}catch(e){}
+  document.getElementById("pW").style.display="none";
+  document.getElementById("postit").style.display="none";
+  document.getElementById("lW").style.display="flex";
+  document.getElementById("lNome").value="";
+  // Reseta abas
+  document.querySelectorAll(".ntab").forEach((t,i)=>{t.classList.toggle("on",i===0);});
+  document.querySelectorAll(".scr").forEach((s,i)=>{s.classList.toggle("on",i===0);});
 }
 
 // ── LOGIN ──────────────────────────────────────────────────
@@ -553,14 +479,15 @@ function start(){
   document.getElementById("lW").style.display="none";
   document.getElementById("pW").style.display="block";
   updTs();setInterval(updTs,60000);
-  if(usr===PRINC)document.getElementById("nEl").textContent="Jessica Nascimento — Agente de Ops. III";
-  else if(vis)document.getElementById("nEl").textContent="Modo visualização";
-  else document.getElementById("nEl").textContent=usr+" — registrando atividades";
+  // Nome no cabeçalho
+  if(vis) document.getElementById("nEl").textContent="Modo visualização";
+  else document.getElementById("nEl").textContent=usr+(usr===PRINC?" — Agente de Ops. III":"");
   if(vis){document.getElementById("dForm").style.display="none";document.getElementById("dNeg").style.display="block";}
   document.getElementById("rData").value=new Date().toISOString().split("T")[0];
   try{const r=localStorage.getItem("mu_rasc");if(r)dia=JSON.parse(r)||[];}catch(e){dia=[];}
   try{const p=localStorage.getItem("mu_pi");if(p)piSalvas=JSON.parse(p)||[];}catch(e){piSalvas=[];}
   renderPend();renderPostIt();
+  // Dados sempre do usuário logado
   carGer();carHis();carDem();
 }
 function updTs(){
@@ -573,26 +500,16 @@ function goTab(id,el){
   document.getElementById("scr-"+id).classList.add("on");el.classList.add("on");
 }
 
-// ── GERENCIAL ─────────────────────────────────────────────
+// ── GERENCIAL — usa aba do usuário logado ──────────────────
 function carGer(){
-  api({action:"getUsuarios"},(d)=>{if(d&&d.usuarios)buildSelUsr(d.usuarios);});
-  fetchRes();
-}
-function buildSelUsr(list){
-  const sel=document.getElementById("selUsr"),cur=sel.value;
-  sel.innerHTML='<option value="todos">Todos</option>';
-  list.forEach(u=>{const o=document.createElement("option");o.value=u;o.textContent=u===PRINC?u+" (você)":u;sel.appendChild(o);});
-  if([...sel.options].some(o=>o.value===cur))sel.value=cur;
-}
-function trocaUsr(){
-  ug=document.getElementById("selUsr").value;
-  ["cM","cT"].forEach(id=>document.getElementById(id).innerHTML='<div class="loader"><span class="spin"></span>carregando...</div>');
   fetchRes();
 }
 function fetchRes(){
-  const p={action:"getResumo"};if(ug!=="todos")p.usuario=ug;
+  // Passa sempre o usuário logado para filtrar os dados
+  const p={action:"getResumo",usuario:vis?"todos":usr};
   api(p,(d)=>{if(d&&!d.error&&!d._timeout)renderGer(d);else renderGerDemo();});
 }
+
 function hm(m){const h=Math.floor(m/60),r=m%60;return h>0?(r>0?h+"h "+r+"min":h+"h"):r+"min";}
 function cap(s){return s?s[0].toUpperCase()+s.slice(1).toLowerCase():"";}
 function mkLbl(k){const p=k.split("/");if(p.length<2)return cap(k);return cap(p[0])+"/"+(p[1]||"");}
@@ -605,7 +522,7 @@ function mkSort(a,b){
 function getAnos(obj){return[...new Set(Object.keys(obj).map(k=>k.split("/")[1]||""))].filter(Boolean).sort((a,b)=>parseInt(b)-parseInt(a));}
 function filtrarPorAno(pm,ano){if(ano==="todos")return pm;const o={};Object.entries(pm).forEach(([k,v])=>{if(k.endsWith("/"+ano))o[k]=v;});return o;}
 function buildYrPills(cid,anos,ativo,fn){
-  const el=document.getElementById(cid);el.innerHTML="";
+  const el=document.getElementById(cid);if(!el)return;el.innerHTML="";
   const t=document.createElement("span");t.className="yr-pill"+(ativo==="todos"?" on":"");t.textContent="Todos";t.onclick=()=>fn("todos");el.appendChild(t);
   anos.forEach(a=>{const p=document.createElement("span");p.className="yr-pill"+(ativo===a?" on":"");p.textContent=a;p.onclick=()=>fn(a);el.appendChild(p);});
 }
@@ -626,8 +543,11 @@ function renderGer(d){
   const ms=Math.max(...se.map(([,v])=>v),1);
   document.getElementById("cT").innerHTML=se.map(([t,v])=>`<div class="br"><div class="brl">${t}</div><div class="brb"><div class="brf" style="width:${Math.round(v/ms*100)}%"></div></div><div class="brn">${v}</div></div>`).join("")||'<div class="loader">Sem dados</div>';
   window._rd=d.reuDia||{};
+  const anosReu=getAnos(window._rd);
+  // Pills para tabela de reunião E para gráfico de barras
+  buildYrPills("yrPillsReuTabela",anosReu,yrReuTabela,(a)=>{yrReuTabela=a;buildSelRM(window._rd);renderReu();});
+  buildYrPills("yrPillsReu",anosReu,yrReu,(a)=>{yrReu=a;renderVBar();});
   buildSelRM(window._rd);
-  buildYrPills("yrPillsReu",getAnos(window._rd),yrReu,(a)=>{yrReu=a;renderVBar();});
   renderReu();renderVBar();
 }
 function renderMesChart(){
@@ -653,23 +573,35 @@ function renderVBar(){
   }).join("")}</div>`;
 }
 function buildSelRM(rd){
-  const chs=Object.keys(rd).filter(k=>Object.keys(rd[k]).length>0).sort(mkSort);
+  // Filtra meses pelo ano selecionado em yrReuTabela
+  const chs=Object.keys(rd).filter(k=>{
+    if(!Object.keys(rd[k]).length)return false;
+    if(yrReuTabela==="todos")return true;
+    return k.endsWith("/"+yrReuTabela);
+  }).sort(mkSort);
   const sel=document.getElementById("selRM");
+  const cur=sel.value;
   sel.innerHTML='<option value="todos">Todos os meses</option>';
   chs.forEach(k=>{const o=document.createElement("option");o.value=k;o.textContent=mkLbl(k);sel.appendChild(o);});
+  // Mantém seleção se ainda disponível
+  if([...sel.options].some(o=>o.value===cur))sel.value=cur;
 }
 function renderReu(){
-  const rd=window._rd||{},fk=document.getElementById("selRM").value,fv=document.getElementById("selRV").value;
-  const chs=fk==="todos"?Object.keys(rd):(rd[fk]?[fk]:[]);
+  const rd=window._rd||{};
+  const fk=document.getElementById("selRM").value;
+  const fv=document.getElementById("selRV").value;
+  // Filtra por ano da tabela
+  let chsBase=fk==="todos"?Object.keys(rd):(rd[fk]?[fk]:[]);
+  if(yrReuTabela!=="todos") chsBase=chsBase.filter(k=>k.endsWith("/"+yrReuTabela));
   if(fv==="mes"){
     let tot=0;const lns=[];
-    [...chs].sort(mkSort).forEach(k=>{let m=0;Object.values(rd[k]).forEach(v=>m+=v);if(!m)return;tot+=m;lns.push(`<tr><td>${mkLbl(k)}</td><td>${hm(m)}</td></tr>`);});
+    [...chsBase].sort(mkSort).forEach(k=>{let m=0;Object.values(rd[k]).forEach(v=>m+=v);if(!m)return;tot+=m;lns.push(`<tr><td>${mkLbl(k)}</td><td>${hm(m)}</td></tr>`);});
     document.getElementById("rV").textContent=tot?hm(tot):"0min";
     document.getElementById("rS").textContent=fk==="todos"?"total em reuniões":"total — "+mkLbl(fk);
     document.getElementById("rT").innerHTML=lns.length?`<table class="rtbl"><thead><tr><th>Mês/Ano</th><th>Tempo total</th></tr></thead><tbody>${lns.join("")}</tbody></table>`:'<div style="font-size:12px;color:var(--t3);text-align:center;padding:8px;">Sem dados de reunião.</div>';
   }else{
     let tot=0;const its=[];
-    chs.forEach(k=>{Object.entries(rd[k]).forEach(([d2,m])=>{if(!m)return;tot+=m;const p=d2.split("/");its.push({dia:d2,lbl:mkLbl(k),m,ts:new Date(p[2],p[1]-1,p[0]).getTime()});});});
+    chsBase.forEach(k=>{Object.entries(rd[k]).forEach(([d2,m])=>{if(!m)return;tot+=m;const p=d2.split("/");its.push({dia:d2,lbl:mkLbl(k),m,ts:new Date(p[2],p[1]-1,p[0]).getTime()});});});
     its.sort((a,b)=>b.ts-a.ts);
     document.getElementById("rV").textContent=tot?hm(tot):"0min";
     document.getElementById("rS").textContent="total em reuniões"+(fk!=="todos"?" — "+mkLbl(fk):"");
@@ -683,9 +615,9 @@ function renderGerDemo(){
     reuDia:{"DEZEMBRO/2024":{"01/12/2024":60,"02/12/2024":90},"JANEIRO/2025":{"06/01/2025":120},"ABRIL/2026":{"30/04/2026":90,"29/04/2026":60},"MAIO/2026":{"02/05/2026":35}}});
 }
 
-// ── HISTÓRICO ─────────────────────────────────────────────
+// ── HISTÓRICO — filtra pelo usuário logado ─────────────────
 function carHis(){
-  const u=(usr===PRINC||vis)?PRINC:usr;
+  const u=vis?PRINC:usr;
   api({action:"getAtividades",usuario:u},(d)=>{regs=(d&&d.rows)||[];buildMbt();buildDiaSel();renderTbl();});
 }
 function regKey(r){return r.mes+"/"+(r.ano||"0000");}
@@ -724,18 +656,26 @@ function fObs(o){
   }).join(" ");
 }
 
-// ── ENTREGAS ──────────────────────────────────────────────
+// ── ENTREGAS — filtra pelo usuário logado via coluna C ─────
 function carDem(){
-  api({action:"getDemandas"},(d)=>{dems=(d&&d.rows)||[];buildSelDem();renderDem();});
+  const u=vis?"":usr;
+  api({action:"getDemandas",usuario:u},(d)=>{dems=(d&&d.rows)||[];buildSelDem();renderDem();});
 }
 function normMA(raw){
   if(!raw)return"";const s=String(raw).trim();
   if(/^\d{1,2}\/\d{4}$/.test(s)){const[m,a]=s.split("/");return m.padStart(2,"0")+"/"+a;}
+  // Formato "JAN/2025"
+  if(/^[A-Z]{3}\/\d{4}$/i.test(s)) return s;
   const dt=new Date(s);if(!isNaN(dt.getTime()))return String(dt.getMonth()+1).padStart(2,"0")+"/"+dt.getFullYear();
   return s;
 }
 function buildSelDem(){
-  const vs=[...new Set(dems.map(d=>normMA(d.mesAno)).filter(Boolean))].sort((a,b)=>{const[ma,aa]=a.split("/"),[mb,ab]=b.split("/");return(parseInt(aa)*100+parseInt(ma))-(parseInt(ab)*100+parseInt(mb));});
+  const vs=[...new Set(dems.map(d=>normMA(d.mesAno)).filter(Boolean))].sort((a,b)=>{
+    const pa=a.split("/"),pb=b.split("/");
+    const ma=parseInt(pa[0])||0,mb=parseInt(pb[0])||0;
+    const aa=parseInt(pa[1])||0,ab=parseInt(pb[1])||0;
+    return aa!==ab?aa-ab:ma-mb;
+  });
   const sel=document.getElementById("selDem");sel.innerHTML='<option value="todos">Todos os períodos</option>';
   vs.forEach(v=>{const o=document.createElement("option");o.value=v;o.textContent=v;sel.appendChild(o);});
 }
@@ -747,28 +687,39 @@ function renderDem(){
   const l=document.getElementById("lDem");
   l.innerHTML=`<div class="eh">Entregas do setor</div>`+(r.length===0?`<div class="loader">Nenhuma entrega.</div>`:
     r.map((x,i)=>{
-      const mn=normMA(x.mesAno);const[mm,aa]=(mn||"0/0").split("/");
-      const ag=new Date();const rec=(parseInt(aa)>ag.getFullYear())||(parseInt(aa)===ag.getFullYear()&&parseInt(mm)>=ag.getMonth()+1);
-      return`<div class="er" ${i===r.length-1?'style="border-bottom:none"':''}><div class="edot" style="background:${rec?"#EF9F27":"var(--pink)"}"></div><div class="ei"><div class="en">${esc(x.projeto)}</div><div class="ed">${mn}</div></div><span class="bg ${rec?"bg-a":"bg-g"}">${rec?"Recente":"Concluído"}</span></div>`;
+      const mn=normMA(x.mesAno);
+      return`<div class="er" ${i===r.length-1?'style="border-bottom:none"':''}><div class="edot" style="background:var(--pink)"></div><div class="ei"><div class="en">${esc(x.projeto)}</div><div class="ed">${mn}${x.responsavel?" · "+esc(x.responsavel):""}</div></div></div>`;
     }).join(""));
 }
 
 // ── REGISTRAR ─────────────────────────────────────────────
+function toggleTipo(){
+  const t=document.getElementById("rTipo").value;
+  document.getElementById("camposAtiv").style.display=t==="atividade"?"block":"none";
+}
 document.querySelectorAll(".chip").forEach(c=>{
   c.addEventListener("click",()=>{
     document.getElementById("rAtiv").value=c.dataset.n;
     document.getElementById("rSt").value=document.getElementById("rStP").value;
+    document.getElementById("rTipo").value="atividade";
+    toggleTipo();
     document.getElementById("rAtiv").focus();
   });
 });
 function addAv(){
   const a=document.getElementById("rAtiv").value.trim();
   if(!a){toast("Informe a descrição.");return;}
-  dia.push({atividade:a,status:document.getElementById("rSt").value,
-    observacao:document.getElementById("rObs").value.trim(),
-    links:[...links],data:document.getElementById("rData").value});
+  const tipo=document.getElementById("rTipo").value;
+  dia.push({
+    tipo:tipo,
+    atividade:a,
+    status:tipo==="atividade"?document.getElementById("rSt").value:"Projeto",
+    observacao:tipo==="atividade"?document.getElementById("rObs").value.trim():"",
+    links:tipo==="atividade"?[...links]:[],
+    data:document.getElementById("rData").value
+  });
   document.getElementById("rAtiv").value="";
-  document.getElementById("rObs").value="";
+  if(tipo==="atividade"){document.getElementById("rObs").value="";}
   links=[];renderLnks();
   try{localStorage.setItem("mu_rasc",JSON.stringify(dia));}catch(e){}
   renderPend();
@@ -781,8 +732,18 @@ function renderPend(){
   h.textContent="Aguardando envio ("+dia.length+")";
   b.innerHTML=dia.map((a,i)=>{
     const lh=(a.links||[]).map(l=>`<a class="pend-link" href="${esc(l.url)}" target="_blank">📎 ${esc(l.nome)}</a>`).join("");
+    const isProjeto=a.tipo==="projeto";
     const op=SOPT.map(s=>`<option${s===a.status?" selected":""}>${s}</option>`).join("");
-    return`<div class="pend-item"><div style="flex:1;min-width:0;"><div class="pend-name" title="${esc(a.atividade)}">${esc(a.atividade)}</div>${a.observacao?`<div class="pend-obs">${esc(a.observacao)}</div>`:""}${lh?`<div class="pend-links">${lh}</div>`:""}</div><select class="ss" onchange="dia[${i}].status=this.value;try{localStorage.setItem('mu_rasc',JSON.stringify(dia));}catch(e){}">${op}</select><button class="rmb" onclick="dia.splice(${i},1);try{localStorage.setItem('mu_rasc',JSON.stringify(dia));}catch(e){}renderPend()">×</button></div>`;
+    return`<div class="pend-item">
+      <span class="pend-tipo ${isProjeto?"tipo-proj":"tipo-ativ"}">${isProjeto?"Projeto":"Ativ."}</span>
+      <div style="flex:1;min-width:0;">
+        <div class="pend-name" title="${esc(a.atividade)}">${esc(a.atividade)}</div>
+        ${a.observacao?`<div class="pend-obs">${esc(a.observacao)}</div>`:""}
+        ${lh?`<div class="pend-links">${lh}</div>`:""}
+      </div>
+      ${!isProjeto?`<select class="ss" onchange="dia[${i}].status=this.value;try{localStorage.setItem('mu_rasc',JSON.stringify(dia));}catch(e){}">${op}</select>`:""}
+      <button class="rmb" onclick="dia.splice(${i},1);try{localStorage.setItem('mu_rasc',JSON.stringify(dia));}catch(e){}renderPend()">×</button>
+    </div>`;
   }).join("");
 }
 function limpar(){
@@ -792,7 +753,7 @@ function limpar(){
   renderPend();toast("Registro limpo.");
 }
 
-// ── POST-IT ────────────────────────────────────────────────
+// ── POST-IT com risca para Finalizado ─────────────────────
 function renderPostIt(){
   const el=document.getElementById("postit");
   if(!piSalvas.length){el.style.display="none";return;}
@@ -802,11 +763,98 @@ function renderPostIt(){
   document.getElementById("piBody").innerHTML=piSalvas.map(a=>{
     const nome=a.atividade||"";
     const isReu=nome.toUpperCase().includes("REUNIÃO");
+    const isDone=a.status==="Finalizado";
     let hora="";
     if(isReu&&a.observacao){const m=a.observacao.match(/(\d{1,2}[h:]\d{0,2}\s*[-–]\s*\d{1,2}[h:]\d{0,2})/i);if(m)hora=m[1];}
     const nomeExib=isReu?nome.replace(/^REUNIÃO\s*[-–]\s*/i,""):nome;
-    return`<div class="pi-item"><div class="pi-dot"></div><span class="pi-nome">${esc(nomeExib)}</span>${hora?`<span class="pi-hora">(${hora})</span>`:""}</div>`;
+    return`<div class="pi-item${isDone?" done":""}">
+      <div class="pi-dot"></div>
+      <span class="pi-nome">${esc(nomeExib)}</span>
+      ${hora?`<span class="pi-hora">(${hora})</span>`:""}
+    </div>`;
   }).join("");
+}
+
+// ── SALVAR (atividades + projetos separados) ───────────────
+function salvar(){
+  if(!dia.length){toast("Adicione pelo menos uma atividade antes de salvar.");return;}
+  const data=document.getElementById("rData").value;
+
+  const ativs=dia.filter(a=>a.tipo!=="projeto").map(a=>({
+    data:a.data||data,atividade:a.atividade,status:a.status,
+    observacao:a.observacao||"",
+    linkNome:a.links&&a.links[0]?a.links[0].nome:"",
+    linkUrl:a.links&&a.links[0]?a.links[0].url:""
+  }));
+  const projs=dia.filter(a=>a.tipo==="projeto").map(a=>({
+    data:a.data||data,
+    descricao:a.atividade,
+    responsavel:usr
+  }));
+
+  const btn=document.getElementById("btnS");
+  const btnOrig=`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Salvar todas as atividades na planilha`;
+  btn.disabled=true;
+  btn.innerHTML=`<span class="spin"></span> Salvando...`;
+
+  const primeiraAtiv=ativs.length?ativs[0].atividade:(projs.length?projs[0].descricao:"");
+  const primeiraData=ativs.length?ativs[0].data:(projs.length?projs[0].data:data);
+
+  // Envia atividades
+  function enviarAtivs(cb2){
+    if(!ativs.length){cb2(true,0,0);return;}
+    api({action:"saveAtividades",usuario:usr,dados:encodeURIComponent(JSON.stringify(ativs))},(d)=>{
+      if(d&&d._timeout||d&&d.error){
+        // Fallback: verifica se foi salvo
+        verificarSeSalvou(primeiraAtiv,primeiraData,ativs.length,(ok)=>cb2(ok,ativs.length,d.ignoradas||0));
+      } else if(d&&d.ok){
+        cb2(true,d.inseridas||0,d.ignoradas||0);
+      } else {
+        cb2(false,0,0);
+      }
+    },12000);
+  }
+
+  // Envia projetos
+  function enviarProjs(cb2){
+    if(!projs.length){cb2(true,0);return;}
+    api({action:"saveProjeto",usuario:usr,dados:encodeURIComponent(JSON.stringify(projs))},(d)=>{
+      cb2(d&&d.ok,d&&d.inseridas||0);
+    },12000);
+  }
+
+  enviarAtivs((okA,insA,ignA)=>{
+    enviarProjs((okP,insP)=>{
+      btn.disabled=false;
+      btn.innerHTML=btnOrig;
+      if(okA||okP){
+        let msg="✓ Salvo!";
+        const parts=[];
+        if(insA>0)parts.push(insA+" atividade"+(insA!==1?"s":""));
+        if(ignA>0)parts.push(ignA+" duplicada"+(ignA!==1?"s":"")+" ignorada"+(ignA!==1?"s":""));
+        if(insP>0)parts.push(insP+" projeto"+(insP!==1?"s":""));
+        if(parts.length)msg="✓ "+parts.join(", ")+".";
+        toast(msg);
+        piSalvas=[...piSalvas,...dia];
+        try{localStorage.setItem("mu_pi",JSON.stringify(piSalvas));}catch(e){}
+        dia=[];try{localStorage.removeItem("mu_rasc");}catch(e){}
+        renderPend();renderPostIt();carHis();carGer();carDem();
+      } else {
+        toast("Erro ao salvar. Verifique a planilha.");
+      }
+    });
+  });
+}
+
+function verificarSeSalvou(nomeAtiv,dataAtiv,qtd,cb){
+  api({action:"getAtividades",usuario:usr},(d)=>{
+    if(!d||d.error){cb(false);return;}
+    const rows=d.rows||[];
+    let dataFmt="";
+    try{const dt=new Date(dataAtiv+"T12:00:00");dataFmt=dt.toLocaleDateString("pt-BR");}catch(e){dataFmt=dataAtiv;}
+    const ok=rows.some(r=>r.atividade&&r.atividade.trim().toLowerCase()===nomeAtiv.trim().toLowerCase()&&r.data===dataFmt);
+    cb(ok);
+  },10000);
 }
 
 // ── MODAL ──────────────────────────────────────────────────
