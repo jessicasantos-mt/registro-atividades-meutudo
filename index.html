@@ -26,8 +26,8 @@ input,select,textarea,button{font-family:inherit;}
 .brand strong{font-weight:800;}
 .brand .dot{color:var(--pink);}
 .hdr-sub{margin-top:8px;font-size:12px;color:var(--t2);border-top:0.5px solid var(--bd);padding-top:8px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;}
-.back-btn{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--t3);background:none;border:0.5px solid var(--bd);border-radius:20px;padding:3px 10px;cursor:pointer;transition:all .15s;}
-.back-btn:hover{color:var(--pkd);border-color:var(--pink);}
+.back-btn{display:flex;align-items:center;gap:5px;font-size:11px;color:#fff;background:var(--pink);border:none;border-radius:20px;padding:5px 13px;cursor:pointer;transition:all .15s;font-weight:600;}
+.back-btn:hover{background:var(--pkd);}
 .nav{display:flex;background:var(--sf);border:0.5px solid var(--bd);border-radius:var(--rl);overflow:hidden;margin-bottom:4px;}
 .ntab{flex:1;padding:11px 6px;font-size:13px;font-weight:500;cursor:pointer;text-align:center;color:var(--t2);background:rgba(185,0,89,.04);border-right:0.5px solid var(--bd);border-bottom:2px solid transparent;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:5px;}
 .ntab:last-child{border-right:none;}
@@ -173,8 +173,9 @@ input:focus,select:focus,textarea:focus{border-color:var(--pink);background:var(
 .pi-clip{position:absolute;top:-8px;left:50%;transform:translateX(-50%);width:44px;height:26px;border:3.5px solid #999;border-bottom:none;border-radius:18px 18px 0 0;background:transparent;box-shadow:inset 0 3px 0 #ddd,0 -1px 4px rgba(0,0,0,.15);z-index:53;}
 .pi-clip::after{content:'';position:absolute;top:2px;left:50%;transform:translateX(-50%);width:18px;height:16px;border:2.5px solid #bbb;border-bottom:none;border-radius:12px 12px 0 0;background:linear-gradient(180deg,#eee 0%,#ccc 100%);}
 .pi-date{font-size:11px;font-weight:800;color:#9b2d52;letter-spacing:.05em;text-transform:uppercase;margin-bottom:9px;border-bottom:1.5px dashed #f0a0be;padding-bottom:5px;}
-.pi-item{font-size:11.5px;color:#4a1028;padding:3.5px 0;border-bottom:1px solid rgba(180,60,100,.1);display:flex;align-items:baseline;gap:5px;line-height:1.35;}
+.pi-item{font-size:11.5px;color:#4a1028;padding:3.5px 0;border-bottom:1px solid rgba(180,60,100,.1);display:flex;align-items:baseline;gap:5px;line-height:1.35;cursor:pointer;border-radius:4px;transition:background .12s;}
 .pi-item:last-child{border-bottom:none;}
+.pi-item:hover{background:rgba(218,0,117,.07);}
 /* Riscado quando Finalizado */
 .pi-item.done .pi-nome{text-decoration:line-through;opacity:.55;}
 .pi-item.done .pi-dot{background:#aaa;}
@@ -753,6 +754,14 @@ function limpar(){
   renderPend();toast("Registro limpo.");
 }
 
+// ── TOGGLE FINALIZADO NO POST-IT ──────────────────────────
+function togglePiDone(idx){
+  if(!piSalvas[idx]) return;
+  piSalvas[idx].status = piSalvas[idx].status === "Finalizado" ? "Em andamento" : "Finalizado";
+  try{localStorage.setItem("mu_pi", JSON.stringify(piSalvas));}catch(e){}
+  renderPostIt();
+}
+
 // ── POST-IT com risca para Finalizado ─────────────────────
 function renderPostIt(){
   const el=document.getElementById("postit");
@@ -760,14 +769,15 @@ function renderPostIt(){
   el.style.display="block";
   const dt=piSalvas[piSalvas.length-1].data||new Date().toISOString().split("T")[0];
   document.getElementById("piDate").textContent=new Date(dt+"T12:00:00").toLocaleDateString("pt-BR",{weekday:"short",day:"2-digit",month:"short"}).toUpperCase();
-  document.getElementById("piBody").innerHTML=piSalvas.map(a=>{
+  document.getElementById("piBody").innerHTML=piSalvas.map((a,i)=>{
     const nome=a.atividade||"";
     const isReu=nome.toUpperCase().includes("REUNIÃO");
     const isDone=a.status==="Finalizado";
     let hora="";
     if(isReu&&a.observacao){const m=a.observacao.match(/(\d{1,2}[h:]\d{0,2}\s*[-–]\s*\d{1,2}[h:]\d{0,2})/i);if(m)hora=m[1];}
     const nomeExib=isReu?nome.replace(/^REUNIÃO\s*[-–]\s*/i,""):nome;
-    return`<div class="pi-item${isDone?" done":""}">
+    const title=isDone?"Clique para desmarcar como finalizado":"Clique para marcar como finalizado";
+    return`<div class="pi-item${isDone?" done":""}" onclick="togglePiDone(${i})" title="${title}">
       <div class="pi-dot"></div>
       <span class="pi-nome">${esc(nomeExib)}</span>
       ${hora?`<span class="pi-hora">(${hora})</span>`:""}
