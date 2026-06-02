@@ -4,318 +4,303 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Painel de Operações — meutudo.</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
 :root{
   --pink:#DA0075;--pink-dark:#B90059;--pink-light:#fce4ef;
-  --bg:#f7f4f6;--surface:#ffffff;--border:#e8e0e5;
+  --bg:#f7f4f6;--surface:#fff;--border:#e8e0e5;
   --text:#1a1020;--text-2:#5c4d58;--text-3:#9e8c98;
-  --green-bg:#eaf3de;--green-text:#3b6d11;
-  --amber-bg:#faeeda;--amber-text:#854f0b;
-  --blue-bg:#e6f1fb;--blue-text:#185fa5;
-  --gray-bg:#f1eff0;--gray-text:#5c4d58;
-  --radius:10px;--radius-lg:14px;
+  --green-bg:#eaf3de;--green-tx:#3b6d11;
+  --amber-bg:#faeeda;--amber-tx:#854f0b;
+  --blue-bg:#e6f1fb;--blue-tx:#185fa5;
+  --gray-bg:#f1eff0;--gray-tx:#5c4d58;
+  --r:10px;--rl:14px;
 }
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;}
-input,select,textarea,button{font-family:'Inter',sans-serif;}
-.wrapper{max-width:900px;margin:0 auto;padding:20px 16px 40px;}
-.header{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:18px 22px 14px;margin-bottom:4px;}
-.header-top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
-.header-left{font-size:13px;font-weight:500;color:var(--text-2);}
-.header-brand{font-family:'Nunito',sans-serif;font-size:26px;font-weight:400;letter-spacing:-0.5px;color:var(--text);}
-.header-brand strong{font-weight:800;}
-.header-brand .dot{color:var(--pink);font-weight:800;}
-.header-ts{font-size:11px;color:var(--text-3);text-align:right;}
-.header-sub{margin-top:8px;font-size:12px;color:var(--text-2);border-top:0.5px solid var(--border);padding-top:8px;}
-.nav{display:flex;background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:4px;}
-.nav-tab{flex:1;padding:11px 8px;font-size:13px;font-weight:500;cursor:pointer;text-align:center;color:var(--text-2);background:rgba(185,0,89,0.04);border-right:0.5px solid var(--border);transition:all .15s;display:flex;align-items:center;justify-content:center;gap:6px;border-bottom:2px solid transparent;}
-.nav-tab:last-child{border-right:none;}
-.nav-tab:hover{background:rgba(218,0,117,0.07);color:var(--pink-dark);}
-.nav-tab.active{background:rgba(218,0,117,0.09);color:var(--pink-dark);border-bottom:2px solid var(--pink);font-weight:600;}
-.nav-tab svg{width:15px;height:15px;flex-shrink:0;}
-.screen{display:none;background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:18px;}
-.screen.active{display:block;}
-.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px;}
-.kpi{background:var(--pink);border-radius:var(--radius);padding:14px 12px;}
-.kpi-label{font-size:11px;color:rgba(255,255,255,0.75);margin-bottom:4px;}
-.kpi-val{font-size:26px;font-weight:700;color:#fff;font-family:'Nunito',sans-serif;}
-.kpi-sub{font-size:11px;color:rgba(255,255,255,0.6);margin-top:2px;}
+input,select,textarea,button{font-family:inherit;}
+.wrap{max-width:900px;margin:0 auto;padding:20px 16px 40px;}
+
+/* HEADER */
+.hdr{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--rl);padding:16px 20px 12px;margin-bottom:4px;}
+.hdr-top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+.hdr-left{font-size:13px;font-weight:500;color:var(--text-2);}
+.brand{font-family:'Nunito',sans-serif;font-size:26px;font-weight:400;color:var(--text);}
+.brand strong{font-weight:800;}
+.brand .dot{color:var(--pink);}
+.hdr-ts{font-size:11px;color:var(--text-3);text-align:right;}
+.hdr-sub{margin-top:8px;font-size:12px;color:var(--text-2);border-top:0.5px solid var(--border);padding-top:8px;}
+
+/* NAV */
+.nav{display:flex;background:var(--surface);border:0.5px solid var(--border);border-radius:var(--rl);overflow:hidden;margin-bottom:4px;}
+.tab{flex:1;padding:11px 6px;font-size:13px;font-weight:500;cursor:pointer;text-align:center;color:var(--text-2);background:rgba(185,0,89,0.04);border-right:0.5px solid var(--border);border-bottom:2px solid transparent;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:5px;}
+.tab:last-child{border-right:none;}
+.tab:hover{background:rgba(218,0,117,0.07);color:var(--pink-dark);}
+.tab.on{background:rgba(218,0,117,0.09);color:var(--pink-dark);border-bottom:2px solid var(--pink);font-weight:600;}
+.tab svg{width:14px;height:14px;flex-shrink:0;}
+
+/* SCREENS */
+.scr{display:none;background:var(--surface);border:0.5px solid var(--border);border-radius:var(--rl);padding:18px;}
+.scr.on{display:block;}
+
+/* KPIs */
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px;}
+.kpi{background:var(--pink);border-radius:var(--r);padding:13px 12px;}
+.kpi-lbl{font-size:11px;color:rgba(255,255,255,.75);margin-bottom:3px;}
+.kpi-val{font-size:25px;font-weight:700;color:#fff;font-family:'Nunito',sans-serif;}
+.kpi-sub{font-size:11px;color:rgba(255,255,255,.6);margin-top:2px;}
+
+/* CHARTS */
 .charts{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;}
-.chart-card{border:0.5px solid var(--border);border-radius:var(--radius);padding:14px;}
-.section-label{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--text-3);margin-bottom:12px;}
-.bar-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
-.bar-label{font-size:12px;color:var(--text-2);width:130px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.bar-bg{flex:1;height:7px;background:var(--bg);border-radius:4px;overflow:hidden;}
-.bar-fill{height:100%;border-radius:4px;background:var(--pink);transition:width .4s;}
-.bar-count{font-size:11px;color:var(--text-3);width:28px;text-align:right;}
-.toolbar{display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap;}
-.month-btn{font-size:11px;padding:4px 11px;border-radius:20px;border:0.5px solid var(--border);background:var(--surface);color:var(--text-2);cursor:pointer;transition:all .12s;}
-.month-btn:hover{border-color:var(--pink);color:var(--pink);}
-.month-btn.active{background:var(--pink);color:#fff;border-color:var(--pink);}
-.search-wrap{display:flex;align-items:center;gap:7px;background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius);padding:6px 12px;flex:1;max-width:240px;}
-.search-wrap input{background:none;border:none;outline:none;font-size:13px;color:var(--text);width:100%;}
-.filter-sel{font-size:12px;padding:6px 10px;border-radius:var(--radius);border:0.5px solid var(--border);background:var(--surface);color:var(--text);cursor:pointer;}
-.tbl-wrap{border:0.5px solid var(--border);border-radius:var(--radius);overflow:hidden;}
-.tbl-wrap table{width:100%;border-collapse:collapse;font-size:12px;}
-.tbl-wrap th{background:var(--bg);color:var(--text-3);padding:8px 10px;text-align:left;font-weight:600;font-size:11px;letter-spacing:.04em;border-bottom:0.5px solid var(--border);}
-.tbl-wrap td{padding:8px 10px;border-bottom:0.5px solid var(--border);vertical-align:top;}
-.tbl-wrap tr:last-child td{border-bottom:none;}
-.tbl-wrap tr:hover td{background:var(--bg);}
-.tbl-meta{font-size:11px;color:var(--text-3);margin-top:7px;text-align:right;}
-.obs-link{color:var(--pink);text-decoration:none;font-size:11px;}
-.obs-link:hover{text-decoration:underline;}
+.chart-card{border:0.5px solid var(--border);border-radius:var(--r);padding:14px;}
+.sec-lbl{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--text-3);margin-bottom:12px;}
+.br{display:flex;align-items:center;gap:8px;margin-bottom:7px;}
+.br-lbl{font-size:12px;color:var(--text-2);width:130px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.br-bg{flex:1;height:7px;background:var(--bg);border-radius:4px;overflow:hidden;}
+.br-fill{height:100%;border-radius:4px;background:var(--pink);}
+.br-n{font-size:11px;color:var(--text-3);width:26px;text-align:right;}
+
+/* REUNIÕES BOX */
+.reu-box{border:0.5px solid var(--border);border-radius:var(--r);padding:14px;margin-top:0;}
+.reu-val{font-size:24px;font-weight:700;color:var(--pink);font-family:'Nunito',sans-serif;}
+.reu-sub{font-size:11px;color:var(--text-3);}
+.reu-tbl{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px;}
+.reu-tbl th{color:var(--text-3);font-size:10px;font-weight:600;letter-spacing:.04em;padding:5px 8px;text-align:left;border-bottom:0.5px solid var(--border);}
+.reu-tbl td{padding:5px 8px;border-bottom:0.5px solid var(--border);color:var(--text-2);}
+.reu-tbl tr:last-child td{border-bottom:none;}
+.reu-tbl td:last-child{color:var(--pink);font-weight:600;text-align:right;}
+
+/* TOOLBAR */
+.tb{display:flex;align-items:center;gap:7px;margin-bottom:12px;flex-wrap:wrap;}
+.mbt{font-size:11px;padding:4px 11px;border-radius:20px;border:0.5px solid var(--border);background:var(--surface);color:var(--text-2);cursor:pointer;transition:all .12s;}
+.mbt:hover{border-color:var(--pink);color:var(--pink);}
+.mbt.on{background:var(--pink);color:#fff;border-color:var(--pink);}
+.srch{display:flex;align-items:center;gap:7px;background:var(--bg);border:0.5px solid var(--border);border-radius:var(--r);padding:6px 11px;flex:1;max-width:240px;}
+.srch input{background:none;border:none;outline:none;font-size:13px;color:var(--text);width:100%;}
+.fsel{font-size:12px;padding:6px 10px;border-radius:var(--r);border:0.5px solid var(--border);background:var(--surface);color:var(--text);cursor:pointer;}
+
+/* TABLE */
+.tbl-w{border:0.5px solid var(--border);border-radius:var(--r);overflow:hidden;}
+.tbl-w table{width:100%;border-collapse:collapse;font-size:12px;}
+.tbl-w th{background:var(--bg);color:var(--text-3);padding:7px 10px;text-align:left;font-weight:600;font-size:11px;letter-spacing:.04em;border-bottom:0.5px solid var(--border);}
+.tbl-w td{padding:7px 10px;border-bottom:0.5px solid var(--border);vertical-align:top;}
+.tbl-w tr:last-child td{border-bottom:none;}
+.tbl-w tr:hover td{background:var(--bg);}
+.tbl-meta{font-size:11px;color:var(--text-3);margin-top:6px;text-align:right;}
+.obs-lnk{color:var(--pink);text-decoration:none;font-size:11px;}
+.obs-lnk:hover{text-decoration:underline;}
+
+/* PILLS */
 .pill{display:inline-block;font-size:11px;padding:2px 9px;border-radius:20px;font-weight:500;white-space:nowrap;}
-.p-finalizado{background:var(--green-bg);color:var(--green-text);}
-.p-trabalho{background:var(--amber-bg);color:var(--amber-text);}
-.p-andamento{background:var(--blue-bg);color:var(--blue-text);}
+.p-fin{background:var(--green-bg);color:var(--green-tx);}
+.p-trab{background:var(--amber-bg);color:var(--amber-tx);}
+.p-and{background:var(--blue-bg);color:var(--blue-tx);}
 .p-dock{background:#f0e6f8;color:#6b21a8;}
-.p-excelencia{background:#e6f1fb;color:#185fa5;}
-.p-naoiniciado{background:var(--gray-bg);color:var(--gray-text);}
-.entrega-list{border:0.5px solid var(--border);border-radius:var(--radius);overflow:hidden;}
-.entrega-header{background:var(--bg);padding:8px 12px;font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--text-3);border-bottom:0.5px solid var(--border);}
-.entrega-row{display:flex;align-items:center;gap:12px;padding:10px 12px;border-bottom:0.5px solid var(--border);}
-.entrega-row:last-child{border-bottom:none;}
-.entrega-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;background:var(--pink);}
-.entrega-info{flex:1;}
-.entrega-nome{font-size:13px;color:var(--text);}
-.entrega-mes{font-size:11px;color:var(--text-3);margin-top:2px;}
-.badge-pink{background:var(--pink-light);color:var(--pink-dark);font-size:11px;padding:3px 10px;border-radius:20px;}
-.badge-amber{background:var(--amber-bg);color:var(--amber-text);font-size:11px;padding:3px 10px;border-radius:20px;}
-.badge-green{background:var(--green-bg);color:var(--green-text);font-size:11px;padding:3px 10px;border-radius:20px;}
-.form-label{font-size:12px;color:var(--text-2);margin-bottom:4px;display:block;font-weight:500;}
-.form-group{margin-bottom:13px;}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-input[type=text],input[type=date],select,textarea{width:100%;padding:8px 11px;border:0.5px solid var(--border);border-radius:var(--radius);background:var(--bg);color:var(--text);font-size:13px;outline:none;transition:border-color .15s;}
+.p-exc{background:var(--blue-bg);color:var(--blue-tx);}
+.p-ni{background:var(--gray-bg);color:var(--gray-tx);}
+
+/* ENTREGAS */
+.etr-list{border:0.5px solid var(--border);border-radius:var(--r);overflow:hidden;}
+.etr-hdr{background:var(--bg);padding:8px 12px;font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--text-3);border-bottom:0.5px solid var(--border);}
+.etr-row{display:flex;align-items:center;gap:12px;padding:10px 12px;border-bottom:0.5px solid var(--border);}
+.etr-row:last-child{border-bottom:none;}
+.etr-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.etr-info{flex:1;}
+.etr-nm{font-size:13px;color:var(--text);}
+.etr-dt{font-size:11px;color:var(--text-3);margin-top:2px;}
+.bg-green{background:var(--green-bg);color:var(--green-tx);font-size:11px;padding:3px 10px;border-radius:20px;}
+.bg-amber{background:var(--amber-bg);color:var(--amber-tx);font-size:11px;padding:3px 10px;border-radius:20px;}
+
+/* FORM */
+.flbl{font-size:12px;color:var(--text-2);margin-bottom:4px;display:block;font-weight:500;}
+.fgrp{margin-bottom:12px;}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+input[type=text],input[type=date],select,textarea{width:100%;padding:8px 11px;border:0.5px solid var(--border);border-radius:var(--r);background:var(--bg);color:var(--text);font-size:13px;outline:none;transition:border-color .15s;}
 input:focus,select:focus,textarea:focus{border-color:var(--pink);background:var(--surface);}
+
 /* CHIPS */
-.chip-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:5px;}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:5px;}
 .chip{font-size:12px;padding:5px 12px;border-radius:20px;cursor:pointer;border:0.5px solid var(--border);background:var(--bg);color:var(--text-2);transition:all .15s;user-select:none;}
 .chip:hover{border-color:var(--pink);color:var(--pink);}
-.chip.sel{background:var(--pink);color:#fff;border-color:var(--pink);}
-/* ANEXOS */
-.attach-btn{display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:var(--radius);border:0.5px dashed var(--border);background:var(--bg);color:var(--text-2);font-size:12px;cursor:pointer;transition:all .15s;margin-top:6px;}
-.attach-btn:hover{border-color:var(--pink);color:var(--pink);}
-.links-preview{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;}
-.link-chip{display:flex;align-items:center;gap:5px;background:var(--blue-bg);color:var(--blue-text);font-size:11px;padding:3px 10px;border-radius:20px;}
-.link-chip a{color:var(--blue-text);text-decoration:none;}
-.link-chip .rm-link{cursor:pointer;font-size:13px;border:none;background:none;color:inherit;padding:0 0 0 3px;opacity:.6;}
-.link-chip .rm-link:hover{opacity:1;}
-/* LISTA DO DIA — corrigida */
-.day-list{border:0.5px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:12px;}
-.day-list-header{background:var(--bg);padding:8px 12px;font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--text-3);border-bottom:0.5px solid var(--border);}
-.day-item{display:flex;align-items:center;gap:8px;padding:8px 12px;border-bottom:0.5px solid var(--border);min-height:40px;}
-.day-item:last-child{border-bottom:none;}
-.day-item-name{flex:1;font-size:12px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;}
-.day-item-obs{font-size:11px;color:var(--text-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px;}
-.day-item-links{display:flex;gap:4px;flex-wrap:wrap;margin-top:2px;}
-.day-item-link{font-size:11px;color:var(--blue-text);text-decoration:none;background:var(--blue-bg);padding:1px 7px;border-radius:20px;}
-.status-sel{font-size:11px;padding:3px 7px;border-radius:20px;border:0.5px solid var(--border);background:var(--bg);color:var(--text);cursor:pointer;width:auto;flex-shrink:0;max-width:160px;}
-.rm-item{background:none;border:none;color:var(--text-3);cursor:pointer;font-size:16px;line-height:1;padding:0 2px;flex-shrink:0;}
-.rm-item:hover{color:#c00;}
-/* BOTÕES */
-.btn{display:flex;align-items:center;justify-content:center;gap:7px;padding:9px 18px;border-radius:var(--radius);border:none;font-size:13px;font-weight:600;cursor:pointer;width:100%;transition:all .15s;}
-.btn-pink{background:var(--pink);color:#fff;}
-.btn-pink:hover{background:var(--pink-dark);}
-.btn-dark{background:var(--pink-dark);color:#fff;}
-.btn-dark:hover{background:#8c003f;}
+
+/* ATTACH */
+.att-btn{display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:var(--r);border:0.5px dashed var(--border);background:var(--bg);color:var(--text-2);font-size:12px;cursor:pointer;transition:all .15s;margin-top:6px;}
+.att-btn:hover{border-color:var(--pink);color:var(--pink);}
+.lnk-prev{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;}
+.lnk-chip{display:flex;align-items:center;gap:5px;background:var(--blue-bg);color:var(--blue-tx);font-size:11px;padding:3px 10px;border-radius:20px;}
+.lnk-chip a{color:inherit;text-decoration:none;}
+.lnk-chip a:hover{text-decoration:underline;}
+.lnk-rm{cursor:pointer;font-size:13px;border:none;background:none;color:inherit;padding:0 0 0 3px;opacity:.6;}
+.lnk-rm:hover{opacity:1;}
+
+/* DAY LIST */
+.dlist{border:0.5px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:12px;}
+.dlist-hdr{background:var(--bg);padding:8px 12px;font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--text-3);border-bottom:0.5px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.ditem{display:flex;align-items:center;gap:8px;padding:8px 12px;border-bottom:0.5px solid var(--border);}
+.ditem:last-child{border-bottom:none;}
+.ditem-nm{flex:1;font-size:12px;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;}
+.ditem-obs{font-size:11px;color:var(--text-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:110px;}
+.ditem-lnks{display:flex;gap:4px;flex-wrap:wrap;margin-top:2px;}
+.ditem-lnk{font-size:11px;color:var(--blue-tx);text-decoration:none;background:var(--blue-bg);padding:1px 7px;border-radius:20px;}
+.ssel{font-size:11px;padding:3px 7px;border-radius:20px;border:0.5px solid var(--border);background:var(--bg);color:var(--text);cursor:pointer;width:auto;flex-shrink:0;max-width:155px;}
+.rm-btn{background:none;border:none;color:var(--text-3);cursor:pointer;font-size:16px;line-height:1;padding:0 2px;flex-shrink:0;}
+.rm-btn:hover{color:#c00;}
+.clr-btn{background:none;border:none;font-size:11px;color:var(--text-3);cursor:pointer;display:flex;align-items:center;gap:4px;}
+.clr-btn:hover{color:#c00;}
+
+/* BTNS */
+.btn{display:flex;align-items:center;justify-content:center;gap:7px;padding:9px 18px;border-radius:var(--r);border:none;font-size:13px;font-weight:600;cursor:pointer;width:100%;transition:all .15s;}
+.btn-p{background:var(--pink);color:#fff;}
+.btn-p:hover{background:var(--pink-dark);}
+.btn-d{background:var(--pink-dark);color:#fff;}
+.btn-d:hover{background:#8c003f;}
 .btn:disabled{opacity:.5;cursor:not-allowed;}
+
 /* TOAST */
-.toast{position:fixed;bottom:24px;right:24px;background:var(--text);color:#fff;padding:10px 18px;border-radius:var(--radius);font-size:13px;opacity:0;transform:translateY(8px);transition:all .3s;pointer-events:none;z-index:999;}
-.toast.show{opacity:1;transform:translateY(0);}
-.loader{text-align:center;padding:30px;color:var(--text-3);font-size:13px;}
-.spinner{display:inline-block;width:18px;height:18px;border:2px solid var(--border);border-top-color:var(--pink);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:8px;}
-@keyframes spin{to{transform:rotate(360deg);}}
+.toast{position:fixed;bottom:24px;right:24px;background:var(--text);color:#fff;padding:10px 18px;border-radius:var(--r);font-size:13px;opacity:0;transform:translateY(8px);transition:all .3s;pointer-events:none;z-index:999;}
+.toast.on{opacity:1;transform:translateY(0);}
+
+/* LOADER */
+.loader{text-align:center;padding:24px;color:var(--text-3);font-size:13px;}
+.spin{display:inline-block;width:16px;height:16px;border:2px solid var(--border);border-top-color:var(--pink);border-radius:50%;animation:sp .7s linear infinite;vertical-align:middle;margin-right:6px;}
+@keyframes sp{to{transform:rotate(360deg);}}
+
 /* MODAL */
-.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:100;align-items:center;justify-content:center;}
-.modal-bg.open{display:flex;}
-.modal{background:var(--surface);border-radius:var(--radius-lg);padding:22px;width:360px;max-width:90vw;}
+.mbg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:100;align-items:center;justify-content:center;}
+.mbg.on{display:flex;}
+.modal{background:var(--surface);border-radius:var(--rl);padding:22px;width:360px;max-width:90vw;}
 .modal h3{font-size:15px;font-weight:600;margin-bottom:14px;}
+
 /* LOGIN */
-.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--bg);}
-.login-card{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:32px;width:360px;max-width:90vw;text-align:center;}
+.login-w{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--bg);}
+.login-c{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--rl);padding:32px;width:360px;max-width:90vw;text-align:center;}
 .login-brand{font-family:'Nunito',sans-serif;font-size:32px;font-weight:400;margin-bottom:4px;}
 .login-brand strong{font-weight:800;}
-.login-brand .dot{color:var(--pink);font-weight:800;}
-.login-sub{font-size:13px;color:var(--text-2);margin-bottom:24px;}
-.login-card input{margin-bottom:10px;}
-.login-card .btn{margin-top:6px;}
-/* REUNIÕES BOX */
-.reuniao-box{border:0.5px solid var(--border);border-radius:var(--radius);padding:14px;margin-top:12px;}
-.reuniao-toolbar{display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap;}
-.reuniao-total{font-size:22px;font-weight:700;color:var(--pink);font-family:'Nunito',sans-serif;}
-.reuniao-sub{font-size:11px;color:var(--text-3);}
-.reuniao-table{width:100%;border-collapse:collapse;font-size:12px;}
-.reuniao-table th{color:var(--text-3);font-size:10px;font-weight:600;letter-spacing:.04em;padding:5px 8px;text-align:left;border-bottom:0.5px solid var(--border);}
-.reuniao-table td{padding:5px 8px;border-bottom:0.5px solid var(--border);color:var(--text-2);}
-.reuniao-table tr:last-child td{border-bottom:none;}
-.reuniao-table td:last-child{color:var(--pink);font-weight:600;text-align:right;}
+.login-brand .dot{color:var(--pink);}
+.login-sub{font-size:13px;color:var(--text-2);margin-bottom:20px;}
+.login-c input{margin-bottom:10px;}
+.login-c .btn{margin-top:6px;}
+
 @media(max-width:600px){
-  .kpi-row{grid-template-columns:1fr 1fr;}
-  .charts,.form-row{grid-template-columns:1fr;}
-  .nav-tab span{display:none;}
-  .header-top{flex-direction:column;gap:6px;text-align:center;}
+  .kpis{grid-template-columns:1fr 1fr;}
+  .charts,.frow{grid-template-columns:1fr;}
+  .tab span{display:none;}
+  .hdr-top{flex-direction:column;gap:6px;text-align:center;}
 }
 </style>
 </head>
 <body>
 
 <!-- LOGIN -->
-<div class="login-wrap" id="loginWrap">
-  <div class="login-card">
+<div class="login-w" id="loginW">
+  <div class="login-c" id="loginC">
     <div class="login-brand">meu<strong>tudo</strong><span class="dot">.</span></div>
     <div class="login-sub">Painel de operações — cartões</div>
-    <div class="form-group" style="text-align:left">
-      <label class="form-label">Seu nome completo</label>
+    <div class="fgrp" style="text-align:left">
+      <label class="flbl">Seu nome completo</label>
       <input type="text" id="loginNome" placeholder="Ex: Jessica Nascimento" autocomplete="off">
     </div>
-    <button class="btn btn-pink" onclick="fazerLogin()">Entrar no painel</button>
-    <p style="font-size:11px;color:var(--text-3);margin-top:14px;">Visitantes podem visualizar todas as informações.<br>Para registrar atividades, informe seu nome.</p>
+    <button class="btn btn-p" onclick="fazerLogin()">Entrar no painel</button>
+    <p style="font-size:11px;color:var(--text-3);margin-top:12px;">Visitantes podem visualizar. Para registrar, informe seu nome.</p>
   </div>
 </div>
 
 <!-- PAINEL -->
-<div class="wrapper" id="painelWrap" style="display:none">
-  <div class="header">
-    <div class="header-top">
-      <div class="header-left">Painel de operações — cartões</div>
-      <div class="header-brand">meu<strong>tudo</strong><span class="dot">.</span></div>
-      <div class="header-ts" id="tsAtual"></div>
+<div class="wrap" id="painelW" style="display:none">
+  <div class="hdr">
+    <div class="hdr-top">
+      <div class="hdr-left">Painel de operações — cartões</div>
+      <div class="brand">meu<strong>tudo</strong><span class="dot">.</span></div>
+      <div class="hdr-ts" id="tsEl"></div>
     </div>
-    <div class="header-sub">Gestão de atividades e demandas &nbsp;·&nbsp; <span id="subNomeUsuario">Jessica Nascimento — Agente de Ops. III</span></div>
+    <div class="hdr-sub">Gestão de atividades e demandas &nbsp;·&nbsp; <span id="nomeEl">Jessica Nascimento — Agente de Ops. III</span></div>
   </div>
 
   <nav class="nav">
-    <div class="nav-tab active" onclick="showTab('gerencial',this)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="12" width="4" height="9"/><rect x="10" y="7" width="4" height="14"/><rect x="17" y="3" width="4" height="18"/></svg>
-      <span>Gerencial</span>
-    </div>
-    <div class="nav-tab" onclick="showTab('historico',this)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
-      <span>Histórico</span>
-    </div>
-    <div class="nav-tab" onclick="showTab('demandas',this)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
-      <span>Entregas</span>
-    </div>
-    <div class="nav-tab" onclick="showTab('registro',this)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>
-      <span>Registrar dia</span>
-    </div>
+    <div class="tab on" onclick="goTab('ger',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="12" width="4" height="9"/><rect x="10" y="7" width="4" height="14"/><rect x="17" y="3" width="4" height="18"/></svg><span>Gerencial</span></div>
+    <div class="tab" onclick="goTab('hist',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg><span>Histórico</span></div>
+    <div class="tab" onclick="goTab('dem',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg><span>Entregas</span></div>
+    <div class="tab" onclick="goTab('reg',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg><span>Registrar dia</span></div>
   </nav>
 
   <!-- GERENCIAL -->
-  <div class="screen active" id="screen-gerencial">
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;">
+  <div class="scr on" id="scr-ger">
+    <div class="tb" style="margin-bottom:14px;">
       <span style="font-size:12px;color:var(--text-2);font-weight:500;">Visualizando:</span>
-      <select class="filter-sel" id="filtroUsuario" onchange="filtrarUsuarioGerencial()" style="font-size:12px;min-width:200px;">
+      <select class="fsel" id="selUsuario" onchange="trocarUsuario()" style="min-width:200px;">
         <option value="todos">Todos</option>
       </select>
-      <span style="font-size:11px;color:var(--text-3);">Selecione uma pessoa para ver os dados individualmente</span>
     </div>
-    <div class="kpi-row">
-      <div class="kpi"><div class="kpi-label">Total atividades</div><div class="kpi-val" id="kTotal">—</div><div class="kpi-sub" id="kTotalSub">carregando...</div></div>
-      <div class="kpi"><div class="kpi-label">Finalizadas</div><div class="kpi-val" id="kFin">—</div><div class="kpi-sub" id="kFinSub"></div></div>
-      <div class="kpi"><div class="kpi-label">Reuniões</div><div class="kpi-val" id="kReu">—</div><div class="kpi-sub" id="kReuSub"></div></div>
-      <div class="kpi"><div class="kpi-label">Entregas do setor</div><div class="kpi-val" id="kDem">—</div><div class="kpi-sub">projetos realizados</div></div>
+    <div class="kpis">
+      <div class="kpi"><div class="kpi-lbl">Total atividades</div><div class="kpi-val" id="kT">—</div><div class="kpi-sub" id="kTS">carregando...</div></div>
+      <div class="kpi"><div class="kpi-lbl">Finalizadas</div><div class="kpi-val" id="kF">—</div><div class="kpi-sub" id="kFS"></div></div>
+      <div class="kpi"><div class="kpi-lbl">Reuniões</div><div class="kpi-val" id="kR">—</div><div class="kpi-sub" id="kRS"></div></div>
+      <div class="kpi"><div class="kpi-lbl">Entregas do setor</div><div class="kpi-val" id="kD">—</div><div class="kpi-sub">projetos realizados</div></div>
     </div>
     <div class="charts">
-      <div class="chart-card">
-        <div class="section-label">Atividades por mês</div>
-        <div id="chartMes"><div class="loader"><span class="spinner"></span>carregando...</div></div>
-      </div>
-      <div class="chart-card">
-        <div class="section-label">Tipo de atividade</div>
-        <div id="chartTipo"><div class="loader"><span class="spinner"></span>carregando...</div></div>
-      </div>
+      <div class="chart-card"><div class="sec-lbl">Atividades por mês</div><div id="cMes"><div class="loader"><span class="spin"></span>carregando...</div></div></div>
+      <div class="chart-card"><div class="sec-lbl">Tipo de atividade</div><div id="cTipo"><div class="loader"><span class="spin"></span>carregando...</div></div></div>
     </div>
-    <!-- REUNIÕES POR MÊS -->
-    <div class="reuniao-box">
-      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:12px;">
-        <div class="section-label" style="margin-bottom:0;">Tempo em reunião</div>
-        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
-          <select class="filter-sel" id="filtroReuMes" onchange="renderReunioes()" style="font-size:11px;padding:4px 8px;">
-            <option value="todos">Todos os meses</option>
-          </select>
-          <select class="filter-sel" id="filtroReuVis" onchange="renderReunioes()" style="font-size:11px;padding:4px 8px;">
+    <div class="reu-box">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
+        <div class="sec-lbl" style="margin:0;">Tempo em reunião</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <select class="fsel" id="selReuMes" onchange="renderReu()" style="font-size:11px;padding:4px 8px;"></select>
+          <select class="fsel" id="selReuVis" onchange="renderReu()" style="font-size:11px;padding:4px 8px;">
             <option value="mes">Por mês</option>
             <option value="dia">Por dia</option>
           </select>
         </div>
       </div>
-      <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:12px;">
-        <div class="reuniao-total" id="reuTotal">—</div>
-        <div class="reuniao-sub" id="reuSub">total em reuniões</div>
+      <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:10px;">
+        <div class="reu-val" id="reuVal">—</div>
+        <div class="reu-sub" id="reuSub">total em reuniões</div>
       </div>
-      <div id="reuTabela"><div class="loader"><span class="spinner"></span>carregando...</div></div>
+      <div id="reuTbl"><div class="loader"><span class="spin"></span>carregando...</div></div>
     </div>
   </div>
 
   <!-- HISTÓRICO -->
-  <div class="screen" id="screen-historico">
-    <div class="toolbar" id="monthFilters">
-      <div class="month-btn active" data-mes="todos" onclick="filtrarMes(this)">Todos</div>
+  <div class="scr" id="scr-hist">
+    <div class="tb" id="mbtRow"><div class="mbt on" data-k="todos" onclick="filtMes(this)">Todos</div></div>
+    <div class="tb">
+      <select class="fsel" id="selDia" onchange="filtDia()" style="font-size:11px;padding:4px 8px;"><option value="todos">Todos os dias</option></select>
+      <div class="srch"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg><input type="text" id="buscaI" placeholder="Buscar atividade..." oninput="filtBusca()"></div>
     </div>
-    <div class="toolbar" style="gap:8px;">
-      <select class="filter-sel" id="filtroDia" onchange="filtrarDia()" style="font-size:11px;padding:4px 8px;">
-        <option value="todos">Todos os dias</option>
-      </select>
-      <div class="search-wrap">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-        <input type="text" id="buscaInput" placeholder="Buscar atividade..." oninput="filtrarBusca()">
-      </div>
-    </div>
-    <div class="tbl-wrap">
-      <table>
-        <thead><tr><th>Data</th><th>Atividade</th><th>Status</th><th>Observação</th></tr></thead>
-        <tbody id="tblBody"><tr><td colspan="4" class="loader"><span class="spinner"></span>carregando...</td></tr></tbody>
-      </table>
-    </div>
-    <div class="tbl-meta" id="tblMeta"></div>
+    <div class="tbl-w"><table><thead><tr><th>Data</th><th>Atividade</th><th>Status</th><th>Observação</th></tr></thead><tbody id="tblB"><tr><td colspan="4" class="loader"><span class="spin"></span>carregando...</td></tr></tbody></table></div>
+    <div class="tbl-meta" id="tblM"></div>
   </div>
 
   <!-- ENTREGAS -->
-  <div class="screen" id="screen-demandas">
-    <div class="toolbar" style="margin-bottom:12px;">
+  <div class="scr" id="scr-dem">
+    <div class="tb" style="margin-bottom:12px;">
       <span style="font-size:12px;color:var(--text-2);font-weight:500;">Filtrar:</span>
-      <select class="filter-sel" id="filtroDemanda" onchange="filtrarDemandas()">
-        <option value="todos">Todos os períodos</option>
-      </select>
-      <span class="badge-pink" id="contDemandas">— projetos</span>
+      <select class="fsel" id="selDem" onchange="filtDem()"><option value="todos">Todos os períodos</option></select>
+      <span style="background:var(--pink-light);color:var(--pink-dark);font-size:11px;padding:3px 10px;border-radius:20px;" id="cntDem">— projetos</span>
     </div>
-    <div class="entrega-list" id="listaEntregas">
-      <div class="entrega-header">Entregas do setor</div>
-      <div class="loader"><span class="spinner"></span>carregando...</div>
-    </div>
+    <div class="etr-list" id="lisDem"><div class="etr-hdr">Entregas do setor</div><div class="loader"><span class="spin"></span>carregando...</div></div>
   </div>
 
-  <!-- REGISTRAR DIA -->
-  <div class="screen" id="screen-registro">
-    <div id="acessoNegado" style="display:none;text-align:center;padding:24px;">
+  <!-- REGISTRAR -->
+  <div class="scr" id="scr-reg">
+    <div id="divNegado" style="display:none;text-align:center;padding:24px;">
       <p style="color:var(--text-2);font-size:14px;margin-bottom:8px;">Você está no modo visualização.</p>
       <p style="color:var(--text-3);font-size:12px;">Para registrar atividades, faça login com seu nome completo.</p>
     </div>
-    <div id="formRegistro">
-      <p style="font-size:13px;color:var(--text-2);margin-bottom:14px;">Selecione as atividades do dia ou adicione uma nova. Os dados são salvos diretamente na planilha.</p>
-      <div class="form-row" style="margin-bottom:2px;">
-        <div class="form-group">
-          <label class="form-label">Data</label>
-          <input type="date" id="regData">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Status padrão para os chips</label>
-          <select id="regStatusPadrao">
+    <div id="divForm">
+      <p style="font-size:13px;color:var(--text-2);margin-bottom:14px;">Selecione as atividades do dia ou adicione uma nova. Dados salvos diretamente na planilha.</p>
+      <div class="frow" style="margin-bottom:2px;">
+        <div class="fgrp"><label class="flbl">Data</label><input type="date" id="regData"></div>
+        <div class="fgrp"><label class="flbl">Status padrão para os chips</label>
+          <select id="regStPad">
             <option>Finalizado</option><option>Tempo de trabalho</option><option>Em andamento</option>
             <option>Não Iniciado</option><option>Aguardando retorno Dock</option><option>Aguardando retorno Excelência</option>
           </select>
         </div>
       </div>
-
-      <div class="form-group">
-        <label class="form-label">Atividades frequentes — clique para preencher o formulário</label>
-        <div class="chip-row" id="chipsFreq">
+      <div class="fgrp">
+        <label class="flbl">Atividades frequentes — clique para preencher o formulário</label>
+        <div class="chips">
           <div class="chip" data-nome="REUNIÃO - Daily Time Cartões">Daily Time Cartões</div>
           <div class="chip" data-nome="REUNIÃO - Quinzenal Flash & Meutudo">Quinzenal Flash & Meutudo</div>
           <div class="chip" data-nome="Verificar tasks abertas na ClickUp">Verificar ClickUp</div>
@@ -325,52 +310,42 @@ input:focus,select:focus,textarea:focus{border-color:var(--pink);background:var(
           <div class="chip" data-nome="REUNIÃO - Semanal Meutudo & Dock">Semanal Meutudo & Dock</div>
         </div>
       </div>
-
-      <div style="border:0.5px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:13px;">
-        <div class="section-label" style="margin-bottom:10px;">Atividade</div>
-        <div class="form-group">
-          <label class="form-label">Descrição da atividade</label>
-          <input type="text" id="regAtiv" placeholder="Clique em um chip acima ou escreva aqui...">
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">Status</label>
-            <select id="regStatus">
+      <div style="border:0.5px solid var(--border);border-radius:var(--r);padding:14px;margin-bottom:13px;">
+        <div class="sec-lbl" style="margin-bottom:10px;">Atividade</div>
+        <div class="fgrp"><label class="flbl">Descrição</label><input type="text" id="regAtiv" placeholder="Clique em um chip acima ou escreva aqui..."></div>
+        <div class="frow">
+          <div class="fgrp"><label class="flbl">Status</label>
+            <select id="regSt">
               <option>Finalizado</option><option>Tempo de trabalho</option><option>Em andamento</option>
               <option>Não Iniciado</option><option>Aguardando retorno Dock</option><option>Aguardando retorno Excelência</option>
             </select>
           </div>
-          <div class="form-group">
-            <label class="form-label">Observação</label>
-            <input type="text" id="regObs" placeholder="Contexto, quantidade...">
-          </div>
+          <div class="fgrp"><label class="flbl">Observação</label><input type="text" id="regObs" placeholder="Contexto, horário..."></div>
         </div>
-        <div class="form-group">
-          <label class="form-label">Anexo ou link</label>
-          <div id="linksPreview" class="links-preview"></div>
-          <button type="button" class="attach-btn" onclick="abrirModalLink()">
+        <div class="fgrp">
+          <label class="flbl">Anexo ou link</label>
+          <div id="lnkPrev" class="lnk-prev"></div>
+          <button type="button" class="att-btn" onclick="abrirModal()">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>
             Adicionar link / planilha
           </button>
         </div>
-        <button class="btn btn-pink" onclick="adicionarAvulsa()">
+        <button class="btn btn-p" onclick="addAvulsa()">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>
           Adicionar ao registro do dia
         </button>
       </div>
-
-      <div class="day-list" id="dayList">
-        <div class="day-list-header" style="display:flex;align-items:center;justify-content:space-between;">
-          <span id="dayListHeader">Atividades registradas hoje</span>
-          <button onclick="limparRascunho()" style="background:none;border:none;font-size:11px;color:var(--text-3);cursor:pointer;padding:0;display:flex;align-items:center;gap:4px;" title="Limpar registro do dia">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+      <div class="dlist">
+        <div class="dlist-hdr">
+          <span id="dlistHdr">Atividades registradas hoje</span>
+          <button class="clr-btn" onclick="limpar()">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
             Limpar
           </button>
         </div>
-        <div id="dayListBody" style="color:var(--text-3);font-size:12px;padding:12px;text-align:center;">Nenhuma atividade adicionada ainda.</div>
+        <div id="dlistB" style="color:var(--text-3);font-size:12px;padding:12px;text-align:center;">Nenhuma atividade adicionada ainda.</div>
       </div>
-
-      <button class="btn btn-dark" id="btnSalvar" onclick="salvarNaPlanilha()">
+      <button class="btn btn-d" id="btnSalvar" onclick="salvar()">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
         Salvar todas as atividades na planilha
       </button>
@@ -379,509 +354,520 @@ input:focus,select:focus,textarea:focus{border-color:var(--pink);background:var(
 </div>
 
 <!-- MODAL LINK -->
-<div class="modal-bg" id="modalBg">
+<div class="mbg" id="mBg">
   <div class="modal">
     <h3>Adicionar link / planilha</h3>
-    <div class="form-group"><label class="form-label">Nome exibido</label><input type="text" id="mLinkNome" placeholder="Ex: Planilha de Logística"></div>
-    <div class="form-group"><label class="form-label">URL</label><input type="text" id="mLinkUrl" placeholder="https://docs.google.com/..."></div>
+    <div class="fgrp"><label class="flbl">Nome exibido</label><input type="text" id="mNome" placeholder="Ex: Planilha de Logística"></div>
+    <div class="fgrp"><label class="flbl">URL</label><input type="text" id="mUrl" placeholder="https://docs.google.com/..."></div>
     <div style="display:flex;gap:8px;margin-top:4px;">
-      <button class="btn btn-pink" style="flex:1" onclick="confirmarLink()">Confirmar</button>
-      <button class="btn" style="flex:1;background:var(--bg);color:var(--text)" onclick="fecharModal()">Cancelar</button>
+      <button class="btn btn-p" style="flex:1" onclick="confLink()">Confirmar</button>
+      <button class="btn" style="flex:1;background:var(--bg);color:var(--text)" onclick="fechaModal()">Cancelar</button>
     </div>
   </div>
 </div>
 
-<div class="toast" id="toast"></div>
+<div class="toast" id="toastEl"></div>
 
 <script>
+// ══ CONFIGURAÇÃO ══════════════════════════════════════════════
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxsi1cIKISXDqRb-jkx-tH62HtDyEzL8V_fkbSNNFDlLeQGyXoqfB7220CV3vLmplXF/exec";
-const USUARIO_PRINCIPAL = "Jessica Nascimento";
-let usuarioAtual = "", modoVisualizacao = false;
-let todosRegistros = [], todasDemandas = [];
-let linksAtivos = [], atividadesDoDia = [];
-let mesFiltro = "todos", diaFiltro = "todos", buscaAtiva = "", usuarioGerencial = "todos";
+const PRINCIPAL  = "Jessica Nascimento";
+// ═════════════════════════════════════════════════════════════
 
-// ── PERSISTÊNCIA DO REGISTRO DO DIA ──────────────────────────────────────
-function salvarRascunho(){
-  try{ localStorage.setItem("meutudo_rascunho", JSON.stringify(atividadesDoDia)); }catch(e){}
-}
-function carregarRascunho(){
-  try{
-    const raw = localStorage.getItem("meutudo_rascunho");
-    if(raw){ atividadesDoDia = JSON.parse(raw) || []; }
-  }catch(e){ atividadesDoDia = []; }
-}
-function limparRascunho(){
-  if(!atividadesDoDia.length){ toast("Nenhuma atividade para limpar."); return; }
-  if(!confirm("Deseja limpar todas as atividades registradas hoje?")) return;
-  atividadesDoDia = [];
-  try{ localStorage.removeItem("meutudo_rascunho"); }catch(e){}
-  renderListaDia();
-  toast("Registro do dia limpo.");
+let usuario = "", visMode = false;
+let registros = [], demandas = [], linksAtivos = [], doDia = [];
+let mesFiltro = "todos", diaFiltro = "todos", buscaFiltro = "", usuGer = "todos";
+
+const MESES_ORD = ["DEZEMBRO","JANEIRO","FEVEREIRO","MARÇO","ABRIL","MAIO",
+                   "JUNHO","JULHO","AGOSTO","SETEMBRO","OUTUBRO","NOVEMBRO"];
+const MESES_N   = {JANEIRO:1,FEVEREIRO:2,"MARÇO":3,ABRIL:4,MAIO:5,JUNHO:6,
+                   JULHO:7,AGOSTO:8,SETEMBRO:9,OUTUBRO:10,NOVEMBRO:11,DEZEMBRO:12};
+
+// ── JSONP fetch ───────────────────────────────────────────────
+let _cbIdx = 0;
+function apiFetch(params, cb) {
+  const cbName = "_cb" + (++_cbIdx);
+  const qs = Object.entries(params).map(([k,v])=>k+"="+encodeURIComponent(v)).join("&");
+  const url = SCRIPT_URL + "?" + qs + "&callback=" + cbName;
+  window[cbName] = function(data) {
+    delete window[cbName];
+    document.getElementById("s_"+cbName) && document.getElementById("s_"+cbName).remove();
+    cb(null, data);
+  };
+  const s = document.createElement("script");
+  s.id  = "s_" + cbName;
+  s.src = url;
+  s.onerror = function() {
+    delete window[cbName];
+    s.remove();
+    cb(new Error("Erro de conexão"));
+  };
+  document.head.appendChild(s);
 }
 
-// ── LOGIN
-function fazerLogin(){
+// POST via fetch (Apps Script aceita POST de qualquer origem)
+function apiPost(payload, cb) {
+  fetch(SCRIPT_URL, {
+    method: "POST",
+    mode: "no-cors",  // evita bloqueio CORS; resposta será opaque
+    body: JSON.stringify(payload)
+  })
+  .then(() => cb(null, {ok:true, inseridas: (payload.atividades||[]).length}))
+  .catch(e => cb(e));
+}
+
+// ── LOGIN ─────────────────────────────────────────────────────
+function fazerLogin() {
   const nome = document.getElementById("loginNome").value.trim();
-  if(!nome){toast("Informe seu nome para continuar.");return;}
-  usuarioAtual = nome; modoVisualizacao = false;
-  try{ localStorage.setItem("meutudo_usuario", nome); }catch(e){}
-  iniciarPainel();
+  if (!nome) { toast("Informe seu nome para continuar."); return; }
+  usuario = nome; visMode = false;
+  try { localStorage.setItem("meutudo_user", nome); } catch(e) {}
+  iniciar();
 }
-document.getElementById("loginNome").addEventListener("keydown",e=>{if(e.key==="Enter")fazerLogin();});
+document.getElementById("loginNome").addEventListener("keydown", e => { if(e.key==="Enter") fazerLogin(); });
 
-function loginRapido(nome){
-  document.getElementById("loginNome").value = nome;
-  fazerLogin();
-}
-
-// Recupera e exibe último usuário
-(function(){
-  try{
-    const ultimo = localStorage.getItem("meutudo_usuario");
-    if(!ultimo) return;
-    const loginCard = document.querySelector(".login-card");
-    const sub = loginCard.querySelector(".login-sub");
-    const inicial = ultimo.trim().charAt(0).toUpperCase();
-    const nomeEsc = ultimo.replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/'/g,"\'");
-    const quickDiv = document.createElement("div");
-    quickDiv.style="margin-bottom:16px;border:0.5px solid var(--border);border-radius:var(--radius);overflow:hidden;";
-    quickDiv.innerHTML=`
-      <div style="font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--text-3);padding:7px 14px;background:var(--bg);border-bottom:0.5px solid var(--border);">Último acesso</div>
-      <button onclick="loginRapido('${nomeEsc}')" style="width:100%;display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--surface);border:none;cursor:pointer;text-align:left;">
-        <div style="width:36px;height:36px;border-radius:50%;background:var(--pink);color:#fff;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;font-family:'Nunito',sans-serif;flex-shrink:0;">${inicial}</div>
-        <div style="flex:1;min-width:0;">
-          <div style="font-size:13px;font-weight:600;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${ultimo}</div>
-          <div style="font-size:11px;color:var(--text-3);">Clique para entrar</div>
-        </div>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--text-3);flex-shrink:0;"><path d="M9 18l6-6-6-6"/></svg>
-      </button>`;
-    sub.insertAdjacentElement("afterend", quickDiv);
-    document.getElementById("loginNome").value = ultimo;
-  }catch(e){}
-})();
-
-const loginCard = document.querySelector(".login-card");
+// Botão visualizar
 const btnVis = document.createElement("button");
-btnVis.className="btn"; btnVis.style="margin-top:8px;background:var(--bg);color:var(--text-2);font-size:12px;";
-btnVis.textContent="Entrar apenas para visualizar";
-btnVis.onclick=()=>{usuarioAtual="Visitante";modoVisualizacao=true;iniciarPainel();};
-loginCard.appendChild(btnVis);
+btnVis.className = "btn"; btnVis.style = "margin-top:8px;background:var(--bg);color:var(--text-2);font-size:12px;";
+btnVis.textContent = "Entrar apenas para visualizar";
+btnVis.onclick = () => { usuario="Visitante"; visMode=true; iniciar(); };
+document.getElementById("loginC").appendChild(btnVis);
 
-function iniciarPainel(){
-  document.getElementById("loginWrap").style.display="none";
-  document.getElementById("painelWrap").style.display="block";
-  atualizarTimestamp(); setInterval(atualizarTimestamp,60000);
-  if(usuarioAtual===USUARIO_PRINCIPAL) document.getElementById("subNomeUsuario").textContent="Jessica Nascimento — Agente de Ops. III";
-  else if(modoVisualizacao) document.getElementById("subNomeUsuario").textContent="Modo visualização";
-  else document.getElementById("subNomeUsuario").textContent=usuarioAtual+" — registrando atividades";
-  if(modoVisualizacao){document.getElementById("formRegistro").style.display="none";document.getElementById("acessoNegado").style.display="block";}
-  const hoje=new Date(); document.getElementById("regData").value=hoje.toISOString().split("T")[0];
-  carregarRascunho(); renderListaDia();
-  carregarGerencial(); carregarHistorico(); carregarDemandas();
-}
-function atualizarTimestamp(){
-  const n=new Date();
-  document.getElementById("tsAtual").textContent="atualizado em "+n.toLocaleDateString("pt-BR")+" às "+n.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"});
+// Último acesso
+(function(){
+  try {
+    const ult = localStorage.getItem("meutudo_user");
+    if (!ult) return;
+    const c = document.getElementById("loginC");
+    const sub = c.querySelector(".login-sub");
+    const ini = ult.trim()[0].toUpperCase();
+    const div = document.createElement("div");
+    div.style = "margin-bottom:14px;border:0.5px solid var(--border);border-radius:var(--r);overflow:hidden;";
+    div.innerHTML = `<div style="font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--text-3);padding:6px 14px;background:var(--bg);border-bottom:0.5px solid var(--border);">Último acesso</div>
+    <button onclick="loginRapido('${ult.replace(/'/g,"\\'")}') " style="width:100%;display:flex;align-items:center;gap:12px;padding:11px 14px;background:var(--surface);border:none;cursor:pointer;text-align:left;">
+      <div style="width:34px;height:34px;border-radius:50%;background:var(--pink);color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;font-family:'Nunito',sans-serif;flex-shrink:0;">${ini}</div>
+      <div style="flex:1;min-width:0;"><div style="font-size:13px;font-weight:600;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${ult}</div><div style="font-size:11px;color:var(--text-3);">Clique para entrar</div></div>
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--text-3);flex-shrink:0;"><path d="M9 18l6-6-6-6"/></svg>
+    </button>`;
+    sub.insertAdjacentElement("afterend", div);
+    document.getElementById("loginNome").value = ult;
+  } catch(e) {}
+})();
+function loginRapido(n) { document.getElementById("loginNome").value=n; fazerLogin(); }
+
+// ── INICIAR PAINEL ────────────────────────────────────────────
+function iniciar() {
+  document.getElementById("loginW").style.display = "none";
+  document.getElementById("painelW").style.display = "block";
+  updTs(); setInterval(updTs, 60000);
+
+  if (usuario === PRINCIPAL)
+    document.getElementById("nomeEl").textContent = "Jessica Nascimento — Agente de Ops. III";
+  else if (visMode)
+    document.getElementById("nomeEl").textContent = "Modo visualização";
+  else
+    document.getElementById("nomeEl").textContent = usuario + " — registrando atividades";
+
+  if (visMode) {
+    document.getElementById("divForm").style.display = "none";
+    document.getElementById("divNegado").style.display = "block";
+  }
+
+  const hoje = new Date();
+  document.getElementById("regData").value = hoje.toISOString().split("T")[0];
+  carregarRascunho(); renderDia();
+
+  carregarGerencial();
+  carregarHist();
+  carregarDem();
 }
 
-// ── NAVEGAÇÃO
-function showTab(name,el){
-  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
-  document.querySelectorAll(".nav-tab").forEach(t=>t.classList.remove("active"));
-  document.getElementById("screen-"+name).classList.add("active"); el.classList.add("active");
+function updTs() {
+  const n = new Date();
+  document.getElementById("tsEl").textContent =
+    "atualizado em " + n.toLocaleDateString("pt-BR") + " às " +
+    n.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"});
 }
 
-// ── GERENCIAL
-function carregarGerencial(){
-  // Carrega lista de usuários e depois o resumo
-  fetch(SCRIPT_URL+"?action=getUsuarios",{mode:"cors",redirect:"follow"})
-    .then(r=>r.json())
-    .then(data=>{ construirFiltroUsuario(data.usuarios||[]); })
-    .catch(()=>{ construirFiltroUsuario([]); });
+// ── NAVEGAÇÃO ─────────────────────────────────────────────────
+function goTab(id, el) {
+  document.querySelectorAll(".scr").forEach(s=>s.classList.remove("on"));
+  document.querySelectorAll(".tab").forEach(t=>t.classList.remove("on"));
+  document.getElementById("scr-"+id).classList.add("on");
+  el.classList.add("on");
+}
+
+// ── GERENCIAL ─────────────────────────────────────────────────
+function carregarGerencial() {
+  apiFetch({action:"getUsuarios"}, (err, data) => {
+    if (!err && data && data.usuarios) buildSelUsuario(data.usuarios);
+  });
   fetchResumo();
 }
-function fetchResumo(){
-  const u = usuarioGerencial;
-  const qs = u==="todos" ? "" : "&usuario="+encodeURIComponent(u);
-  fetch(SCRIPT_URL+"?action=getResumo"+qs,{mode:"cors",redirect:"follow"})
-    .then(r=>r.json()).then(renderGerencial).catch(renderGerencialDemo);
-}
-function construirFiltroUsuario(usuarios){
-  const sel = document.getElementById("filtroUsuario");
-  if(!sel) return;
-  const atual = sel.value;
-  sel.innerHTML = `<option value="todos">Todos</option>`;
-  usuarios.forEach(u=>{
-    const o=document.createElement("option");
-    o.value=u;
-    // Exibe "Jessica Nascimento" com "(você)" para identificar
-    o.textContent = u===USUARIO_PRINCIPAL ? u+" (você)" : u;
+function buildSelUsuario(lista) {
+  const sel = document.getElementById("selUsuario");
+  const cur = sel.value;
+  sel.innerHTML = '<option value="todos">Todos</option>';
+  lista.forEach(u => {
+    const o = document.createElement("option");
+    o.value = u;
+    o.textContent = u === PRINCIPAL ? u + " (você)" : u;
     sel.appendChild(o);
   });
-  // Restaura seleção anterior se ainda existir
-  if([...sel.options].some(o=>o.value===atual)) sel.value=atual;
+  if ([...sel.options].some(o=>o.value===cur)) sel.value = cur;
 }
-function filtrarUsuarioGerencial(){
-  usuarioGerencial=document.getElementById("filtroUsuario").value;
-  // Limpa dados anteriores
-  document.getElementById("kTotal").textContent="—";
-  document.getElementById("kFin").textContent="—";
-  document.getElementById("kReu").textContent="—";
-  document.getElementById("chartMes").innerHTML=`<div class="loader"><span class="spinner"></span>carregando...</div>`;
-  document.getElementById("chartTipo").innerHTML=`<div class="loader"><span class="spinner"></span>carregando...</div>`;
-  document.getElementById("reuTabela").innerHTML=`<div class="loader"><span class="spinner"></span>carregando...</div>`;
+function trocarUsuario() {
+  usuGer = document.getElementById("selUsuario").value;
+  document.getElementById("kT").textContent = "—";
+  document.getElementById("kF").textContent = "—";
+  document.getElementById("kR").textContent = "—";
+  document.getElementById("cMes").innerHTML = '<div class="loader"><span class="spin"></span>carregando...</div>';
+  document.getElementById("cTipo").innerHTML = '<div class="loader"><span class="spin"></span>carregando...</div>';
   fetchResumo();
 }
-function renderGerencial(d){
-  document.getElementById("kTotal").textContent=d.total||0;
-  document.getElementById("kTotalSub").textContent="registros históricos";
-  document.getElementById("kFin").textContent=d.finalizadas||0;
-  document.getElementById("kFinSub").textContent=(d.total?Math.round((d.finalizadas/d.total)*100):0)+"% do total";
-  document.getElementById("kReu").textContent=d.reunioes||0;
-  document.getElementById("kReuSub").textContent=(d.total?Math.round((d.reunioes/d.total)*100):0)+"% do total";
-  document.getElementById("kDem").textContent=d.totalDemandas||0;
-  // barras mês
-  const pm=d.porMes||{};
-  const ordem=["DEZEMBRO","JANEIRO","FEVEREIRO","MARÇO","ABRIL","MAIO","JUNHO","JULHO","AGOSTO","SETEMBRO","OUTUBRO","NOVEMBRO"];
-  const entMes=ordem.filter(m=>pm[m]).map(m=>[m,pm[m]]);
-  const maxM=Math.max(...entMes.map(x=>x[1]),1);
-  document.getElementById("chartMes").innerHTML=entMes.map(([m,v])=>
-    `<div class="bar-row"><div class="bar-label">${cap(m)}</div><div class="bar-bg"><div class="bar-fill" style="width:${Math.round(v/maxM*100)}%"></div></div><div class="bar-count">${v}</div></div>`
-  ).join("")||"<div class='loader'>Sem dados</div>";
-  // barras tipo
-  const pt=d.porTipo||{};
-  const entTipo=Object.entries(pt).filter(([,v])=>v>0).sort((a,b)=>b[1]-a[1]);
-  const maxT=Math.max(...entTipo.map(x=>x[1]),1);
-  document.getElementById("chartTipo").innerHTML=entTipo.map(([t,v])=>
-    `<div class="bar-row"><div class="bar-label">${t}</div><div class="bar-bg"><div class="bar-fill" style="width:${Math.round(v/maxT*100)}%"></div></div><div class="bar-count">${v}</div></div>`
-  ).join("")||"<div class='loader'>Sem dados</div>";
-  // reuniões
-  window._dadosReunioes = d.reunioesPorMesDia || {};
-  construirFiltroReu(window._dadosReunioes);
-  renderReunioes();
+function fetchResumo() {
+  const p = {action:"getResumo"};
+  if (usuGer !== "todos") p.usuario = usuGer;
+  apiFetch(p, (err, data) => {
+    if (err || !data) { renderGerDemo(); return; }
+    renderGer(data);
+  });
 }
-function construirFiltroReu(dadosReu){
-  // dadosReu = { "MAIO|2025": {...}, "JUNHO|2025": {...} }
-  const chaves=Object.keys(dadosReu||{}).filter(k=>Object.keys(dadosReu[k]).length>0);
-  chaves.sort((a,b)=>{
+
+function hm(min) {
+  const h=Math.floor(min/60), m=min%60;
+  return h>0 ? (m>0 ? h+"h "+m+"min" : h+"h") : m+"min";
+}
+function cap(s) { return s ? s[0].toUpperCase()+s.slice(1).toLowerCase() : ""; }
+function mesAnoLbl(k) {
+  const[m,a]=String(k).split("|");
+  return cap(m)+(a&&a!=="0000"?"/"+a:"");
+}
+
+function renderGer(d) {
+  document.getElementById("kT").textContent  = d.total||0;
+  document.getElementById("kTS").textContent = "registros históricos";
+  document.getElementById("kF").textContent  = d.finalizadas||0;
+  document.getElementById("kFS").textContent = (d.total?Math.round(d.finalizadas/d.total*100):0)+"% do total";
+  document.getElementById("kR").textContent  = d.reunioes||0;
+  document.getElementById("kRS").textContent = (d.total?Math.round(d.reunioes/d.total*100):0)+"% do total";
+  document.getElementById("kD").textContent  = d.totalDemandas||0;
+
+  // Barras mês — porMes agora é { "MAIO|2025": 192 }
+  const pm = d.porMes||{};
+  // Ordena chaves por ano desc, depois mês desc
+  const chavesM = Object.keys(pm).sort((a,b)=>{
     const[ma,aa]=a.split("|"); const[mb,ab]=b.split("|");
-    return (parseInt(ab)*100+(MESES_NUM[mb]||0))-(parseInt(aa)*100+(MESES_NUM[ma]||0));
+    if(ab!==aa) return parseInt(ab)-parseInt(aa);
+    return (MESES_N[mb]||0)-(MESES_N[ma]||0);
   });
-  const sel=document.getElementById("filtroReuMes");
-  sel.innerHTML=`<option value="todos">Todos os meses</option>`;
+  const maxM = Math.max(...chavesM.map(k=>pm[k]),1);
+  document.getElementById("cMes").innerHTML = chavesM.map(k =>
+    `<div class="br"><div class="br-lbl">${mesAnoLbl(k)}</div><div class="br-bg"><div class="br-fill" style="width:${Math.round(pm[k]/maxM*100)}%"></div></div><div class="br-n">${pm[k]}</div></div>`
+  ).join("") || '<div class="loader">Sem dados</div>';
+
+  // Barras tipo
+  const pt = d.porTipo||{};
+  const chavesT = Object.entries(pt).filter(([,v])=>v>0).sort((a,b)=>b[1]-a[1]);
+  const maxT = Math.max(...chavesT.map(([,v])=>v),1);
+  document.getElementById("cTipo").innerHTML = chavesT.map(([t,v])=>
+    `<div class="br"><div class="br-lbl">${t}</div><div class="br-bg"><div class="br-fill" style="width:${Math.round(v/maxT*100)}%"></div></div><div class="br-n">${v}</div></div>`
+  ).join("") || '<div class="loader">Sem dados</div>';
+
+  // Reuniões
+  window._reu = d.reunioesPorMesDia||{};
+  buildSelReu(window._reu);
+  renderReu();
+}
+
+function buildSelReu(dados) {
+  const chaves = Object.keys(dados).filter(k=>Object.keys(dados[k]).length>0)
+    .sort((a,b)=>{
+      const[ma,aa]=a.split("|"); const[mb,ab]=b.split("|");
+      if(ab!==aa) return parseInt(ab)-parseInt(aa);
+      return (MESES_N[mb]||0)-(MESES_N[ma]||0);
+    });
+  const sel = document.getElementById("selReuMes");
+  sel.innerHTML = '<option value="todos">Todos os meses</option>';
   chaves.forEach(k=>{
-    const o=document.createElement("option"); o.value=k; o.textContent=mesAnoLabel(k); sel.appendChild(o);
+    const o=document.createElement("option"); o.value=k; o.textContent=mesAnoLbl(k); sel.appendChild(o);
   });
 }
-function minToHM(min){
-  const h=Math.floor(min/60);const m=min%60;
-  return h>0?(m>0?h+"h "+m+"min":h+"h"):m+"min";
-}
-function renderReunioes(){
-  const dados=window._dadosReunioes||{};   // { "MAIO|2025": { "05/05/2025": 90 } }
-  const filtroKey=document.getElementById("filtroReuMes").value; // "todos" ou "MAIO|2025"
-  const filtroVis=document.getElementById("filtroReuVis").value; // "mes" ou "dia"
+function renderReu() {
+  const dados = window._reu||{};
+  const fk    = document.getElementById("selReuMes").value;
+  const fv    = document.getElementById("selReuVis").value;
+  const chaves = fk==="todos" ? Object.keys(dados) : (dados[fk]?[fk]:[]);
 
-  // Filtra chaves
-  const chaves = filtroKey==="todos" ? Object.keys(dados) : (dados[filtroKey] ? [filtroKey] : []);
-
-  if(filtroVis==="mes"){
-    // Agrupa por chave (mes|ano), soma minutos de todos os dias
-    let totalMin=0; const linhas=[];
-    // ordena chaves cronologicamente
+  if (fv === "mes") {
+    let tot=0; const linhas=[];
     const chavesOrd=[...chaves].sort((a,b)=>{
       const[ma,aa]=a.split("|"); const[mb,ab]=b.split("|");
-      return (parseInt(ab)*100+(MESES_NUM[mb]||0))-(parseInt(aa)*100+(MESES_NUM[ma]||0));
+      if(ab!==aa) return parseInt(ab)-parseInt(aa);
+      return (MESES_N[mb]||0)-(MESES_N[ma]||0);
     });
     chavesOrd.forEach(k=>{
-      let minK=0;
-      Object.values(dados[k]).forEach(v=>{ minK+=v; });
-      if(minK===0) return;
-      totalMin+=minK;
-      const[mes,ano]=k.split("|");
-      const label=cap(mes)+(ano&&ano!=="0000"?"/"+ano:"");
-      linhas.push(`<tr><td>${label}</td><td>${minToHM(minK)}</td></tr>`);
+      let m=0; Object.values(dados[k]).forEach(v=>m+=v);
+      if(!m) return;
+      tot+=m;
+      linhas.push(`<tr><td>${mesAnoLbl(k)}</td><td>${hm(m)}</td></tr>`);
     });
-    document.getElementById("reuTotal").textContent=minToHM(totalMin);
-    document.getElementById("reuSub").textContent=filtroKey==="todos"?"total em reuniões":"total em "+mesAnoLabel(filtroKey);
-    document.getElementById("reuTabela").innerHTML=linhas.length
-      ? `<table class="reuniao-table"><thead><tr><th>Mês/Ano</th><th>Tempo total</th></tr></thead><tbody>${linhas.join("")}</tbody></table>`
-      : `<div style="font-size:12px;color:var(--text-3);text-align:center;padding:10px;">Sem dados de reunião.</div>`;
+    document.getElementById("reuVal").textContent = hm(tot)||"0min";
+    document.getElementById("reuSub").textContent = fk==="todos"?"total em reuniões":"total — "+mesAnoLbl(fk);
+    document.getElementById("reuTbl").innerHTML = linhas.length
+      ? `<table class="reu-tbl"><thead><tr><th>Mês/Ano</th><th>Tempo total</th></tr></thead><tbody>${linhas.join("")}</tbody></table>`
+      : `<div style="font-size:12px;color:var(--text-3);text-align:center;padding:8px;">Sem dados de reunião.</div>`;
   } else {
-    // Por dia
-    let totalMin=0; const linhas=[];
+    let tot=0; const itens=[];
     chaves.forEach(k=>{
       const[mes,ano]=k.split("|");
-      Object.entries(dados[k]).forEach(([dia,min])=>{
-        if(min>0){
-          totalMin+=min;
-          const label=cap(mes)+(ano&&ano!=="0000"?"/"+ano:"");
-          linhas.push({dia,label,min,ts:(()=>{const p=dia.split("/");return new Date(p[2],p[1]-1,p[0]).getTime();})()});
+      Object.entries(dados[k]).forEach(([dia,m])=>{
+        if(m>0){
+          tot+=m;
+          const p=dia.split("/");
+          const ts=new Date(p[2],p[1]-1,p[0]).getTime();
+          itens.push({dia,lbl:mesAnoLbl(k),m,ts});
         }
       });
     });
-    linhas.sort((a,b)=>b.ts-a.ts);
-    document.getElementById("reuTotal").textContent=minToHM(totalMin);
-    document.getElementById("reuSub").textContent="total em reuniões"+(filtroKey!=="todos"?" — "+mesAnoLabel(filtroKey):"");
-    document.getElementById("reuTabela").innerHTML=linhas.length
-      ? `<table class="reuniao-table"><thead><tr><th>Data</th><th>Mês/Ano</th><th>Tempo</th></tr></thead><tbody>`
-        +linhas.map(l=>`<tr><td>${l.dia}</td><td>${l.label}</td><td>${minToHM(l.min)}</td></tr>`).join("")
-        +`</tbody></table>`
-      : `<div style="font-size:12px;color:var(--text-3);text-align:center;padding:10px;">Sem dados de reunião.</div>`;
+    itens.sort((a,b)=>b.ts-a.ts);
+    document.getElementById("reuVal").textContent = hm(tot)||"0min";
+    document.getElementById("reuSub").textContent = "total em reuniões"+(fk!=="todos"?" — "+mesAnoLbl(fk):"");
+    document.getElementById("reuTbl").innerHTML = itens.length
+      ? `<table class="reu-tbl"><thead><tr><th>Data</th><th>Mês/Ano</th><th>Tempo</th></tr></thead><tbody>`
+        + itens.map(i=>`<tr><td>${i.dia}</td><td>${i.lbl}</td><td>${hm(i.m)}</td></tr>`).join("")
+        + `</tbody></table>`
+      : `<div style="font-size:12px;color:var(--text-3);text-align:center;padding:8px;">Sem dados de reunião.</div>`;
   }
 }
-function renderGerencialDemo(){
-  renderGerencial({
+function renderGerDemo() {
+  renderGer({
     total:347,finalizadas:218,reunioes:104,totalDemandas:22,
-    porMes:{"DEZEMBRO":38,"JANEIRO":24,"FEVEREIRO":52,"MARÇO":63,"ABRIL":85,"MAIO":70},
+    porMes:{"DEZEMBRO|2024":38,"JANEIRO|2025":24,"FEVEREIRO|2025":52,"MARÇO|2025":63,"ABRIL|2025":85,"MAIO|2025":70},
     porTipo:{"Reuniões":104,"Análise/Tickets":76,"Verificar ClickUp":65,"Chamados Dock":44,"Auditorias":28,"Outras":30},
-    reunioesPorMesDia:{"DEZEMBRO":{"01/12/2024":60,"02/12/2024":90},"JANEIRO":{"06/01/2025":120,"07/01/2025":60},"FEVEREIRO":{"03/02/2025":90,"04/02/2025":30}}
+    reunioesPorMesDia:{"DEZEMBRO|2024":{"01/12/2024":60,"02/12/2024":90},"JANEIRO|2025":{"06/01/2025":120}}
   });
 }
 
-// ── HISTÓRICO
-function carregarHistorico(){
-  const u = (usuarioAtual===USUARIO_PRINCIPAL||modoVisualizacao) ? USUARIO_PRINCIPAL : usuarioAtual;
-  fetch(SCRIPT_URL+"?action=getAtividades&usuario="+encodeURIComponent(u),{mode:"cors",redirect:"follow"})
-    .then(r=>r.json()).then(data=>{todosRegistros=data.rows||[];construirFiltrosMes();construirFiltroDias();renderTabela();})
-    .catch(()=>{todosRegistros=[];construirFiltrosMes();renderTabela();});
+// ── HISTÓRICO ─────────────────────────────────────────────────
+function carregarHist() {
+  const u = (usuario===PRINCIPAL||visMode) ? PRINCIPAL : usuario;
+  apiFetch({action:"getAtividades",usuario:u}, (err,data)=>{
+    registros = (data&&data.rows)||[];
+    buildMesBtns(); buildDiaSel(); renderTbl();
+  });
 }
-// Mapas de mês para número (para ordenação)
-const MESES_NUM={"JANEIRO":1,"FEVEREIRO":2,"MARÇO":3,"ABRIL":4,"MAIO":5,"JUNHO":6,"JULHO":7,"AGOSTO":8,"SETEMBRO":9,"OUTUBRO":10,"NOVEMBRO":11,"DEZEMBRO":12};
-
-function mesAnoKey(r){
-  // extrai ano da data "dd/MM/yyyy"
-  const partes=(r.data||"").split("/");
-  const ano=partes.length===3?partes[2]:"";
-  return ano ? r.mes+"|"+ano : r.mes+"|0000";
-}
-function mesAnoLabel(mesAnoK){
-  const [mes,ano]=mesAnoK.split("|");
-  return cap(mes)+(ano&&ano!=="0000"?"/"+ano:"");
-}
-
-function construirFiltrosMes(){
-  // agrupa por mes+ano únicos, ordenados desc
-  const chaves=[...new Set(todosRegistros.map(r=>mesAnoKey(r)).filter(Boolean))];
-  chaves.sort((a,b)=>{
+function buildMesBtns() {
+  // chaves únicas mes|ano ordenadas
+  const chaves=[...new Set(registros.map(r=>r.mesAnoKey).filter(Boolean))].sort((a,b)=>{
     const[ma,aa]=a.split("|"); const[mb,ab]=b.split("|");
-    const aaI=parseInt(aa)||0; const abI=parseInt(ab)||0;
-    if(aaI!==abI) return abI-aaI;
-    return (MESES_NUM[mb]||0)-(MESES_NUM[ma]||0);
+    if(ab!==aa) return parseInt(ab)-parseInt(aa);
+    return (MESES_N[mb]||0)-(MESES_N[ma]||0);
   });
-  const cont=document.getElementById("monthFilters");
-  cont.innerHTML=`<div class="month-btn active" data-mes="todos" onclick="filtrarMes(this)">Todos</div>`;
+  const row=document.getElementById("mbtRow");
+  row.innerHTML=`<div class="mbt on" data-k="todos" onclick="filtMes(this)">Todos</div>`;
   chaves.forEach(k=>{
-    const d=document.createElement("div");
-    d.className="month-btn"; d.dataset.mes=k;
-    d.textContent=mesAnoLabel(k);
-    d.onclick=function(){filtrarMes(this);};
-    cont.appendChild(d);
+    const d=document.createElement("div"); d.className="mbt"; d.dataset.k=k;
+    d.textContent=mesAnoLbl(k); d.onclick=function(){filtMes(this);};
+    row.appendChild(d);
   });
 }
-
-function construirFiltroDias(){
-  // dias únicos do filtro atual
-  let rows=todosRegistros;
-  if(mesFiltro!=="todos") rows=rows.filter(r=>mesAnoKey(r)===mesFiltro);
+function buildDiaSel() {
+  let rows = registros;
+  if (mesFiltro!=="todos") rows=rows.filter(r=>r.mesAnoKey===mesFiltro);
   const dias=[...new Set(rows.map(r=>r.data).filter(Boolean))].sort((a,b)=>{
-    const pa=a.split("/"); const pb=b.split("/");
+    const pa=a.split("/"),pb=b.split("/");
     return new Date(pb[2],pb[1]-1,pb[0])-new Date(pa[2],pa[1]-1,pa[0]);
   });
-  const sel=document.getElementById("filtroDia");
-  sel.innerHTML=`<option value="todos">Todos os dias</option>`;
+  const sel=document.getElementById("selDia");
+  sel.innerHTML='<option value="todos">Todos os dias</option>';
   dias.forEach(d=>{const o=document.createElement("option");o.value=d;o.textContent=d;sel.appendChild(o);});
   sel.value="todos"; diaFiltro="todos";
 }
-
-function filtrarMes(el){
-  document.querySelectorAll(".month-btn").forEach(b=>b.classList.remove("active"));
-  el.classList.add("active"); mesFiltro=el.dataset.mes;
-  construirFiltroDias(); renderTabela();
+function filtMes(el) {
+  document.querySelectorAll(".mbt").forEach(b=>b.classList.remove("on"));
+  el.classList.add("on"); mesFiltro=el.dataset.k;
+  buildDiaSel(); renderTbl();
 }
-function filtrarDia(){diaFiltro=document.getElementById("filtroDia").value;renderTabela();}
-function filtrarBusca(){buscaAtiva=document.getElementById("buscaInput").value.toLowerCase();renderTabela();}
-function renderTabela(){
-  let rows=todosRegistros;
-  if(mesFiltro!=="todos") rows=rows.filter(r=>mesAnoKey(r)===mesFiltro);
+function filtDia()   { diaFiltro=document.getElementById("selDia").value; renderTbl(); }
+function filtBusca() { buscaFiltro=document.getElementById("buscaI").value.toLowerCase(); renderTbl(); }
+function renderTbl() {
+  let rows=registros;
+  if(mesFiltro!=="todos") rows=rows.filter(r=>r.mesAnoKey===mesFiltro);
   if(diaFiltro!=="todos") rows=rows.filter(r=>r.data===diaFiltro);
-  if(buscaAtiva) rows=rows.filter(r=>r.atividade.toLowerCase().includes(buscaAtiva)||r.observacao.toLowerCase().includes(buscaAtiva));
-  const tbody=document.getElementById("tblBody");
-  if(!rows.length){tbody.innerHTML=`<tr><td colspan="4" style="text-align:center;color:var(--text-3);padding:20px;">Nenhuma atividade encontrada.</td></tr>`;document.getElementById("tblMeta").textContent="";return;}
-  tbody.innerHTML=rows.map(r=>`<tr>
-    <td style="white-space:nowrap;color:var(--text-2);">${r.data}</td>
-    <td>${esc(r.atividade)}</td>
-    <td>${pillStatus(r.status)}</td>
-    <td>${formatarObs(r.observacao)}</td>
-  </tr>`).join("");
-  document.getElementById("tblMeta").textContent="mostrando "+rows.length+" de "+todosRegistros.length+" registros";
+  if(buscaFiltro) rows=rows.filter(r=>r.atividade.toLowerCase().includes(buscaFiltro)||r.observacao.toLowerCase().includes(buscaFiltro));
+  const b=document.getElementById("tblB");
+  if(!rows.length){b.innerHTML=`<tr><td colspan="4" style="text-align:center;color:var(--text-3);padding:20px;">Nenhuma atividade encontrada.</td></tr>`;document.getElementById("tblM").textContent="";return;}
+  b.innerHTML=rows.map(r=>`<tr><td style="white-space:nowrap;color:var(--text-2);">${r.data}</td><td>${esc(r.atividade)}</td><td>${pillSt(r.status)}</td><td>${fmtObs(r.observacao)}</td></tr>`).join("");
+  document.getElementById("tblM").textContent="mostrando "+rows.length+" de "+registros.length+" registros";
 }
-function formatarObs(obs){
+function fmtObs(obs){
   if(!obs) return `<span style="color:var(--text-3)">—</span>`;
   return obs.split(" | ").map(p=>{
-    if(p.includes("|LINK|")){const[nome,,url]=p.split("|LINK|");return `<a class="obs-link" href="${esc(url)}" target="_blank" rel="noopener">📎 ${esc(nome)}</a>`;}
+    if(p.includes("|LINK|")){const[nm,,url]=p.split("|LINK|");return `<a class="obs-lnk" href="${esc(url)}" target="_blank" rel="noopener">📎 ${esc(nm)}</a>`;}
     return `<span style="color:var(--text-2)">${esc(p)}</span>`;
   }).join(" ");
 }
 
-// ── DEMANDAS — filtro corrigido (MM/YYYY string)
-function carregarDemandas(){
-  fetch(SCRIPT_URL+"?action=getDemandas",{mode:"cors",redirect:"follow"}).then(r=>r.json())
-    .then(data=>{todasDemandas=data.rows||[];construirFiltroDemanda();renderDemandas();})
-    .catch(renderDemoEntregas);
+// ── ENTREGAS ──────────────────────────────────────────────────
+function carregarDem() {
+  apiFetch({action:"getDemandas"}, (err,data)=>{
+    demandas=(data&&data.rows)||[];
+    buildSelDem(); renderDem();
+  });
 }
-function normalizarMesAno(raw){
+function normMA(raw) {
   if(!raw) return "";
   const s=String(raw).trim();
-  // Se já está no formato MM/YYYY ou similar com "/" e <= 7 chars
-  if(/^\d{1,2}\/\d{4}$/.test(s)){
-    const[m,a]=s.split("/"); return m.padStart(2,"0")+"/"+a;
-  }
-  // Se é um objeto Date serializado ou timestamp
+  if(/^\d{1,2}\/\d{4}$/.test(s)){const[m,a]=s.split("/");return m.padStart(2,"0")+"/"+a;}
   const d=new Date(s);
-  if(!isNaN(d.getTime())){
-    return String(d.getMonth()+1).padStart(2,"0")+"/"+d.getFullYear();
-  }
-  // Se vier como "03/2025" já correto
+  if(!isNaN(d.getTime())) return String(d.getMonth()+1).padStart(2,"0")+"/"+d.getFullYear();
   return s;
 }
-function construirFiltroDemanda(){
-  const meses=[...new Set(todasDemandas.map(d=>normalizarMesAno(d.mesAno)).filter(Boolean))]
-    .sort((a,b)=>{
-      const[ma,aa]=a.split("/"); const[mb,ab]=b.split("/");
-      return (parseInt(aa)*100+parseInt(ma))-(parseInt(ab)*100+parseInt(mb));
-    });
-  const sel=document.getElementById("filtroDemanda");
-  sel.innerHTML=`<option value="todos">Todos os períodos</option>`;
-  meses.forEach(m=>{const o=document.createElement("option");o.value=m;o.textContent=m;sel.appendChild(o);});
+function buildSelDem() {
+  const vals=[...new Set(demandas.map(d=>normMA(d.mesAno)).filter(Boolean))].sort((a,b)=>{
+    const[ma,aa]=a.split("/"); const[mb,ab]=b.split("/");
+    return (parseInt(aa)*100+parseInt(ma))-(parseInt(ab)*100+parseInt(mb));
+  });
+  const sel=document.getElementById("selDem");
+  sel.innerHTML='<option value="todos">Todos os períodos</option>';
+  vals.forEach(v=>{const o=document.createElement("option");o.value=v;o.textContent=v;sel.appendChild(o);});
 }
-function filtrarDemandas(){renderDemandas();}
-function renderDemandas(){
-  const filtro=document.getElementById("filtroDemanda").value;
-  const rows=filtro==="todos"?todasDemandas:todasDemandas.filter(d=>normalizarMesAno(d.mesAno)===filtro);
-  document.getElementById("contDemandas").textContent=rows.length+" projeto"+(rows.length!==1?"s":"");
-  const lista=document.getElementById("listaEntregas");
-  lista.innerHTML=`<div class="entrega-header">Entregas do setor</div>`+
-    (rows.length===0?`<div class="loader">Nenhuma entrega no período selecionado.</div>`:
+function filtDem() { renderDem(); }
+function renderDem() {
+  const f=document.getElementById("selDem").value;
+  const rows=f==="todos"?demandas:demandas.filter(d=>normMA(d.mesAno)===f);
+  document.getElementById("cntDem").textContent=rows.length+" projeto"+(rows.length!==1?"s":"");
+  const lista=document.getElementById("lisDem");
+  lista.innerHTML=`<div class="etr-hdr">Entregas do setor</div>`+(rows.length===0?`<div class="loader">Nenhuma entrega.</div>`:
     rows.map((r,i)=>{
-      const mesAnoNorm=normalizarMesAno(r.mesAno);
-      const[mm,aa]=(mesAnoNorm||"0/0").split("/");
-      const agora=new Date();
-      const recente=(parseInt(aa)>agora.getFullYear())||(parseInt(aa)===agora.getFullYear()&&parseInt(mm)>=agora.getMonth()+1);
-      const badge=recente?`<span class="badge-amber">Recente</span>`:`<span class="badge-green">Concluído</span>`;
-      return `<div class="entrega-row" ${i===rows.length-1?'style="border-bottom:none"':''}>
-        <div class="entrega-dot" style="background:${recente?"#EF9F27":"var(--pink)"}"></div>
-        <div class="entrega-info"><div class="entrega-nome">${esc(r.projeto)}</div><div class="entrega-mes">${mesAnoNorm}</div></div>
-        ${badge}</div>`;
+      const mn=normMA(r.mesAno); const[mm,aa]=(mn||"0/0").split("/");
+      const ag=new Date(); const rec=(parseInt(aa)>ag.getFullYear())||(parseInt(aa)===ag.getFullYear()&&parseInt(mm)>=ag.getMonth()+1);
+      return `<div class="etr-row" ${i===rows.length-1?'style="border-bottom:none"':''}>
+        <div class="etr-dot" style="background:${rec?"#EF9F27":"var(--pink)"}"></div>
+        <div class="etr-info"><div class="etr-nm">${esc(r.projeto)}</div><div class="etr-dt">${mn}</div></div>
+        <span class="${rec?"bg-amber":"bg-green"}">${rec?"Recente":"Concluído"}</span></div>`;
     }).join(""));
 }
-function renderDemoEntregas(){
-  todasDemandas=[
-    {projeto:"Inclusão do time de cartões como área resolvedora no Back Office",mesAno:"12/2024"},
-    {projeto:"Criação da planilha inicial de controle dos tickets",mesAno:"01/2025"},
-    {projeto:"Migração do acompanhamento de tickets da planilha para a ClickUp",mesAno:"03/2025"},
-    {projeto:"Automação da planilha de Distribuição de Tickets",mesAno:"04/2026"},
-    {projeto:"Criação do Dashboard de acompanhamento de Tickets",mesAno:"05/2026"},
-  ];
-  construirFiltroDemanda(); renderDemandas();
-}
 
-// ── CHIPS → preenche campo de descrição (não adiciona direto)
+// ── REGISTRAR DIA ─────────────────────────────────────────────
+// Chips
 document.querySelectorAll(".chip").forEach(c=>{
   c.addEventListener("click",()=>{
-    const nome=c.dataset.nome;
-    document.getElementById("regAtiv").value=nome;
+    document.getElementById("regAtiv").value=c.dataset.nome;
     document.getElementById("regAtiv").focus();
-    // visual feedback temporário
-    document.querySelectorAll(".chip").forEach(x=>x.classList.remove("sel"));
-    c.classList.add("sel");
-    setTimeout(()=>c.classList.remove("sel"),800);
+    document.querySelectorAll(".chip").forEach(x=>x.classList.remove("on"));
+    c.classList.add("on"); setTimeout(()=>c.classList.remove("on"),700);
   });
 });
 
-// ── REGISTRO
-function adicionarAvulsa(){
+function addAvulsa() {
   const ativ=document.getElementById("regAtiv").value.trim();
   if(!ativ){toast("Informe a descrição da atividade.");return;}
-  const status=document.getElementById("regStatus").value;
-  const obs=document.getElementById("regObs").value.trim();
-  const data=document.getElementById("regData").value;
-  atividadesDoDia.push({atividade:ativ,status,observacao:obs,links:[...linksAtivos],data});
+  doDia.push({
+    atividade:ativ,
+    status:document.getElementById("regSt").value,
+    observacao:document.getElementById("regObs").value.trim(),
+    links:[...linksAtivos],
+    data:document.getElementById("regData").value
+  });
   document.getElementById("regAtiv").value="";
   document.getElementById("regObs").value="";
-  linksAtivos=[]; renderLinksAtivos(); renderListaDia(); salvarRascunho();
+  linksAtivos=[]; renderLnks(); guardarRascunho(); renderDia();
 }
-function renderListaDia(){
-  const body=document.getElementById("dayListBody");
-  const header=document.getElementById("dayListHeader");
+
+const STATUS_OPTS=["Finalizado","Tempo de trabalho","Em andamento","Não Iniciado","Aguardando retorno Dock","Aguardando retorno Excelência"];
+
+function renderDia() {
+  const b=document.getElementById("dlistB");
+  const h=document.getElementById("dlistHdr");
   const data=document.getElementById("regData").value;
-  const dataFmt=data?new Date(data+"T12:00:00").toLocaleDateString("pt-BR"):"hoje";
-  header.textContent="Atividades registradas — "+dataFmt+" ("+atividadesDoDia.length+")";
-  if(!atividadesDoDia.length){body.innerHTML=`<div style="color:var(--text-3);font-size:12px;padding:12px;text-align:center;">Nenhuma atividade adicionada ainda.</div>`;return;}
-  const opts=["Finalizado","Tempo de trabalho","Em andamento","Não Iniciado","Aguardando retorno Dock","Aguardando retorno Excelência"];
-  body.innerHTML=atividadesDoDia.map((a,i)=>{
-    const linksHtml=(a.links||[]).map(l=>`<a class="day-item-link" href="${esc(l.url)}" target="_blank" rel="noopener">📎 ${esc(l.nome)}</a>`).join("");
-    const selOpts=opts.map(s=>`<option${s===a.status?" selected":""}>${s}</option>`).join("");
-    return `<div class="day-item">
-      <div style="flex:1;min-width:0;overflow:hidden;">
-        <div class="day-item-name" title="${esc(a.atividade)}">${esc(a.atividade)}</div>
-        ${a.observacao?`<div class="day-item-obs">${esc(a.observacao)}</div>`:""}
-        ${linksHtml?`<div class="day-item-links">${linksHtml}</div>`:""}
+  const df=data?new Date(data+"T12:00:00").toLocaleDateString("pt-BR"):"hoje";
+  h.textContent="Atividades registradas — "+df+" ("+doDia.length+")";
+  if(!doDia.length){b.innerHTML=`<div style="color:var(--text-3);font-size:12px;padding:12px;text-align:center;">Nenhuma atividade adicionada ainda.</div>`;return;}
+  b.innerHTML=doDia.map((a,i)=>{
+    const lnksH=(a.links||[]).map(l=>`<a class="ditem-lnk" href="${esc(l.url)}" target="_blank" rel="noopener">📎 ${esc(l.nome)}</a>`).join("");
+    const opts=STATUS_OPTS.map(s=>`<option${s===a.status?" selected":""}>${s}</option>`).join("");
+    return `<div class="ditem">
+      <div style="flex:1;min-width:0;">
+        <div class="ditem-nm" title="${esc(a.atividade)}">${esc(a.atividade)}</div>
+        ${a.observacao?`<div class="ditem-obs">${esc(a.observacao)}</div>`:""}
+        ${lnksH?`<div class="ditem-lnks">${lnksH}</div>`:""}
       </div>
-      <select class="status-sel" onchange="atividadesDoDia[${i}].status=this.value;salvarRascunho()">${selOpts}</select>
-      <button class="rm-item" onclick="atividadesDoDia.splice(${i},1);renderListaDia();salvarRascunho()" title="Remover">×</button>
+      <select class="ssel" onchange="doDia[${i}].status=this.value;guardarRascunho()">${opts}</select>
+      <button class="rm-btn" onclick="doDia.splice(${i},1);guardarRascunho();renderDia()" title="Remover">×</button>
     </div>`;
   }).join("");
 }
 
-// ── SALVAR
-function salvarNaPlanilha(){
-  if(!atividadesDoDia.length){toast("Adicione pelo menos uma atividade antes de salvar.");return;}
-  const data=document.getElementById("regData").value;
-  const payload={action:"saveAtividades",usuario:usuarioAtual,atividades:atividadesDoDia.map(a=>({
-    data:a.data||data,atividade:a.atividade,status:a.status,observacao:a.observacao||"",
-    linkNome:a.links&&a.links[0]?a.links[0].nome:"",linkUrl:a.links&&a.links[0]?a.links[0].url:""
-  }))};
-  const btn=document.getElementById("btnSalvar");
-  btn.disabled=true; btn.innerHTML=`<span class="spinner"></span> Salvando...`;
-  fetch(SCRIPT_URL,{method:"POST",mode:"cors",redirect:"follow",headers:{"Content-Type":"text/plain"},body:JSON.stringify(payload)})
-    .then(r=>r.json()).then(res=>{
-      if(res.ok){
-        toast("✓ "+res.inseridas+" atividades salvas com sucesso!");
-        atividadesDoDia=[];
-        try{ localStorage.removeItem("meutudo_rascunho"); }catch(e){}
-        renderListaDia();
-        carregarHistorico(); carregarGerencial();
-      } else toast("Erro: "+(res.error||"tente novamente"));
-    }).catch(()=>toast("Erro de conexão com a planilha."))
-    .finally(()=>{btn.disabled=false;btn.innerHTML=`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Salvar todas as atividades na planilha`;});
+function limpar() {
+  if(!doDia.length){toast("Nenhuma atividade para limpar.");return;}
+  if(!confirm("Deseja limpar todas as atividades registradas hoje?")) return;
+  doDia=[];
+  try{localStorage.removeItem("meutudo_rascunho");}catch(e){}
+  renderDia(); toast("Registro do dia limpo.");
 }
 
-// ── MODAL LINK
-function abrirModalLink(){document.getElementById("mLinkNome").value="";document.getElementById("mLinkUrl").value="";document.getElementById("modalBg").classList.add("open");setTimeout(()=>document.getElementById("mLinkNome").focus(),50);}
-function fecharModal(){document.getElementById("modalBg").classList.remove("open");}
-function confirmarLink(){
-  const nome=document.getElementById("mLinkNome").value.trim();
-  const url=document.getElementById("mLinkUrl").value.trim();
-  if(!nome||!url){toast("Preencha nome e URL.");return;}
-  linksAtivos.push({nome,url}); renderLinksAtivos(); fecharModal();
+function guardarRascunho() {
+  try{localStorage.setItem("meutudo_rascunho",JSON.stringify(doDia));}catch(e){}
 }
-function renderLinksAtivos(){
-  document.getElementById("linksPreview").innerHTML=linksAtivos.map((l,i)=>
-    `<span class="link-chip"><a href="${esc(l.url)}" target="_blank" rel="noopener">📎 ${esc(l.nome)}</a><button class="rm-link" onclick="linksAtivos.splice(${i},1);renderLinksAtivos()">×</button></span>`
+function carregarRascunho() {
+  try{const r=localStorage.getItem("meutudo_rascunho");if(r)doDia=JSON.parse(r)||[];}catch(e){doDia=[];}
+}
+
+// ── SALVAR NA PLANILHA ────────────────────────────────────────
+function salvar() {
+  if(!doDia.length){toast("Adicione pelo menos uma atividade antes de salvar.");return;}
+  const data=document.getElementById("regData").value;
+  const payload={
+    action:"saveAtividades",
+    usuario:usuario,
+    atividades:doDia.map(a=>({
+      data:a.data||data, atividade:a.atividade, status:a.status,
+      observacao:a.observacao||"",
+      linkNome:a.links&&a.links[0]?a.links[0].nome:"",
+      linkUrl: a.links&&a.links[0]?a.links[0].url:""
+    }))
+  };
+  const btn=document.getElementById("btnSalvar");
+  btn.disabled=true; btn.innerHTML=`<span class="spin"></span> Salvando...`;
+
+  apiPost(payload, (err) => {
+    if(err) {
+      toast("Erro ao salvar. Verifique a conexão.");
+    } else {
+      toast("✓ "+doDia.length+" atividades salvas com sucesso!");
+      doDia=[];
+      try{localStorage.removeItem("meutudo_rascunho");}catch(e){}
+      renderDia(); carregarHist(); carregarGerencial();
+    }
+    btn.disabled=false;
+    btn.innerHTML=`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Salvar todas as atividades na planilha`;
+  });
+}
+
+// ── MODAL LINK ────────────────────────────────────────────────
+function abrirModal(){document.getElementById("mNome").value="";document.getElementById("mUrl").value="";document.getElementById("mBg").classList.add("on");setTimeout(()=>document.getElementById("mNome").focus(),50);}
+function fechaModal(){document.getElementById("mBg").classList.remove("on");}
+function confLink(){
+  const n=document.getElementById("mNome").value.trim(), u=document.getElementById("mUrl").value.trim();
+  if(!n||!u){toast("Preencha nome e URL.");return;}
+  linksAtivos.push({nome:n,url:u}); renderLnks(); fechaModal();
+}
+function renderLnks(){
+  document.getElementById("lnkPrev").innerHTML=linksAtivos.map((l,i)=>
+    `<span class="lnk-chip"><a href="${esc(l.url)}" target="_blank" rel="noopener">📎 ${esc(l.nome)}</a><button class="lnk-rm" onclick="linksAtivos.splice(${i},1);renderLnks()">×</button></span>`
   ).join("");
 }
-document.getElementById("modalBg").addEventListener("click",e=>{if(e.target===document.getElementById("modalBg"))fecharModal();});
+document.getElementById("mBg").addEventListener("click",e=>{if(e.target===document.getElementById("mBg"))fechaModal();});
 
-// ── UTILS
-function pillStatus(s){
-  const m={"Finalizado":"p-finalizado","Tempo de trabalho":"p-trabalho","Em andamento":"p-andamento","Não Iniciado":"p-naoiniciado","Aguardando retorno Dock":"p-dock","Aguardando retorno Excelência":"p-excelencia"};
-  return `<span class="pill ${m[s]||"p-naoiniciado"}">${esc(s||"—")}</span>`;
+// ── UTILS ─────────────────────────────────────────────────────
+function pillSt(s){
+  const m={"Finalizado":"p-fin","Tempo de trabalho":"p-trab","Em andamento":"p-and","Não Iniciado":"p-ni","Aguardando retorno Dock":"p-dock","Aguardando retorno Excelência":"p-exc"};
+  return `<span class="pill ${m[s]||"p-ni"}">${esc(s||"—")}</span>`;
 }
 function esc(s){return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
-function cap(s){return s.charAt(0).toUpperCase()+s.slice(1).toLowerCase();}
-function toast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),3000);}
+function toast(msg){const t=document.getElementById("toastEl");t.textContent=msg;t.classList.add("on");setTimeout(()=>t.classList.remove("on"),3000);}
 </script>
 </body>
 </html>
