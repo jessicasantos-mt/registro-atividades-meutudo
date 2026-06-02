@@ -251,7 +251,10 @@ input:focus,select:focus,textarea:focus{border-color:var(--pink);background:var(
     <div class="toolbar" id="monthFilters">
       <div class="month-btn active" data-mes="todos" onclick="filtrarMes(this)">Todos</div>
     </div>
-    <div class="toolbar">
+    <div class="toolbar" style="gap:8px;">
+      <select class="filter-sel" id="filtroDia" onchange="filtrarDia()" style="font-size:11px;padding:4px 8px;">
+        <option value="todos">Todos os dias</option>
+      </select>
       <div class="search-wrap">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
         <input type="text" id="buscaInput" placeholder="Buscar atividade..." oninput="filtrarBusca()">
@@ -350,7 +353,13 @@ input:focus,select:focus,textarea:focus{border-color:var(--pink);background:var(
       </div>
 
       <div class="day-list" id="dayList">
-        <div class="day-list-header" id="dayListHeader">Atividades registradas hoje</div>
+        <div class="day-list-header" style="display:flex;align-items:center;justify-content:space-between;">
+          <span id="dayListHeader">Atividades registradas hoje</span>
+          <button onclick="limparRascunho()" style="background:none;border:none;font-size:11px;color:var(--text-3);cursor:pointer;padding:0;display:flex;align-items:center;gap:4px;" title="Limpar registro do dia">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+            Limpar
+          </button>
+        </div>
         <div id="dayListBody" style="color:var(--text-3);font-size:12px;padding:12px;text-align:center;">Nenhuma atividade adicionada ainda.</div>
       </div>
 
@@ -383,7 +392,26 @@ const USUARIO_PRINCIPAL = "Jessica Nascimento";
 let usuarioAtual = "", modoVisualizacao = false;
 let todosRegistros = [], todasDemandas = [];
 let linksAtivos = [], atividadesDoDia = [];
-let mesFiltro = "todos", buscaAtiva = "";
+let mesFiltro = "todos", diaFiltro = "todos", buscaAtiva = "";
+
+// ── PERSISTÊNCIA DO REGISTRO DO DIA ──────────────────────────────────────
+function salvarRascunho(){
+  try{ localStorage.setItem("meutudo_rascunho", JSON.stringify(atividadesDoDia)); }catch(e){}
+}
+function carregarRascunho(){
+  try{
+    const raw = localStorage.getItem("meutudo_rascunho");
+    if(raw){ atividadesDoDia = JSON.parse(raw) || []; }
+  }catch(e){ atividadesDoDia = []; }
+}
+function limparRascunho(){
+  if(!atividadesDoDia.length){ toast("Nenhuma atividade para limpar."); return; }
+  if(!confirm("Deseja limpar todas as atividades registradas hoje?")) return;
+  atividadesDoDia = [];
+  try{ localStorage.removeItem("meutudo_rascunho"); }catch(e){}
+  renderListaDia();
+  toast("Registro do dia limpo.");
+}
 
 // ── LOGIN
 function fazerLogin(){
@@ -442,6 +470,7 @@ function iniciarPainel(){
   else document.getElementById("subNomeUsuario").textContent=usuarioAtual+" — registrando atividades";
   if(modoVisualizacao){document.getElementById("formRegistro").style.display="none";document.getElementById("acessoNegado").style.display="block";}
   const hoje=new Date(); document.getElementById("regData").value=hoje.toISOString().split("T")[0];
+  carregarRascunho(); renderListaDia();
   carregarGerencial(); carregarHistorico(); carregarDemandas();
 }
 function atualizarTimestamp(){
@@ -560,20 +589,68 @@ function renderGerencialDemo(){
 function carregarHistorico(){
   const u = (usuarioAtual===USUARIO_PRINCIPAL||modoVisualizacao) ? USUARIO_PRINCIPAL : usuarioAtual;
   fetch(SCRIPT_URL+"?action=getAtividades&usuario="+encodeURIComponent(u))
-    .then(r=>r.json()).then(data=>{todosRegistros=data.rows||[];construirFiltrosMes();renderTabela();})
+    .then(r=>r.json()).then(data=>{todosRegistros=data.rows||[];construirFiltrosMes();construirFiltroDias();renderTabela();})
     .catch(()=>{todosRegistros=[];construirFiltrosMes();renderTabela();});
 }
+// Mapas de mês para número (para ordenação)
+const MESES_NUM={"JANEIRO":1,"FEVEREIRO":2,"MARÇO":3,"ABRIL":4,"MAIO":5,"JUNHO":6,"JULHO":7,"AGOSTO":8,"SETEMBRO":9,"OUTUBRO":10,"NOVEMBRO":11,"DEZEMBRO":12};
+
+function mesAnoKey(r){
+  // extrai ano da data "dd/MM/yyyy"
+  const partes=(r.data||"").split("/");
+  const ano=partes.length===3?partes[2]:"";
+  return ano ? r.mes+"|"+ano : r.mes+"|0000";
+}
+function mesAnoLabel(mesAnoK){
+  const [mes,ano]=mesAnoK.split("|");
+  return cap(mes)+(ano&&ano!=="0000"?"/"+ano:"");
+}
+
 function construirFiltrosMes(){
-  const meses=[...new Set(todosRegistros.map(r=>r.mes).filter(Boolean))];
+  // agrupa por mes+ano únicos, ordenados desc
+  const chaves=[...new Set(todosRegistros.map(r=>mesAnoKey(r)).filter(Boolean))];
+  chaves.sort((a,b)=>{
+    const[ma,aa]=a.split("|"); const[mb,ab]=b.split("|");
+    const aaI=parseInt(aa)||0; const abI=parseInt(ab)||0;
+    if(aaI!==abI) return abI-aaI;
+    return (MESES_NUM[mb]||0)-(MESES_NUM[ma]||0);
+  });
   const cont=document.getElementById("monthFilters");
   cont.innerHTML=`<div class="month-btn active" data-mes="todos" onclick="filtrarMes(this)">Todos</div>`;
-  meses.forEach(m=>{const d=document.createElement("div");d.className="month-btn";d.dataset.mes=m;d.textContent=cap(m);d.onclick=function(){filtrarMes(this);};cont.appendChild(d);});
+  chaves.forEach(k=>{
+    const d=document.createElement("div");
+    d.className="month-btn"; d.dataset.mes=k;
+    d.textContent=mesAnoLabel(k);
+    d.onclick=function(){filtrarMes(this);};
+    cont.appendChild(d);
+  });
 }
-function filtrarMes(el){document.querySelectorAll(".month-btn").forEach(b=>b.classList.remove("active"));el.classList.add("active");mesFiltro=el.dataset.mes;renderTabela();}
+
+function construirFiltroDias(){
+  // dias únicos do filtro atual
+  let rows=todosRegistros;
+  if(mesFiltro!=="todos") rows=rows.filter(r=>mesAnoKey(r)===mesFiltro);
+  const dias=[...new Set(rows.map(r=>r.data).filter(Boolean))].sort((a,b)=>{
+    const pa=a.split("/"); const pb=b.split("/");
+    return new Date(pb[2],pb[1]-1,pb[0])-new Date(pa[2],pa[1]-1,pa[0]);
+  });
+  const sel=document.getElementById("filtroDia");
+  sel.innerHTML=`<option value="todos">Todos os dias</option>`;
+  dias.forEach(d=>{const o=document.createElement("option");o.value=d;o.textContent=d;sel.appendChild(o);});
+  sel.value="todos"; diaFiltro="todos";
+}
+
+function filtrarMes(el){
+  document.querySelectorAll(".month-btn").forEach(b=>b.classList.remove("active"));
+  el.classList.add("active"); mesFiltro=el.dataset.mes;
+  construirFiltroDias(); renderTabela();
+}
+function filtrarDia(){diaFiltro=document.getElementById("filtroDia").value;renderTabela();}
 function filtrarBusca(){buscaAtiva=document.getElementById("buscaInput").value.toLowerCase();renderTabela();}
 function renderTabela(){
   let rows=todosRegistros;
-  if(mesFiltro!=="todos") rows=rows.filter(r=>r.mes===mesFiltro);
+  if(mesFiltro!=="todos") rows=rows.filter(r=>mesAnoKey(r)===mesFiltro);
+  if(diaFiltro!=="todos") rows=rows.filter(r=>r.data===diaFiltro);
   if(buscaAtiva) rows=rows.filter(r=>r.atividade.toLowerCase().includes(buscaAtiva)||r.observacao.toLowerCase().includes(buscaAtiva));
   const tbody=document.getElementById("tblBody");
   if(!rows.length){tbody.innerHTML=`<tr><td colspan="4" style="text-align:center;color:var(--text-3);padding:20px;">Nenhuma atividade encontrada.</td></tr>`;document.getElementById("tblMeta").textContent="";return;}
@@ -678,7 +755,7 @@ function adicionarAvulsa(){
   atividadesDoDia.push({atividade:ativ,status,observacao:obs,links:[...linksAtivos],data});
   document.getElementById("regAtiv").value="";
   document.getElementById("regObs").value="";
-  linksAtivos=[]; renderLinksAtivos(); renderListaDia();
+  linksAtivos=[]; renderLinksAtivos(); renderListaDia(); salvarRascunho();
 }
 function renderListaDia(){
   const body=document.getElementById("dayListBody");
@@ -697,8 +774,8 @@ function renderListaDia(){
         ${a.observacao?`<div class="day-item-obs">${esc(a.observacao)}</div>`:""}
         ${linksHtml?`<div class="day-item-links">${linksHtml}</div>`:""}
       </div>
-      <select class="status-sel" onchange="atividadesDoDia[${i}].status=this.value">${selOpts}</select>
-      <button class="rm-item" onclick="atividadesDoDia.splice(${i},1);renderListaDia()" title="Remover">×</button>
+      <select class="status-sel" onchange="atividadesDoDia[${i}].status=this.value;salvarRascunho()">${selOpts}</select>
+      <button class="rm-item" onclick="atividadesDoDia.splice(${i},1);renderListaDia();salvarRascunho()" title="Remover">×</button>
     </div>`;
   }).join("");
 }
@@ -717,7 +794,9 @@ function salvarNaPlanilha(){
     .then(r=>r.json()).then(res=>{
       if(res.ok){
         toast("✓ "+res.inseridas+" atividades salvas com sucesso!");
-        atividadesDoDia=[]; renderListaDia();
+        atividadesDoDia=[];
+        try{ localStorage.removeItem("meutudo_rascunho"); }catch(e){}
+        renderListaDia();
         carregarHistorico(); carregarGerencial();
       } else toast("Erro: "+(res.error||"tente novamente"));
     }).catch(()=>toast("Erro de conexão com a planilha."))
