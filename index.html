@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painel de Operações — meutudo.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ── RESET & BASE ─────────────────────────────────────────── */
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --pink:#DA0075;
+  --pink-dark:#B90059;
+  --pink-light:#fce4ef;
+  --pink-mid:rgba(218,0,117,0.08);
+  --bg:#f7f4f6;
+  --surface:#ffffff;
+  --border:#e8e0e5;
+  --text:#1a1020;
+  --text-2:#5c4d58;
+  --text-3:#9e8c98;
+  --green-bg:#eaf3de;--green-text:#3b6d11;
+  --amber-bg:#faeeda;--amber-text:#854f0b;
+  --blue-bg:#e6f1fb;--blue-text:#185fa5;
+  --gray-bg:#f1eff0;--gray-text:#5c4d58;
+  --radius:10px;
+  --radius-lg:14px;
+}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;}
+input,select,textarea,button{font-family:'Inter',sans-serif;}
+
+/* ── LAYOUT ──────────────────────────────────────────────── */
+.wrapper{max-width:900px;margin:0 auto;padding:20px 16px 40px;}
+
+/* ── CABEÇALHO ───────────────────────────────────────────── */
+.header{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:18px 22px 14px;margin-bottom:4px;}
+.header-top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+.header-left{font-family:'Inter',sans-serif;font-size:13px;font-weight:500;color:var(--text-2);}
+.header-brand{font-family:'Nunito',sans-serif;font-size:26px;font-weight:400;letter-spacing:-0.5px;color:var(--text);text-align:center;}
+.header-brand strong{font-weight:800;}
+.header-brand .dot{color:var(--pink);font-weight:800;}
+.header-ts{font-size:11px;color:var(--text-3);text-align:right;}
+.header-sub{margin-top:8px;font-size:12px;color:var(--text-2);border-top:0.5px solid var(--border);padding-top:8px;}
+.header-sub span{color:var(--text-3);}
+
+/* ── NAVEGAÇÃO ───────────────────────────────────────────── */
+.nav{display:flex;background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:4px;}
+.nav-tab{flex:1;padding:11px 8px;font-size:13px;font-weight:500;cursor:pointer;text-align:center;color:var(--text-2);background:rgba(185,0,89,0.04);border-right:0.5px solid var(--border);transition:all .15s;display:flex;align-items:center;justify-content:center;gap:6px;border-bottom:2px solid transparent;}
+.nav-tab:last-child{border-right:none;}
+.nav-tab:hover{background:rgba(218,0,117,0.07);color:var(--pink-dark);}
+.nav-tab.active{background:rgba(218,0,117,0.09);color:var(--pink-dark);border-bottom:2px solid var(--pink);font-weight:600;}
+.nav-tab svg{width:15px;height:15px;flex-shrink:0;}
+
+/* ── TELAS ───────────────────────────────────────────────── */
+.screen{display:none;background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:18px;}
+.screen.active{display:block;}
+
+/* ── KPIs ────────────────────────────────────────────────── */
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px;}
+.kpi{background:var(--pink);border-radius:var(--radius);padding:14px 12px;}
+.kpi-label{font-size:11px;color:rgba(255,255,255,0.75);margin-bottom:4px;display:flex;align-items:center;gap:5px;}
+.kpi-val{font-size:26px;font-weight:700;color:#fff;font-family:'Nunito',sans-serif;}
+.kpi-sub{font-size:11px;color:rgba(255,255,255,0.6);margin-top:2px;}
+
+/* ── GRÁFICOS SIMPLES ────────────────────────────────────── */
+.charts{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.chart-card{border:0.5px solid var(--border);border-radius:var(--radius);padding:14px;}
+.section-label{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--text-3);margin-bottom:12px;}
+.bar-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.bar-label{font-size:12px;color:var(--text-2);width:140px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.bar-bg{flex:1;height:7px;background:var(--bg);border-radius:4px;overflow:hidden;}
+.bar-fill{height:100%;border-radius:4px;background:var(--pink);transition:width .4s;}
+.bar-count{font-size:11px;color:var(--text-3);width:22px;text-align:right;}
+
+/* ── FILTROS / BUSCA ─────────────────────────────────────── */
+.toolbar{display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap;}
+.month-btn{font-size:11px;padding:4px 11px;border-radius:20px;border:0.5px solid var(--border);background:var(--surface);color:var(--text-2);cursor:pointer;transition:all .12s;}
+.month-btn:hover{border-color:var(--pink);color:var(--pink);}
+.month-btn.active{background:var(--pink);color:#fff;border-color:var(--pink);}
+.search-wrap{display:flex;align-items:center;gap:7px;background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius);padding:6px 12px;flex:1;max-width:240px;}
+.search-wrap input{background:none;border:none;outline:none;font-size:13px;color:var(--text);width:100%;}
+.filter-sel{font-size:12px;padding:6px 10px;border-radius:var(--radius);border:0.5px solid var(--border);background:var(--surface);color:var(--text);cursor:pointer;}
+
+/* ── TABELA HISTÓRICO ────────────────────────────────────── */
+.tbl-wrap{border:0.5px solid var(--border);border-radius:var(--radius);overflow:hidden;}
+.tbl-wrap table{width:100%;border-collapse:collapse;font-size:12px;}
+.tbl-wrap th{background:var(--bg);color:var(--text-3);padding:8px 10px;text-align:left;font-weight:600;font-size:11px;letter-spacing:.04em;border-bottom:0.5px solid var(--border);}
+.tbl-wrap td{padding:8px 10px;border-bottom:0.5px solid var(--border);vertical-align:top;}
+.tbl-wrap tr:last-child td{border-bottom:none;}
+.tbl-wrap tr:hover td{background:var(--bg);}
+.tbl-meta{font-size:11px;color:var(--text-3);margin-top:7px;text-align:right;}
+.obs-link{color:var(--pink);text-decoration:none;font-size:11px;}
+.obs-link:hover{text-decoration:underline;}
+
+/* ── STATUS PILLS ────────────────────────────────────────── */
+.pill{display:inline-block;font-size:11px;padding:2px 9px;border-radius:20px;font-weight:500;white-space:nowrap;}
+.p-finalizado{background:var(--green-bg);color:var(--green-text);}
+.p-trabalho{background:var(--amber-bg);color:var(--amber-text);}
+.p-andamento{background:var(--blue-bg);color:var(--blue-text);}
+.p-dock{background:#f0e6f8;color:#6b21a8;}
+.p-excelencia{background:#e6f1fb;color:#185fa5;}
+.p-naoiniciado{background:var(--gray-bg);color:var(--gray-text);}
+
+/* ── ENTREGAS ────────────────────────────────────────────── */
+.entrega-list{border:0.5px solid var(--border);border-radius:var(--radius);overflow:hidden;}
+.entrega-header{background:var(--bg);padding:8px 12px;font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--text-3);border-bottom:0.5px solid var(--border);}
+.entrega-row{display:flex;align-items:center;gap:12px;padding:10px 12px;border-bottom:0.5px solid var(--border);}
+.entrega-row:last-child{border-bottom:none;}
+.entrega-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;background:var(--pink);}
+.entrega-info{flex:1;}
+.entrega-nome{font-size:13px;color:var(--text);}
+.entrega-mes{font-size:11px;color:var(--text-3);margin-top:2px;}
+.badge-pink{background:var(--pink-light);color:var(--pink-dark);font-size:11px;padding:3px 10px;border-radius:20px;}
+.badge-amber{background:var(--amber-bg);color:var(--amber-text);font-size:11px;padding:3px 10px;border-radius:20px;}
+.badge-green{background:var(--green-bg);color:var(--green-text);font-size:11px;padding:3px 10px;border-radius:20px;}
+
+/* ── FORMULÁRIO REGISTRO ─────────────────────────────────── */
+.form-label{font-size:12px;color:var(--text-2);margin-bottom:4px;display:block;font-weight:500;}
+.form-group{margin-bottom:13px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+input[type=text],input[type=date],select,textarea{
+  width:100%;padding:8px 11px;border:0.5px solid var(--border);border-radius:var(--radius);
+  background:var(--bg);color:var(--text);font-size:13px;outline:none;
+  transition:border-color .15s;}
+input:focus,select:focus,textarea:focus{border-color:var(--pink);background:var(--surface);}
+textarea{resize:vertical;min-height:56px;}
+
+/* ── CHIPS ATIVIDADES ────────────────────────────────────── */
+.chip-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:5px;}
+.chip{font-size:12px;padding:5px 12px;border-radius:20px;cursor:pointer;border:0.5px solid var(--border);background:var(--bg);color:var(--text-2);transition:all .15s;user-select:none;}
+.chip:hover{border-color:var(--pink);color:var(--pink);}
+.chip.sel{background:var(--pink);color:#fff;border-color:var(--pink);}
+
+/* ── ANEXOS / LINKS ──────────────────────────────────────── */
+.attach-row{display:flex;align-items:center;gap:8px;margin-top:6px;}
+.attach-btn{display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:var(--radius);border:0.5px dashed var(--border);background:var(--bg);color:var(--text-2);font-size:12px;cursor:pointer;transition:all .15s;}
+.attach-btn:hover{border-color:var(--pink);color:var(--pink);}
+.links-preview{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;}
+.link-chip{display:flex;align-items:center;gap:5px;background:var(--blue-bg);color:var(--blue-text);font-size:11px;padding:3px 10px;border-radius:20px;}
+.link-chip a{color:var(--blue-text);text-decoration:none;}
+.link-chip a:hover{text-decoration:underline;}
+.link-chip .rm-link{cursor:pointer;font-size:13px;line-height:1;opacity:.6;border:none;background:none;color:inherit;padding:0 0 0 3px;}
+.link-chip .rm-link:hover{opacity:1;}
+
+/* ── REGISTRO DO DIA ─────────────────────────────────────── */
+.day-list{border:0.5px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:12px;}
+.day-list-header{background:var(--bg);padding:8px 12px;font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--text-3);border-bottom:0.5px solid var(--border);}
+.day-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border-bottom:0.5px solid var(--border);}
+.day-item:last-child{border-bottom:none;}
+.day-item-name{flex:1;font-size:12px;color:var(--text);}
+.day-item-obs{font-size:11px;color:var(--text-3);max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.day-item-links{display:flex;gap:4px;flex-wrap:wrap;}
+.day-item-link{font-size:11px;color:var(--blue-text);text-decoration:none;background:var(--blue-bg);padding:1px 7px;border-radius:20px;}
+.day-item-link:hover{text-decoration:underline;}
+.status-sel{font-size:11px;padding:3px 8px;border-radius:20px;border:0.5px solid var(--border);background:var(--bg);color:var(--text);cursor:pointer;}
+.rm-item{background:none;border:none;color:var(--text-3);cursor:pointer;font-size:16px;line-height:1;padding:0 2px;}
+.rm-item:hover{color:#c00;}
+
+/* ── BOTÕES ──────────────────────────────────────────────── */
+.btn{display:flex;align-items:center;justify-content:center;gap:7px;padding:9px 18px;border-radius:var(--radius);border:none;font-size:13px;font-weight:600;cursor:pointer;width:100%;transition:all .15s;}
+.btn-pink{background:var(--pink);color:#fff;}
+.btn-pink:hover{background:var(--pink-dark);}
+.btn-dark{background:var(--pink-dark);color:#fff;}
+.btn-dark:hover{background:#8c003f;}
+.btn:disabled{opacity:.5;cursor:not-allowed;}
+
+/* ── TOAST ───────────────────────────────────────────────── */
+.toast{position:fixed;bottom:24px;right:24px;background:var(--text);color:#fff;padding:10px 18px;border-radius:var(--radius);font-size:13px;opacity:0;transform:translateY(8px);transition:all .3s;pointer-events:none;z-index:999;}
+.toast.show{opacity:1;transform:translateY(0);}
+
+/* ── LOADER ──────────────────────────────────────────────── */
+.loader{text-align:center;padding:30px;color:var(--text-3);font-size:13px;}
+.spinner{display:inline-block;width:18px;height:18px;border:2px solid var(--border);border-top-color:var(--pink);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:8px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* ── MODAL LINK ──────────────────────────────────────────── */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:100;align-items:center;justify-content:center;}
+.modal-bg.open{display:flex;}
+.modal{background:var(--surface);border-radius:var(--radius-lg);padding:22px;width:360px;max-width:90vw;}
+.modal h3{font-size:15px;font-weight:600;margin-bottom:14px;}
+
+/* ── TELA LOGIN ──────────────────────────────────────────── */
+.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--bg);}
+.login-card{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:32px;width:360px;max-width:90vw;text-align:center;}
+.login-brand{font-family:'Nunito',sans-serif;font-size:32px;font-weight:400;margin-bottom:4px;}
+.login-brand strong{font-weight:800;}
+.login-brand .dot{color:var(--pink);font-weight:800;}
+.login-sub{font-size:13px;color:var(--text-2);margin-bottom:24px;}
+.login-card input{margin-bottom:10px;}
+.login-card .btn{margin-top:6px;}
+
+@media(max-width:600px){
+  .kpi-row{grid-template-columns:1fr 1fr;}
+  .charts,.form-row,.form-row-3{grid-template-columns:1fr;}
+  .nav-tab span{display:none;}
+  .header-top{flex-direction:column;gap:6px;text-align:center;}
+  .header-ts{text-align:center;}
+}
+</style>
+</head>
+<body>
+
+<!-- ══ TELA DE LOGIN ══════════════════════════════════════════ -->
+<div class="login-wrap" id="loginWrap">
+  <div class="login-card">
+    <div class="login-brand">meu<strong>tudo</strong><span class="dot">.</span></div>
+    <div class="login-sub">Painel de operações — cartões</div>
+    <div class="form-group" style="text-align:left">
+      <label class="form-label">Seu nome completo</label>
+      <input type="text" id="loginNome" placeholder="Ex: Jessica Nascimento" autocomplete="off">
+    </div>
+    <button class="btn btn-pink" onclick="fazerLogin()">Entrar no painel</button>
+    <p style="font-size:11px;color:var(--text-3);margin-top:14px;">Visitantes podem visualizar todas as informações.<br>Para registrar atividades, informe seu nome.</p>
+  </div>
+</div>
+
+<!-- ══ PAINEL PRINCIPAL ══════════════════════════════════════ -->
+<div class="wrapper" id="painelWrap" style="display:none">
+
+  <!-- CABEÇALHO -->
+  <div class="header">
+    <div class="header-top">
+      <div class="header-left">Painel de operações — cartões</div>
+      <div class="header-brand">meu<strong>tudo</strong><span class="dot">.</span></div>
+      <div class="header-ts" id="tsAtual"></div>
+    </div>
+    <div class="header-sub">
+      Gestão de atividades e demandas &nbsp;·&nbsp;
+      <span id="subNomeUsuario">Jessica Nascimento — Agente de Ops. III</span>
+    </div>
+  </div>
+
+  <!-- NAVEGAÇÃO -->
+  <nav class="nav">
+    <div class="nav-tab active" onclick="showTab('gerencial',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="12" width="4" height="9"/><rect x="10" y="7" width="4" height="14"/><rect x="17" y="3" width="4" height="18"/></svg>
+      <span>Gerencial</span>
+    </div>
+    <div class="nav-tab" onclick="showTab('historico',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+      <span>Histórico</span>
+    </div>
+    <div class="nav-tab" onclick="showTab('demandas',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+      <span>Entregas</span>
+    </div>
+    <div class="nav-tab" id="tabRegistrar" onclick="showTab('registro',this)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>
+      <span>Registrar dia</span>
+    </div>
+  </nav>
+
+  <!-- ── ABA GERENCIAL ──────────────────────────────────────── -->
+  <div class="screen active" id="screen-gerencial">
+    <div class="kpi-row" id="kpiRow">
+      <div class="kpi"><div class="kpi-label">Total atividades</div><div class="kpi-val" id="kTotal">—</div><div class="kpi-sub" id="kTotalSub">carregando...</div></div>
+      <div class="kpi"><div class="kpi-label">Finalizadas</div><div class="kpi-val" id="kFin">—</div><div class="kpi-sub" id="kFinSub"></div></div>
+      <div class="kpi"><div class="kpi-label">Reuniões</div><div class="kpi-val" id="kReu">—</div><div class="kpi-sub" id="kReuSub"></div></div>
+      <div class="kpi"><div class="kpi-label">Entregas do setor</div><div class="kpi-val" id="kDem">—</div><div class="kpi-sub">projetos realizados</div></div>
+    </div>
+    <div class="charts">
+      <div class="chart-card">
+        <div class="section-label">Atividades por mês</div>
+        <div id="chartMes"><div class="loader"><span class="spinner"></span>carregando...</div></div>
+      </div>
+      <div class="chart-card">
+        <div class="section-label">Tipo de atividade</div>
+        <div id="chartTipo"><div class="loader"><span class="spinner"></span>carregando...</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── ABA HISTÓRICO ──────────────────────────────────────── -->
+  <div class="screen" id="screen-historico">
+    <div class="toolbar" id="monthFilters">
+      <div class="month-btn active" data-mes="todos" onclick="filtrarMes(this)">Todos</div>
+    </div>
+    <div class="toolbar">
+      <div class="search-wrap">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <input type="text" id="buscaInput" placeholder="Buscar atividade..." oninput="filtrarBusca()">
+      </div>
+    </div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Data</th><th>Atividade</th><th>Status</th><th>Observação</th></tr></thead>
+        <tbody id="tblBody"><tr><td colspan="4" class="loader"><span class="spinner"></span>carregando histórico...</td></tr></tbody>
+      </table>
+    </div>
+    <div class="tbl-meta" id="tblMeta"></div>
+  </div>
+
+  <!-- ── ABA ENTREGAS ───────────────────────────────────────── -->
+  <div class="screen" id="screen-demandas">
+    <div class="toolbar" style="margin-bottom:12px;">
+      <span style="font-size:12px;color:var(--text-2);font-weight:500;">Filtrar:</span>
+      <select class="filter-sel" id="filtroDemanda" onchange="filtrarDemandas()">
+        <option value="todos">Todos os períodos</option>
+      </select>
+      <span class="badge-pink" id="contDemandas">— projetos</span>
+    </div>
+    <div class="entrega-list" id="listaEntregas">
+      <div class="entrega-header">Entregas do setor</div>
+      <div class="loader"><span class="spinner"></span>carregando...</div>
+    </div>
+  </div>
+
+  <!-- ── ABA REGISTRAR DIA ──────────────────────────────────── -->
+  <div class="screen" id="screen-registro">
+    <div id="acessoNegado" style="display:none;text-align:center;padding:24px;">
+      <p style="color:var(--text-2);font-size:14px;margin-bottom:8px;">Você está no modo visualização.</p>
+      <p style="color:var(--text-3);font-size:12px;">Para registrar atividades, faça login com seu nome completo.</p>
+    </div>
+    <div id="formRegistro">
+      <p style="font-size:13px;color:var(--text-2);margin-bottom:14px;">Selecione as atividades do dia ou adicione uma nova. Os dados são salvos diretamente na planilha.</p>
+
+      <div class="form-row" style="margin-bottom:2px;">
+        <div class="form-group">
+          <label class="form-label">Data</label>
+          <input type="date" id="regData">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Status padrão para os chips</label>
+          <select id="regStatusPadrao">
+            <option>Finalizado</option>
+            <option>Tempo de trabalho</option>
+            <option>Em andamento</option>
+            <option>Não Iniciado</option>
+            <option>Aguardando retorno Dock</option>
+            <option>Aguardando retorno Excelência</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Atividades frequentes — clique para selecionar</label>
+        <div class="chip-row" id="chipsFreq">
+          <div class="chip" data-nome="REUNIÃO - Daily Time Cartões">Daily Time Cartões</div>
+          <div class="chip" data-nome="REUNIÃO - Quinzenal Flash & Meutudo">Quinzenal Flash & Meutudo</div>
+          <div class="chip" data-nome="Verificar tasks abertas na ClickUp">Verificar ClickUp</div>
+          <div class="chip" data-nome="Verificar tickets BackOffice">Verificar tickets BackOffice</div>
+          <div class="chip" data-nome="Fazer validação do presumido">Fazer validação do presumido</div>
+          <div class="chip" data-nome="Verificar planilha de custódia">Verificar planilha de custódia</div>
+          <div class="chip" data-nome="REUNIÃO - Semanal Meutudo & Dock">Semanal Meutudo & Dock</div>
+        </div>
+      </div>
+
+      <div style="border:0.5px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:13px;">
+        <div class="section-label" style="margin-bottom:10px;">Atividade avulsa</div>
+        <div class="form-group">
+          <label class="form-label">Descrição da atividade</label>
+          <input type="text" id="regAtiv" placeholder="Ex: Analisar chamado DOCK para cliente X...">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Status</label>
+            <select id="regStatus">
+              <option>Finalizado</option>
+              <option>Tempo de trabalho</option>
+              <option>Em andamento</option>
+              <option>Não Iniciado</option>
+              <option>Aguardando retorno Dock</option>
+              <option>Aguardando retorno Excelência</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Observação</label>
+            <input type="text" id="regObs" placeholder="Contexto, quantidade...">
+          </div>
+        </div>
+
+        <!-- ANEXO / LINK -->
+        <div class="form-group">
+          <label class="form-label">Anexo ou link</label>
+          <div id="linksPreview" class="links-preview"></div>
+          <div class="attach-row">
+            <button type="button" class="attach-btn" onclick="abrirModalLink()">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>
+              Adicionar link / planilha
+            </button>
+          </div>
+        </div>
+        <button class="btn btn-pink" onclick="adicionarAvulsa()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>
+          Adicionar atividade avulsa
+        </button>
+      </div>
+
+      <!-- LISTA DO DIA -->
+      <div class="day-list" id="dayList">
+        <div class="day-list-header" id="dayListHeader">Atividades registradas hoje</div>
+        <div id="dayListBody" style="color:var(--text-3);font-size:12px;padding:12px 12px;text-align:center;">Nenhuma atividade adicionada ainda.</div>
+      </div>
+
+      <button class="btn btn-dark" id="btnSalvar" onclick="salvarNaPlanilha()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        Salvar todas as atividades na planilha
+      </button>
+    </div>
+  </div>
+
+</div><!-- /wrapper -->
+
+<!-- MODAL LINK -->
+<div class="modal-bg" id="modalBg">
+  <div class="modal">
+    <h3>Adicionar link / planilha</h3>
+    <div class="form-group">
+      <label class="form-label">Nome exibido</label>
+      <input type="text" id="mLinkNome" placeholder="Ex: Planilha de Logística">
+    </div>
+    <div class="form-group">
+      <label class="form-label">URL</label>
+      <input type="text" id="mLinkUrl" placeholder="https://docs.google.com/...">
+    </div>
+    <div style="display:flex;gap:8px;margin-top:4px;">
+      <button class="btn btn-pink" style="flex:1" onclick="confirmarLink()">Confirmar</button>
+      <button class="btn" style="flex:1;background:var(--bg);color:var(--text)" onclick="fecharModal()">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ══ CONFIGURAÇÃO ══════════════════════════════════════════════
+// 1. Publique o Apps Script como descrito no Code.gs
+// 2. Cole aqui a URL gerada:
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxsi1cIKISXDqRb-jkx-tH62HtDyEzL8V_fkbSNNFDlLeQGyXoqfB7220CV3vLmplXF/exec";
+// ═════════════════════════════════════════════════════════════
+
+const USUARIO_PRINCIPAL = "Jessica Nascimento";
+let usuarioAtual = "";
+let modoVisualizacao = false;
+let todosRegistros = [];
+let todasDemandas = [];
+let linksAtivos = [];
+let atividadesDoDia = [];
+let mesFiltro = "todos";
+let buscaAtiva = "";
+
+// ── LOGIN ──────────────────────────────────────────────────────
+function fazerLogin() {
+  const nome = document.getElementById("loginNome").value.trim();
+  if (!nome) { toast("Informe seu nome para continuar."); return; }
+  usuarioAtual = nome;
+  modoVisualizacao = false;
+  iniciarPainel();
+}
+
+document.getElementById("loginNome").addEventListener("keydown", e => {
+  if (e.key === "Enter") fazerLogin();
+});
+
+// Botão "apenas visualizar"
+const loginCard = document.querySelector(".login-card");
+const btnVis = document.createElement("button");
+btnVis.className = "btn";
+btnVis.style = "margin-top:8px;background:var(--bg);color:var(--text-2);font-size:12px;";
+btnVis.textContent = "Entrar apenas para visualizar";
+btnVis.onclick = () => {
+  usuarioAtual = "Visitante";
+  modoVisualizacao = true;
+  iniciarPainel();
+};
+loginCard.appendChild(btnVis);
+
+function iniciarPainel() {
+  document.getElementById("loginWrap").style.display = "none";
+  document.getElementById("painelWrap").style.display = "block";
+  atualizarTimestamp();
+  setInterval(atualizarTimestamp, 60000);
+
+  // Nome no cabeçalho
+  if (usuarioAtual === USUARIO_PRINCIPAL) {
+    document.getElementById("subNomeUsuario").textContent = "Jessica Nascimento — Agente de Ops. III";
+  } else if (modoVisualizacao) {
+    document.getElementById("subNomeUsuario").textContent = "Modo visualização";
+  } else {
+    document.getElementById("subNomeUsuario").textContent = usuarioAtual + " — registrando atividades";
+  }
+
+  // Aba registro
+  if (modoVisualizacao) {
+    document.getElementById("formRegistro").style.display = "none";
+    document.getElementById("acessoNegado").style.display = "block";
+  }
+
+  // Data padrão = hoje
+  const hoje = new Date();
+  const hStr = hoje.toISOString().split("T")[0];
+  document.getElementById("regData").value = hStr;
+
+  carregarGerencial();
+  carregarHistorico();
+  carregarDemandas();
+}
+
+function atualizarTimestamp() {
+  const n = new Date();
+  const d = n.toLocaleDateString("pt-BR");
+  const h = n.toLocaleTimeString("pt-BR", {hour:"2-digit",minute:"2-digit"});
+  document.getElementById("tsAtual").textContent = "atualizado em " + d + " às " + h;
+}
+
+// ── NAVEGAÇÃO ──────────────────────────────────────────────────
+function showTab(name, el) {
+  document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+  document.querySelectorAll(".nav-tab").forEach(t => t.classList.remove("active"));
+  document.getElementById("screen-" + name).classList.add("active");
+  el.classList.add("active");
+}
+
+// ── GERENCIAL ─────────────────────────────────────────────────
+function carregarGerencial() {
+  if (SCRIPT_URL === "COLE_AQUI_A_URL_DO_APPS_SCRIPT") {
+    renderGerencialDemo();
+    return;
+  }
+  fetch(SCRIPT_URL + "?action=getResumo")
+    .then(r => r.json())
+    .then(data => renderGerencial(data))
+    .catch(() => renderGerencialDemo());
+}
+
+function renderGerencial(d) {
+  document.getElementById("kTotal").textContent = d.total || 0;
+  document.getElementById("kTotalSub").textContent = "registros históricos";
+  document.getElementById("kFin").textContent = d.finalizadas || 0;
+  const pct = d.total ? Math.round((d.finalizadas/d.total)*100) : 0;
+  document.getElementById("kFinSub").textContent = pct + "% do total";
+  document.getElementById("kReu").textContent = d.reunioes || 0;
+  const pctR = d.total ? Math.round((d.reunioes/d.total)*100) : 0;
+  document.getElementById("kReuSub").textContent = pctR + "% do total";
+  document.getElementById("kDem").textContent = d.totalDemandas || 0;
+
+  // Gráfico por mês
+  const porMes = d.porMes || {};
+  const mesesOrdem = ["DEZEMBRO","JANEIRO","FEVEREIRO","MARÇO","ABRIL","MAIO","JUNHO","JULHO","AGOSTO","SETEMBRO","OUTUBRO","NOVEMBRO"];
+  const entradasMes = mesesOrdem.filter(m => porMes[m]).map(m => [m, porMes[m]]);
+  const maxMes = Math.max(...entradasMes.map(x => x[1]), 1);
+  document.getElementById("chartMes").innerHTML = entradasMes.map(([m, v]) =>
+    `<div class="bar-row">
+      <div class="bar-label">${capitalize(m)}</div>
+      <div class="bar-bg"><div class="bar-fill" style="width:${Math.round((v/maxMes)*100)}%"></div></div>
+      <div class="bar-count">${v}</div>
+    </div>`
+  ).join("") || "<div class='loader'>Sem dados</div>";
+
+  // Gráfico por tipo
+  const porTipo = d.porTipo || {};
+  const entradasTipo = Object.entries(porTipo).filter(([,v]) => v > 0).sort((a,b) => b[1]-a[1]);
+  const maxTipo = Math.max(...entradasTipo.map(x => x[1]), 1);
+  document.getElementById("chartTipo").innerHTML = entradasTipo.map(([t, v]) =>
+    `<div class="bar-row">
+      <div class="bar-label">${t}</div>
+      <div class="bar-bg"><div class="bar-fill" style="width:${Math.round((v/maxTipo)*100)}%"></div></div>
+      <div class="bar-count">${v}</div>
+    </div>`
+  ).join("") || "<div class='loader'>Sem dados</div>";
+}
+
+function renderGerencialDemo() {
+  renderGerencial({
+    total: 347, finalizadas: 218, reunioes: 104, totalDemandas: 22,
+    porMes: {"DEZEMBRO":38,"JANEIRO":24,"FEVEREIRO":52,"MARÇO":63,"ABRIL":85,"MAIO":70},
+    porTipo: {"Reuniões":104,"Análise/Tickets":76,"Verificar ClickUp":65,"Chamados Dock":44,"Auditorias":28,"Outras":30}
+  });
+}
+
+// ── HISTÓRICO ─────────────────────────────────────────────────
+function carregarHistorico() {
+  if (SCRIPT_URL === "COLE_AQUI_A_URL_DO_APPS_SCRIPT") {
+    renderDemoHistorico();
+    return;
+  }
+  fetch(SCRIPT_URL + "?action=getAtividades&usuario=" + encodeURIComponent(usuarioAtual === USUARIO_PRINCIPAL || modoVisualizacao ? USUARIO_PRINCIPAL : usuarioAtual))
+    .then(r => r.json())
+    .then(data => {
+      todosRegistros = data.rows || [];
+      construirFiltrosMes();
+      renderTabela();
+    })
+    .catch(() => renderDemoHistorico());
+}
+
+function construirFiltrosMes() {
+  const meses = [...new Set(todosRegistros.map(r => r.mes).filter(Boolean))];
+  const cont = document.getElementById("monthFilters");
+  cont.innerHTML = `<div class="month-btn active" data-mes="todos" onclick="filtrarMes(this)">Todos</div>`;
+  meses.forEach(m => {
+    const d = document.createElement("div");
+    d.className = "month-btn";
+    d.dataset.mes = m;
+    d.textContent = capitalize(m);
+    d.onclick = function(){ filtrarMes(this); };
+    cont.appendChild(d);
+  });
+}
+
+function filtrarMes(el) {
+  document.querySelectorAll(".month-btn").forEach(b => b.classList.remove("active"));
+  el.classList.add("active");
+  mesFiltro = el.dataset.mes;
+  renderTabela();
+}
+
+function filtrarBusca() {
+  buscaAtiva = document.getElementById("buscaInput").value.toLowerCase();
+  renderTabela();
+}
+
+function renderTabela() {
+  let rows = todosRegistros;
+  if (mesFiltro !== "todos") rows = rows.filter(r => r.mes === mesFiltro);
+  if (buscaAtiva) rows = rows.filter(r =>
+    r.atividade.toLowerCase().includes(buscaAtiva) ||
+    r.observacao.toLowerCase().includes(buscaAtiva)
+  );
+
+  const tbody = document.getElementById("tblBody");
+  if (!rows.length) {
+    tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;color:var(--text-3);padding:20px;">Nenhuma atividade encontrada.</td></tr>`;
+    document.getElementById("tblMeta").textContent = "";
+    return;
+  }
+
+  tbody.innerHTML = rows.map(r => {
+    const obs = formatarObs(r.observacao, r.linha);
+    return `<tr>
+      <td style="white-space:nowrap;color:var(--text-2);">${r.data}</td>
+      <td>${esc(r.atividade)}</td>
+      <td>${pillStatus(r.status)}</td>
+      <td>${obs}</td>
+    </tr>`;
+  }).join("");
+  document.getElementById("tblMeta").textContent = "mostrando " + rows.length + " de " + todosRegistros.length + " registros";
+}
+
+function formatarObs(obs, linha) {
+  if (!obs) return `<span style="color:var(--text-3)">—</span>`;
+  // Detecta links no formato "Nome|LINK|url"
+  const partes = obs.split(" | ");
+  return partes.map(p => {
+    if (p.includes("|LINK|")) {
+      const [nome, , url] = p.split("|LINK|");
+      return `<a class="obs-link" href="${esc(url)}" target="_blank" rel="noopener">📎 ${esc(nome)}</a>`;
+    }
+    return `<span style="color:var(--text-2)">${esc(p)}</span>`;
+  }).join(" ");
+}
+
+function renderDemoHistorico() {
+  todosRegistros = [
+    {linha:1,data:"29/05/2026",mes:"MAIO",atividade:"Criação do painel para busca por CPF",status:"Finalizado",observacao:""},
+    {linha:2,data:"29/05/2026",mes:"MAIO",atividade:"Verificar tickets BackOffice",status:"Finalizado",observacao:""},
+    {linha:3,data:"28/05/2026",mes:"MAIO",atividade:"Verificar planilha de custódia",status:"Finalizado",observacao:"TRATATIVAS CUSTÓDIA|LINK|https://docs.google.com"},
+    {linha:4,data:"28/05/2026",mes:"MAIO",atividade:"REUNIÃO - Daily Time Cartões",status:"Tempo de trabalho",observacao:"16:30 - 17h"},
+    {linha:5,data:"27/05/2026",mes:"MAIO",atividade:"REUNIÃO - Semanal MeuTudo & Dock",status:"Tempo de trabalho",observacao:"16:30 - 17h"},
+    {linha:6,data:"01/06/2026",mes:"JUNHO",atividade:"Verificar tickets BackOffice",status:"Em andamento",observacao:""},
+    {linha:7,data:"01/06/2026",mes:"JUNHO",atividade:"Verificar planilha de custódia",status:"Não Iniciado",observacao:""},
+    {linha:8,data:"01/06/2026",mes:"JUNHO",atividade:"REUNIÃO - Daily Time Cartões",status:"Tempo de trabalho",observacao:"11:30 - 12h"},
+  ];
+  construirFiltrosMes();
+  renderTabela();
+}
+
+// ── DEMANDAS ──────────────────────────────────────────────────
+function carregarDemandas() {
+  if (SCRIPT_URL === "COLE_AQUI_A_URL_DO_APPS_SCRIPT") {
+    renderDemoEntregas();
+    return;
+  }
+  fetch(SCRIPT_URL + "?action=getDemandas")
+    .then(r => r.json())
+    .then(data => {
+      todasDemandas = data.rows || [];
+      construirFiltroDemanda();
+      renderDemandas();
+    })
+    .catch(() => renderDemoEntregas());
+}
+
+function construirFiltroDemanda() {
+  const meses = [...new Set(todasDemandas.map(d => d.mesAno).filter(Boolean))].sort();
+  const sel = document.getElementById("filtroDemanda");
+  sel.innerHTML = `<option value="todos">Todos os períodos</option>`;
+  meses.forEach(m => {
+    const o = document.createElement("option");
+    o.value = m;
+    o.textContent = m;
+    sel.appendChild(o);
+  });
+}
+
+function filtrarDemandas() {
+  renderDemandas();
+}
+
+function renderDemandas() {
+  const filtro = document.getElementById("filtroDemanda").value;
+  const rows = filtro === "todos" ? todasDemandas : todasDemandas.filter(d => d.mesAno === filtro);
+
+  const lista = document.getElementById("listaEntregas");
+  const contEl = document.getElementById("contDemandas");
+  contEl.textContent = rows.length + " projeto" + (rows.length !== 1 ? "s" : "");
+
+  lista.innerHTML = `<div class="entrega-header">Entregas do setor</div>` +
+    (rows.length === 0
+      ? `<div class="loader">Nenhuma entrega no período selecionado.</div>`
+      : rows.map((r, i) => {
+          const ultimo = i === rows.length - 1;
+          const mesNum = parseInt((r.mesAno || "").split("/")[0] || "0");
+          const anoNum = parseInt((r.mesAno || "").split("/")[1] || "0");
+          const agora = new Date();
+          const recente = (anoNum === agora.getFullYear() && mesNum >= agora.getMonth()) || anoNum > agora.getFullYear();
+          const badge = recente
+            ? `<span class="badge-amber">Recente</span>`
+            : `<span class="badge-green">Concluído</span>`;
+          const dot = recente ? "#EF9F27" : "var(--pink)";
+          return `<div class="entrega-row" ${ultimo ? 'style="border-bottom:none"' : ''}>
+            <div class="entrega-dot" style="background:${dot}"></div>
+            <div class="entrega-info">
+              <div class="entrega-nome">${esc(r.projeto)}</div>
+              <div class="entrega-mes">${r.mesAno}</div>
+            </div>
+            ${badge}
+          </div>`;
+        }).join(""));
+}
+
+function renderDemoEntregas() {
+  todasDemandas = [
+    {projeto:"Inclusão do time de cartões como área resolvedora no Back Office",mesAno:"12/2024"},
+    {projeto:"Criação da planilha inicial de controle dos tickets",mesAno:"01/2025"},
+    {projeto:"Iniciativa para a tratativa dos tickets abertos pelo atendimento",mesAno:"02/2025"},
+    {projeto:"Migração do acompanhamento de tickets da planilha para a ClickUp",mesAno:"03/2025"},
+    {projeto:"Consolidar todos os tickets de janeiro a março com SLA",mesAno:"04/2025"},
+    {projeto:"Automação da planilha de Distribuição de Tickets",mesAno:"04/2026"},
+    {projeto:"Criação do Dashboard de acompanhamento de Tickets",mesAno:"05/2026"},
+    {projeto:"Criação do painel para busca por CPF na planilha de logística",mesAno:"05/2026"},
+  ];
+  construirFiltroDemanda();
+  renderDemandas();
+}
+
+// ── REGISTRO DO DIA ───────────────────────────────────────────
+document.querySelectorAll(".chip").forEach(c => {
+  c.addEventListener("click", () => c.classList.toggle("sel"));
+});
+
+function adicionarAvulsa() {
+  const ativ = document.getElementById("regAtiv").value.trim();
+  if (!ativ) { toast("Informe a descrição da atividade."); return; }
+
+  const status = document.getElementById("regStatus").value;
+  const obs    = document.getElementById("regObs").value.trim();
+  const data   = document.getElementById("regData").value;
+
+  adicionarItemDia({ atividade: ativ, status, observacao: obs, links: [...linksAtivos], data });
+
+  document.getElementById("regAtiv").value = "";
+  document.getElementById("regObs").value = "";
+  linksAtivos = [];
+  renderLinksAtivos();
+}
+
+function adicionarItemDia(item) {
+  atividadesDoDia.push(item);
+  renderListaDia();
+}
+
+function renderListaDia() {
+  const body = document.getElementById("dayListBody");
+  const header = document.getElementById("dayListHeader");
+  const data = document.getElementById("regData").value;
+  const dataFmt = data ? new Date(data + "T12:00:00").toLocaleDateString("pt-BR") : "hoje";
+  header.textContent = "Atividades registradas — " + dataFmt + " (" + atividadesDoDia.length + ")";
+
+  if (!atividadesDoDia.length) {
+    body.innerHTML = `<div style="color:var(--text-3);font-size:12px;padding:12px;text-align:center;">Nenhuma atividade adicionada ainda.</div>`;
+    return;
+  }
+
+  const statusOpts = ["Finalizado","Tempo de trabalho","Em andamento","Não Iniciado","Aguardando retorno Dock","Aguardando retorno Excelência"];
+  body.innerHTML = atividadesDoDia.map((a, i) => {
+    const linksHtml = (a.links || []).map(l =>
+      `<a class="day-item-link" href="${esc(l.url)}" target="_blank" rel="noopener">📎 ${esc(l.nome)}</a>`
+    ).join("");
+    const opts = statusOpts.map(s =>
+      `<option${s === a.status ? " selected" : ""}>${s}</option>`
+    ).join("");
+    return `<div class="day-item" id="dayitem-${i}">
+      <div style="flex:1;min-width:0">
+        <div class="day-item-name">${esc(a.atividade)}</div>
+        ${a.observacao ? `<div class="day-item-obs">${esc(a.observacao)}</div>` : ""}
+        ${linksHtml ? `<div class="day-item-links" style="margin-top:3px">${linksHtml}</div>` : ""}
+      </div>
+      <select class="status-sel" onchange="atualizarStatusLocal(${i}, this.value)">${opts}</select>
+      <button class="rm-item" onclick="removerItemDia(${i})" title="Remover">×</button>
+    </div>`;
+  }).join("");
+}
+
+function atualizarStatusLocal(i, val) {
+  atividadesDoDia[i].status = val;
+}
+
+function removerItemDia(i) {
+  atividadesDoDia.splice(i, 1);
+  renderListaDia();
+}
+
+// ── SALVAR NA PLANILHA ────────────────────────────────────────
+function salvarNaPlanilha() {
+  if (SCRIPT_URL === "COLE_AQUI_A_URL_DO_APPS_SCRIPT") {
+    toast("Configure a SCRIPT_URL no código para conectar à planilha.");
+    return;
+  }
+
+  // Chips selecionados
+  const statusPadrao = document.getElementById("regStatusPadrao").value;
+  const data = document.getElementById("regData").value;
+  const chips = [...document.querySelectorAll(".chip.sel")].map(c => ({
+    atividade: c.dataset.nome,
+    status: statusPadrao,
+    observacao: "",
+    links: [],
+    data
+  }));
+
+  const tudo = [...chips, ...atividadesDoDia];
+  if (!tudo.length) { toast("Adicione pelo menos uma atividade antes de salvar."); return; }
+
+  const payload = {
+    action: "saveAtividades",
+    usuario: usuarioAtual,
+    atividades: tudo.map(a => ({
+      data: a.data || data,
+      atividade: a.atividade,
+      status: a.status,
+      observacao: a.observacao || "",
+      linkNome: a.links && a.links[0] ? a.links[0].nome : "",
+      linkUrl:  a.links && a.links[0] ? a.links[0].url  : ""
+    }))
+  };
+
+  const btn = document.getElementById("btnSalvar");
+  btn.disabled = true;
+  btn.innerHTML = `<span class="spinner"></span> Salvando...`;
+
+  fetch(SCRIPT_URL, {
+    method: "POST",
+    headers: {"Content-Type":"application/json"},
+    body: JSON.stringify(payload)
+  })
+  .then(r => r.json())
+  .then(res => {
+    if (res.ok) {
+      toast("✓ " + res.inseridas + " atividades salvas com sucesso!");
+      atividadesDoDia = [];
+      document.querySelectorAll(".chip.sel").forEach(c => c.classList.remove("sel"));
+      renderListaDia();
+      carregarHistorico();
+      carregarGerencial();
+    } else {
+      toast("Erro: " + (res.error || "tente novamente"));
+    }
+  })
+  .catch(() => toast("Erro de conexão com a planilha."))
+  .finally(() => {
+    btn.disabled = false;
+    btn.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Salvar todas as atividades na planilha`;
+  });
+}
+
+// ── MODAL LINK ─────────────────────────────────────────────────
+function abrirModalLink() {
+  document.getElementById("mLinkNome").value = "";
+  document.getElementById("mLinkUrl").value = "";
+  document.getElementById("modalBg").classList.add("open");
+  setTimeout(() => document.getElementById("mLinkNome").focus(), 50);
+}
+function fecharModal() {
+  document.getElementById("modalBg").classList.remove("open");
+}
+function confirmarLink() {
+  const nome = document.getElementById("mLinkNome").value.trim();
+  const url  = document.getElementById("mLinkUrl").value.trim();
+  if (!nome || !url) { toast("Preencha nome e URL."); return; }
+  linksAtivos.push({ nome, url });
+  renderLinksAtivos();
+  fecharModal();
+}
+function renderLinksAtivos() {
+  const prev = document.getElementById("linksPreview");
+  prev.innerHTML = linksAtivos.map((l, i) =>
+    `<span class="link-chip">
+      <a href="${esc(l.url)}" target="_blank" rel="noopener">📎 ${esc(l.nome)}</a>
+      <button class="rm-link" onclick="removerLink(${i})" title="Remover">×</button>
+    </span>`
+  ).join("");
+}
+function removerLink(i) {
+  linksAtivos.splice(i, 1);
+  renderLinksAtivos();
+}
+document.getElementById("modalBg").addEventListener("click", e => {
+  if (e.target === document.getElementById("modalBg")) fecharModal();
+});
+
+// ── STATUS PILL ────────────────────────────────────────────────
+function pillStatus(s) {
+  const m = {
+    "Finalizado":"p-finalizado",
+    "Tempo de trabalho":"p-trabalho",
+    "Em andamento":"p-andamento",
+    "Não Iniciado":"p-naoiniciado",
+    "Aguardando retorno Dock":"p-dock",
+    "Aguardando retorno Excelência":"p-excelencia"
+  };
+  return `<span class="pill ${m[s]||'p-naoiniciado'}">${esc(s||"—")}</span>`;
+}
+
+// ── UTILITÁRIOS ────────────────────────────────────────────────
+function esc(s) {
+  return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+}
+function capitalize(s) {
+  return s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
+}
+function toast(msg) {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  setTimeout(() => t.classList.remove("show"), 3000);
+}
+</script>
+</body>
+</html>
