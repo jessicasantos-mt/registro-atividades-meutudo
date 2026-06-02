@@ -208,6 +208,13 @@ input:focus,select:focus,textarea:focus{border-color:var(--pink);background:var(
 
   <!-- GERENCIAL -->
   <div class="screen active" id="screen-gerencial">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;">
+      <span style="font-size:12px;color:var(--text-2);font-weight:500;">Visualizando:</span>
+      <select class="filter-sel" id="filtroUsuario" onchange="filtrarUsuarioGerencial()" style="font-size:12px;min-width:200px;">
+        <option value="todos">Todos</option>
+      </select>
+      <span style="font-size:11px;color:var(--text-3);">Selecione uma pessoa para ver os dados individualmente</span>
+    </div>
     <div class="kpi-row">
       <div class="kpi"><div class="kpi-label">Total atividades</div><div class="kpi-val" id="kTotal">—</div><div class="kpi-sub" id="kTotalSub">carregando...</div></div>
       <div class="kpi"><div class="kpi-label">Finalizadas</div><div class="kpi-val" id="kFin">—</div><div class="kpi-sub" id="kFinSub"></div></div>
@@ -392,7 +399,7 @@ const USUARIO_PRINCIPAL = "Jessica Nascimento";
 let usuarioAtual = "", modoVisualizacao = false;
 let todosRegistros = [], todasDemandas = [];
 let linksAtivos = [], atividadesDoDia = [];
-let mesFiltro = "todos", diaFiltro = "todos", buscaAtiva = "";
+let mesFiltro = "todos", diaFiltro = "todos", buscaAtiva = "", usuarioGerencial = "todos";
 
 // ── PERSISTÊNCIA DO REGISTRO DO DIA ──────────────────────────────────────
 function salvarRascunho(){
@@ -487,7 +494,44 @@ function showTab(name,el){
 
 // ── GERENCIAL
 function carregarGerencial(){
-  fetch(SCRIPT_URL+"?action=getResumo").then(r=>r.json()).then(renderGerencial).catch(renderGerencialDemo);
+  // Carrega lista de usuários e depois o resumo
+  fetch(SCRIPT_URL+"?action=getUsuarios",{mode:"cors",redirect:"follow"})
+    .then(r=>r.json())
+    .then(data=>{ construirFiltroUsuario(data.usuarios||[]); })
+    .catch(()=>{ construirFiltroUsuario([]); });
+  fetchResumo();
+}
+function fetchResumo(){
+  const u = usuarioGerencial;
+  const qs = u==="todos" ? "" : "&usuario="+encodeURIComponent(u);
+  fetch(SCRIPT_URL+"?action=getResumo"+qs,{mode:"cors",redirect:"follow"})
+    .then(r=>r.json()).then(renderGerencial).catch(renderGerencialDemo);
+}
+function construirFiltroUsuario(usuarios){
+  const sel = document.getElementById("filtroUsuario");
+  if(!sel) return;
+  const atual = sel.value;
+  sel.innerHTML = `<option value="todos">Todos</option>`;
+  usuarios.forEach(u=>{
+    const o=document.createElement("option");
+    o.value=u;
+    // Exibe "Jessica Nascimento" com "(você)" para identificar
+    o.textContent = u===USUARIO_PRINCIPAL ? u+" (você)" : u;
+    sel.appendChild(o);
+  });
+  // Restaura seleção anterior se ainda existir
+  if([...sel.options].some(o=>o.value===atual)) sel.value=atual;
+}
+function filtrarUsuarioGerencial(){
+  usuarioGerencial=document.getElementById("filtroUsuario").value;
+  // Limpa dados anteriores
+  document.getElementById("kTotal").textContent="—";
+  document.getElementById("kFin").textContent="—";
+  document.getElementById("kReu").textContent="—";
+  document.getElementById("chartMes").innerHTML=`<div class="loader"><span class="spinner"></span>carregando...</div>`;
+  document.getElementById("chartTipo").innerHTML=`<div class="loader"><span class="spinner"></span>carregando...</div>`;
+  document.getElementById("reuTabela").innerHTML=`<div class="loader"><span class="spinner"></span>carregando...</div>`;
+  fetchResumo();
 }
 function renderGerencial(d){
   document.getElementById("kTotal").textContent=d.total||0;
@@ -514,65 +558,76 @@ function renderGerencial(d){
   ).join("")||"<div class='loader'>Sem dados</div>";
   // reuniões
   window._dadosReunioes = d.reunioesPorMesDia || {};
-  construirFiltroReu(pm);
+  construirFiltroReu(window._dadosReunioes);
   renderReunioes();
 }
-function construirFiltroReu(pm){
-  const ordem=["DEZEMBRO","JANEIRO","FEVEREIRO","MARÇO","ABRIL","MAIO","JUNHO","JULHO","AGOSTO","SETEMBRO","OUTUBRO","NOVEMBRO"];
+function construirFiltroReu(dadosReu){
+  // dadosReu = { "MAIO|2025": {...}, "JUNHO|2025": {...} }
+  const chaves=Object.keys(dadosReu||{}).filter(k=>Object.keys(dadosReu[k]).length>0);
+  chaves.sort((a,b)=>{
+    const[ma,aa]=a.split("|"); const[mb,ab]=b.split("|");
+    return (parseInt(ab)*100+(MESES_NUM[mb]||0))-(parseInt(aa)*100+(MESES_NUM[ma]||0));
+  });
   const sel=document.getElementById("filtroReuMes");
   sel.innerHTML=`<option value="todos">Todos os meses</option>`;
-  ordem.filter(m=>pm[m]).forEach(m=>{
-    const o=document.createElement("option"); o.value=m; o.textContent=cap(m); sel.appendChild(o);
+  chaves.forEach(k=>{
+    const o=document.createElement("option"); o.value=k; o.textContent=mesAnoLabel(k); sel.appendChild(o);
   });
 }
+function minToHM(min){
+  const h=Math.floor(min/60);const m=min%60;
+  return h>0?(m>0?h+"h "+m+"min":h+"h"):m+"min";
+}
 function renderReunioes(){
-  const dados=window._dadosReunioes||{};
-  const filtroMes=document.getElementById("filtroReuMes").value;
-  const filtroVis=document.getElementById("filtroReuVis").value;
-  // calcula minutos totais
-  function minToHM(min){const h=Math.floor(min/60);const m=min%60;return h>0?(m>0?`${h}h ${m}min`:`${h}h`):`${m}min`;}
+  const dados=window._dadosReunioes||{};   // { "MAIO|2025": { "05/05/2025": 90 } }
+  const filtroKey=document.getElementById("filtroReuMes").value; // "todos" ou "MAIO|2025"
+  const filtroVis=document.getElementById("filtroReuVis").value; // "mes" ou "dia"
+
+  // Filtra chaves
+  const chaves = filtroKey==="todos" ? Object.keys(dados) : (dados[filtroKey] ? [filtroKey] : []);
+
   if(filtroVis==="mes"){
-    const ordem=["DEZEMBRO","JANEIRO","FEVEREIRO","MARÇO","ABRIL","MAIO","JUNHO","JULHO","AGOSTO","SETEMBRO","OUTUBRO","NOVEMBRO"];
+    // Agrupa por chave (mes|ano), soma minutos de todos os dias
     let totalMin=0; const linhas=[];
-    const mesesExibir = filtroMes==="todos" ? ordem.filter(m=>dados[m]) : [filtroMes];
-    mesesExibir.forEach(mes=>{
-      if(!dados[mes]) return;
-      let minMes=0;
-      Object.values(dados[mes]).forEach(dias=>{
-        if(typeof dias==="number") minMes+=dias;
-        else Object.values(dias).forEach(v=>minMes+=v);
-      });
-      totalMin+=minMes;
-      linhas.push(`<tr><td>${cap(mes)}</td><td>${minToHM(minMes)}</td></tr>`);
+    // ordena chaves cronologicamente
+    const chavesOrd=[...chaves].sort((a,b)=>{
+      const[ma,aa]=a.split("|"); const[mb,ab]=b.split("|");
+      return (parseInt(ab)*100+(MESES_NUM[mb]||0))-(parseInt(aa)*100+(MESES_NUM[ma]||0));
+    });
+    chavesOrd.forEach(k=>{
+      let minK=0;
+      Object.values(dados[k]).forEach(v=>{ minK+=v; });
+      if(minK===0) return;
+      totalMin+=minK;
+      const[mes,ano]=k.split("|");
+      const label=cap(mes)+(ano&&ano!=="0000"?"/"+ano:"");
+      linhas.push(`<tr><td>${label}</td><td>${minToHM(minK)}</td></tr>`);
     });
     document.getElementById("reuTotal").textContent=minToHM(totalMin);
-    document.getElementById("reuSub").textContent=filtroMes==="todos"?"total em reuniões":"total em "+cap(filtroMes);
+    document.getElementById("reuSub").textContent=filtroKey==="todos"?"total em reuniões":"total em "+mesAnoLabel(filtroKey);
     document.getElementById("reuTabela").innerHTML=linhas.length
-      ? `<table class="reuniao-table"><thead><tr><th>Mês</th><th>Tempo total</th></tr></thead><tbody>${linhas.join("")}</tbody></table>`
+      ? `<table class="reuniao-table"><thead><tr><th>Mês/Ano</th><th>Tempo total</th></tr></thead><tbody>${linhas.join("")}</tbody></table>`
       : `<div style="font-size:12px;color:var(--text-3);text-align:center;padding:10px;">Sem dados de reunião.</div>`;
   } else {
     // Por dia
-    const mes = filtroMes==="todos" ? null : filtroMes;
     let totalMin=0; const linhas=[];
-    const mesesLoop = mes ? [mes] : Object.keys(dados);
-    mesesLoop.forEach(m=>{
-      if(!dados[m]) return;
-      Object.entries(dados[m]).forEach(([dia,val])=>{
-        const min = typeof val==="number" ? val : Object.values(val).reduce((a,b)=>a+b,0);
-        if(min>0){ totalMin+=min; linhas.push(`<tr><td>${dia}</td><td>${cap(m)}</td><td>${minToHM(min)}</td></tr>`); }
+    chaves.forEach(k=>{
+      const[mes,ano]=k.split("|");
+      Object.entries(dados[k]).forEach(([dia,min])=>{
+        if(min>0){
+          totalMin+=min;
+          const label=cap(mes)+(ano&&ano!=="0000"?"/"+ano:"");
+          linhas.push({dia,label,min,ts:(()=>{const p=dia.split("/");return new Date(p[2],p[1]-1,p[0]).getTime();})()});
+        }
       });
     });
-    // ordena por data
-    linhas.sort((a,b)=>{
-      const da=a.match(/\d{2}\/\d{2}\/\d{4}/); const db=b.match(/\d{2}\/\d{2}\/\d{4}/);
-      if(!da||!db) return 0;
-      const pa=da[0].split("/"); const pb=db[0].split("/");
-      return new Date(pb[2],pb[1]-1,pb[0])-new Date(pa[2],pa[1]-1,pa[0]);
-    });
+    linhas.sort((a,b)=>b.ts-a.ts);
     document.getElementById("reuTotal").textContent=minToHM(totalMin);
-    document.getElementById("reuSub").textContent="total em reuniões"+(mes?" — "+cap(mes):"");
+    document.getElementById("reuSub").textContent="total em reuniões"+(filtroKey!=="todos"?" — "+mesAnoLabel(filtroKey):"");
     document.getElementById("reuTabela").innerHTML=linhas.length
-      ? `<table class="reuniao-table"><thead><tr><th>Data</th><th>Mês</th><th>Tempo</th></tr></thead><tbody>${linhas.join("")}</tbody></table>`
+      ? `<table class="reuniao-table"><thead><tr><th>Data</th><th>Mês/Ano</th><th>Tempo</th></tr></thead><tbody>`
+        +linhas.map(l=>`<tr><td>${l.dia}</td><td>${l.label}</td><td>${minToHM(l.min)}</td></tr>`).join("")
+        +`</tbody></table>`
       : `<div style="font-size:12px;color:var(--text-3);text-align:center;padding:10px;">Sem dados de reunião.</div>`;
   }
 }
@@ -588,7 +643,7 @@ function renderGerencialDemo(){
 // ── HISTÓRICO
 function carregarHistorico(){
   const u = (usuarioAtual===USUARIO_PRINCIPAL||modoVisualizacao) ? USUARIO_PRINCIPAL : usuarioAtual;
-  fetch(SCRIPT_URL+"?action=getAtividades&usuario="+encodeURIComponent(u))
+  fetch(SCRIPT_URL+"?action=getAtividades&usuario="+encodeURIComponent(u),{mode:"cors",redirect:"follow"})
     .then(r=>r.json()).then(data=>{todosRegistros=data.rows||[];construirFiltrosMes();construirFiltroDias();renderTabela();})
     .catch(()=>{todosRegistros=[];construirFiltrosMes();renderTabela();});
 }
@@ -672,7 +727,7 @@ function formatarObs(obs){
 
 // ── DEMANDAS — filtro corrigido (MM/YYYY string)
 function carregarDemandas(){
-  fetch(SCRIPT_URL+"?action=getDemandas").then(r=>r.json())
+  fetch(SCRIPT_URL+"?action=getDemandas",{mode:"cors",redirect:"follow"}).then(r=>r.json())
     .then(data=>{todasDemandas=data.rows||[];construirFiltroDemanda();renderDemandas();})
     .catch(renderDemoEntregas);
 }
@@ -790,7 +845,7 @@ function salvarNaPlanilha(){
   }))};
   const btn=document.getElementById("btnSalvar");
   btn.disabled=true; btn.innerHTML=`<span class="spinner"></span> Salvando...`;
-  fetch(SCRIPT_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)})
+  fetch(SCRIPT_URL,{method:"POST",mode:"cors",redirect:"follow",headers:{"Content-Type":"text/plain"},body:JSON.stringify(payload)})
     .then(r=>r.json()).then(res=>{
       if(res.ok){
         toast("✓ "+res.inseridas+" atividades salvas com sucesso!");
