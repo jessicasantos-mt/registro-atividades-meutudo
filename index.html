@@ -83,8 +83,7 @@ input,select,textarea,button{font-family:inherit;}
 .er{display:flex;align-items:center;gap:12px;padding:10px 12px;border-bottom:0.5px solid var(--bd);}
 .er:last-child{border-bottom:none;}
 .edot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
-.ei{flex:1;}
-.en{font-size:13px;color:var(--t);}
+.ei{flex:1;}.en{font-size:13px;color:var(--t);}
 .ed{font-size:11px;color:var(--t3);margin-top:2px;}
 .bg{font-size:11px;padding:3px 10px;border-radius:20px;}
 .bg-g{background:var(--grbg);color:var(--grtx);}
@@ -134,107 +133,18 @@ input:focus,select:focus,textarea:focus{border-color:var(--pink);background:var(
 .yr-pill{font-size:11px;padding:3px 10px;border-radius:20px;border:0.5px solid var(--bd);background:var(--bg);color:var(--t2);cursor:pointer;transition:all .15s;}
 .yr-pill:hover{border-color:var(--pink);color:var(--pink);}
 .yr-pill.on{background:var(--pink);color:#fff;border-color:var(--pink);}
-/* GRÁFICO BARRAS VERTICAIS */
+/* BARRAS VERTICAIS */
 .vbar-wrap{display:flex;align-items:flex-end;gap:6px;height:120px;margin-top:8px;padding-bottom:2px;}
 .vbar-col{display:flex;flex-direction:column;align-items:center;flex:1;gap:3px;min-width:0;}
 .vbar-lbl{font-size:9px;color:var(--t3);text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:100%;}
 .vbar-val{font-size:10px;color:var(--t2);font-weight:600;}
-
-/* ═══════════════════════════════════════
-   POST-IT
-   ═══════════════════════════════════════ */
-#postit{
-  position:fixed;
-  top:80px;
-  right:24px;
-  width:260px;
-  min-height:140px;
-  background:#fce8ee;
-  border-radius:4px 4px 12px 4px;
-  box-shadow:3px 4px 14px rgba(0,0,0,.18), 0 1px 2px rgba(0,0,0,.10);
-  padding:36px 16px 16px;
-  z-index:50;
-  display:none;
-  font-family:'Nunito',sans-serif;
-  /* dobra no canto inferior direito */
-  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 18px), calc(100% - 18px) 100%, 0 100%);
-}
-#postit::after{
-  content:'';
-  position:absolute;
-  bottom:0;right:0;
-  width:18px;height:18px;
-  background:linear-gradient(135deg,#f0a8bc 50%,transparent 50%);
-  border-radius:0 0 0 3px;
-}
-/* grampo */
-#postit::before{
-  content:'';
-  position:absolute;
-  top:-10px;
-  left:50%;
-  transform:translateX(-50%);
-  width:36px;height:20px;
-  background:transparent;
-  border:3px solid #aaa;
-  border-bottom:none;
-  border-radius:14px 14px 0 0;
-  box-shadow:inset 0 -2px 0 #ccc;
-  z-index:51;
-}
-.postit-clip{
-  position:absolute;
-  top:-14px;left:50%;
-  transform:translateX(-50%);
-  width:14px;height:28px;
-  background:linear-gradient(180deg,#bbb 0%,#888 40%,#bbb 100%);
-  border-radius:3px 3px 0 0;
-  box-shadow:1px 1px 3px rgba(0,0,0,.3);
-  z-index:52;
-}
-.postit-clip::after{
-  content:'';
-  position:absolute;
-  top:4px;left:2px;
-  width:10px;height:20px;
-  background:linear-gradient(180deg,#ddd 0%,#aaa 50%,#ddd 100%);
-  border-radius:2px;
-}
-.postit-date{
-  font-size:11px;
-  font-weight:700;
-  color:#b0406a;
-  letter-spacing:.04em;
-  text-transform:uppercase;
-  margin-bottom:8px;
-  border-bottom:1px dashed #f0a8bc;
-  padding-bottom:5px;
-}
-.postit-item{
-  font-size:11.5px;
-  color:#5a1a30;
-  padding:3px 0;
-  border-bottom:1px solid rgba(176,64,106,.1);
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
-  display:flex;
-  align-items:center;
-  gap:5px;
-  line-height:1.4;
-}
-.postit-item:last-child{border-bottom:none;}
-.postit-dot{width:5px;height:5px;border-radius:50%;background:#da0075;flex-shrink:0;}
-.postit-hora{font-size:10px;color:#b0406a;font-weight:600;white-space:nowrap;}
-.postit-empty{font-size:11px;color:#c0709090;text-align:center;padding:8px 0;font-style:italic;}
-
-/* REGISTRO — área de pendentes (antes de salvar) */
+/* PENDENTES */
 .pend-wrap{border:0.5px solid var(--bd);border-radius:var(--r);overflow:hidden;margin-bottom:12px;}
 .pend-hdr{background:var(--bg);padding:8px 12px;font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--t3);border-bottom:0.5px solid var(--bd);display:flex;align-items:center;justify-content:space-between;}
 .pend-item{display:flex;align-items:center;gap:8px;padding:8px 12px;border-bottom:0.5px solid var(--bd);}
 .pend-item:last-child{border-bottom:none;}
 .pend-name{flex:1;font-size:12px;color:var(--t);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;}
-.pend-obs{font-size:11px;color:var(--t3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:110px;}
+.pend-obs{font-size:11px;color:var(--t3);margin-top:2px;}
 .pend-links{display:flex;gap:4px;flex-wrap:wrap;margin-top:2px;}
 .pend-link{font-size:11px;color:var(--bltx);text-decoration:none;background:var(--blbg);padding:1px 7px;border-radius:20px;}
 .ss{font-size:11px;padding:3px 7px;border-radius:20px;border:0.5px solid var(--bd);background:var(--bg);color:var(--t);cursor:pointer;width:auto;flex-shrink:0;max-width:155px;}
@@ -242,8 +152,56 @@ input:focus,select:focus,textarea:focus{border-color:var(--pink);background:var(
 .rmb:hover{color:#c00;}
 .clrb{background:none;border:none;font-size:11px;color:var(--t3);cursor:pointer;display:flex;align-items:center;gap:4px;}
 .clrb:hover{color:#c00;}
-
-@media(max-width:600px){
+/* POST-IT */
+#postit{
+  position:fixed;top:80px;right:24px;width:270px;
+  background:#fce8ee;
+  border-radius:3px 3px 10px 3px;
+  box-shadow:3px 5px 16px rgba(0,0,0,.2),0 1px 3px rgba(0,0,0,.1);
+  padding:38px 16px 18px;
+  z-index:50;display:none;
+  font-family:'Nunito',sans-serif;
+  clip-path:polygon(0 0,100% 0,100% calc(100% - 20px),calc(100% - 20px) 100%,0 100%);
+}
+#postit::after{
+  content:'';position:absolute;bottom:0;right:0;
+  width:20px;height:20px;
+  background:linear-gradient(135deg,#e8a0b8 50%,transparent 50%);
+}
+/* grampo SVG inline via pseudo não funciona — usamos div */
+.pi-clip{
+  position:absolute;top:-8px;left:50%;transform:translateX(-50%);
+  width:44px;height:26px;
+  border:3.5px solid #999;border-bottom:none;
+  border-radius:18px 18px 0 0;
+  background:transparent;
+  box-shadow:inset 0 3px 0 #ddd,0 -1px 4px rgba(0,0,0,.15);
+  z-index:53;
+}
+.pi-clip::after{
+  content:'';position:absolute;
+  top:2px;left:50%;transform:translateX(-50%);
+  width:18px;height:16px;
+  border:2.5px solid #bbb;border-bottom:none;
+  border-radius:12px 12px 0 0;
+  background:linear-gradient(180deg,#eee 0%,#ccc 100%);
+}
+.pi-date{
+  font-size:11px;font-weight:800;color:#9b2d52;
+  letter-spacing:.05em;text-transform:uppercase;
+  margin-bottom:9px;border-bottom:1.5px dashed #f0a0be;padding-bottom:5px;
+}
+.pi-item{
+  font-size:11.5px;color:#4a1028;
+  padding:3.5px 0;border-bottom:1px solid rgba(180,60,100,.1);
+  display:flex;align-items:baseline;gap:5px;line-height:1.35;
+}
+.pi-item:last-child{border-bottom:none;}
+.pi-dot{width:5px;height:5px;border-radius:50%;background:#da0075;flex-shrink:0;margin-top:4px;}
+.pi-nome{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.pi-hora{font-size:10px;color:#9b2d52;font-weight:700;white-space:nowrap;flex-shrink:0;}
+.pi-empty{font-size:11px;color:#c08090;text-align:center;padding:6px 0;font-style:italic;}
+@media(max-width:700px){
   .kpis{grid-template-columns:1fr 1fr;}
   .charts,.fr{grid-template-columns:1fr;}
   .ntab span{display:none;}
@@ -268,9 +226,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--pink);background:var(
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
       Entrar no painel
     </button>
-    <button class="btn" style="margin-top:8px;background:var(--bg);color:var(--t2);font-size:12px;" onclick="entrarVis()">
-      Entrar apenas para visualizar
-    </button>
+    <button class="btn" style="margin-top:8px;background:var(--bg);color:var(--t2);font-size:12px;" onclick="entrarVis()">Entrar apenas para visualizar</button>
     <p class="lnote">Visitantes podem visualizar todas as informações.<br>Para registrar atividades, informe seu nome.</p>
   </div>
 </div>
@@ -323,10 +279,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--pink);background:var(
           <div class="slbl" style="margin:0;">Tempo em reunião</div>
           <div style="display:flex;gap:8px;">
             <select class="fsel" id="selRM" onchange="renderReu()" style="font-size:11px;padding:4px 8px;"></select>
-            <select class="fsel" id="selRV" onchange="renderReu()" style="font-size:11px;padding:4px 8px;">
-              <option value="mes">Por mês</option>
-              <option value="dia">Por dia</option>
-            </select>
+            <select class="fsel" id="selRV" onchange="renderReu()" style="font-size:11px;padding:4px 8px;"><option value="mes">Por mês</option><option value="dia">Por dia</option></select>
           </div>
         </div>
         <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:10px;">
@@ -372,7 +325,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--pink);background:var(
       <p style="color:var(--t3);font-size:12px;">Para registrar atividades, faça login com seu nome completo.</p>
     </div>
     <div id="dForm">
-      <p style="font-size:13px;color:var(--t2);margin-bottom:14px;">Adicione as atividades abaixo e clique em salvar para enviar tudo de uma vez para a planilha.</p>
+      <p style="font-size:13px;color:var(--t2);margin-bottom:14px;">Adicione as atividades e clique em salvar para enviar tudo de uma vez para a planilha.</p>
       <div class="fr" style="margin-bottom:2px;">
         <div class="fg"><label class="fl">Data</label><input type="date" id="rData"></div>
         <div class="fg"><label class="fl">Status padrão para os chips</label>
@@ -410,21 +363,15 @@ input:focus,select:focus,textarea:focus{border-color:var(--pink);background:var(
           Adicionar ao registro do dia
         </button>
       </div>
-
-      <!-- BLOCO PENDENTES (antes de salvar) -->
+      <!-- PENDENTES -->
       <div class="pend-wrap" id="pendWrap" style="display:none;">
         <div class="pend-hdr">
           <span id="pendH">Aguardando envio</span>
-          <button class="clrb" onclick="limpar()">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>Limpar
-          </button>
+          <button class="clrb" onclick="limpar()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>Limpar</button>
         </div>
         <div id="pendB"></div>
       </div>
-      <div id="pendEmpty" style="color:var(--t3);font-size:12px;padding:12px;text-align:center;border:0.5px solid var(--bd);border-radius:var(--r);margin-bottom:12px;">
-        Nenhuma atividade adicionada ainda.
-      </div>
-
+      <div id="pendEmpty" style="color:var(--t3);font-size:12px;padding:12px;text-align:center;border:0.5px solid var(--bd);border-radius:var(--r);margin-bottom:12px;">Nenhuma atividade adicionada ainda.</div>
       <button class="btn bdd" id="btnS" onclick="salvar()">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
         Salvar todas as atividades na planilha
@@ -433,14 +380,14 @@ input:focus,select:focus,textarea:focus{border-color:var(--pink);background:var(
   </div>
 </div>
 
-<!-- POST-IT fixo -->
+<!-- POST-IT -->
 <div id="postit">
-  <div class="postit-clip"></div>
-  <div class="postit-date" id="piDate">—</div>
-  <div id="piBody"><div class="postit-empty">Nenhuma atividade salva hoje.</div></div>
+  <div class="pi-clip"></div>
+  <div class="pi-date" id="piDate">—</div>
+  <div id="piBody"><div class="pi-empty">Nenhuma atividade salva hoje.</div></div>
 </div>
 
-<!-- MODAL LINK -->
+<!-- MODAL -->
 <div class="mbg" id="mBg">
   <div class="modal">
     <h3>Adicionar link / planilha</h3>
@@ -455,15 +402,14 @@ input:focus,select:focus,textarea:focus{border-color:var(--pink);background:var(
 <div class="toast" id="toastEl"></div>
 
 <script>
-// ══ CONFIG ═══════════════════════════════════════════════════
-const SURL  = "https://script.google.com/macros/s/AKfycbzZyt_I_AOJgC_rHrAMXDcJIiFJwObbK1dFwwU-dbvrdkVcSk2IY7WdApgO_4zWx4bR/exec";
+// ══ ATUALIZE ESTA URL APÓS NOVA IMPLANTAÇÃO ══════════════════
+const SURL  = "https://script.google.com/macros/s/AKfycbwir0Vi4ZX_dyBKDFyHRhxzm2S0YRytB_XtMupEb6Xl_1IX3uaDwvur-nr67t44jPY-/exec";
 const PRINC = "Jessica Nascimento";
 // ═════════════════════════════════════════════════════════════
 
-let usr="", vis=false, regs=[], dems=[], links=[], dia=[];
-let mf="todos", df="todos", bf="", ug="todos";
-let _ci=0, yrAtiv="todos", yrReu="todos", _gerData=null;
-// Post-it: atividades já salvas no dia
+let usr="",vis=false,regs=[],dems=[],links=[],dia=[];
+let mf="todos",df="todos",bf="",ug="todos";
+let _ci=0,yrAtiv="todos",yrReu="todos",_gerData=null;
 let piSalvas=[];
 
 const MORD={JANEIRO:1,FEVEREIRO:2,"MARÇO":3,ABRIL:4,MAIO:5,JUNHO:6,JULHO:7,AGOSTO:8,SETEMBRO:9,OUTUBRO:10,NOVEMBRO:11,DEZEMBRO:12};
@@ -473,10 +419,20 @@ const SOPT=["Finalizado","Tempo de trabalho","Em andamento","Não Iniciado","Agu
 function api(params,cb){
   const name="_c"+(++_ci);
   const qs=Object.entries(params).map(([k,v])=>k+"="+encodeURIComponent(v)).join("&");
-  window[name]=function(d){delete window[name];document.getElementById("_s"+_ci)&&document.getElementById("_s"+_ci).remove();cb(d);};
+  window[name]=function(d){
+    delete window[name];
+    const s=document.getElementById("_s"+_ci);
+    if(s)s.remove();
+    cb(d);
+  };
   const s=document.createElement("script");
-  s.id="_s"+_ci;s.src=SURL+"?"+qs+"&callback="+name;
-  s.onerror=function(){delete window[name];s.remove();cb({error:"Erro de conexão"});};
+  s.id="_s"+_ci;
+  s.src=SURL+"?"+qs+"&callback="+name;
+  s.onerror=function(){
+    delete window[name];
+    s.remove();
+    cb({error:"Erro de conexão"});
+  };
   document.head.appendChild(s);
 }
 
@@ -518,11 +474,10 @@ function start(){
   else document.getElementById("nEl").textContent=usr+" — registrando atividades";
   if(vis){document.getElementById("dForm").style.display="none";document.getElementById("dNeg").style.display="block";}
   document.getElementById("rData").value=new Date().toISOString().split("T")[0];
-  carRasc();renderPend();
+  try{const r=localStorage.getItem("mu_rasc");if(r)dia=JSON.parse(r)||[];}catch(e){dia=[];}
+  try{const p=localStorage.getItem("mu_pi");if(p)piSalvas=JSON.parse(p)||[];}catch(e){piSalvas=[];}
+  renderPend();renderPostIt();
   carGer();carHis();carDem();
-  // Carrega post-it salvo
-  try{const s=localStorage.getItem("mu_pi");if(s)piSalvas=JSON.parse(s)||[];}catch(e){piSalvas=[];}
-  renderPostIt();
 }
 function updTs(){
   const n=new Date();
@@ -540,21 +495,18 @@ function carGer(){
   fetchRes();
 }
 function buildSelUsr(list){
-  const sel=document.getElementById("selUsr");const cur=sel.value;
+  const sel=document.getElementById("selUsr"),cur=sel.value;
   sel.innerHTML='<option value="todos">Todos</option>';
   list.forEach(u=>{const o=document.createElement("option");o.value=u;o.textContent=u===PRINC?u+" (você)":u;sel.appendChild(o);});
   if([...sel.options].some(o=>o.value===cur))sel.value=cur;
 }
 function trocaUsr(){
   ug=document.getElementById("selUsr").value;
-  document.getElementById("kT").textContent="—";
-  document.getElementById("cM").innerHTML='<div class="loader"><span class="spin"></span>carregando...</div>';
-  document.getElementById("cT").innerHTML='<div class="loader"><span class="spin"></span>carregando...</div>';
+  ["cM","cT"].forEach(id=>document.getElementById(id).innerHTML='<div class="loader"><span class="spin"></span>carregando...</div>');
   fetchRes();
 }
 function fetchRes(){
-  const p={action:"getResumo"};
-  if(ug!=="todos")p.usuario=ug;
+  const p={action:"getResumo"};if(ug!=="todos")p.usuario=ug;
   api(p,(d)=>{if(d&&!d.error)renderGer(d);else renderGerDemo();});
 }
 function hm(m){const h=Math.floor(m/60),r=m%60;return h>0?(r>0?h+"h "+r+"min":h+"h"):r+"min";}
@@ -566,17 +518,12 @@ function mkSort(a,b){
   if(ab!==aa)return ab-aa;
   return(MORD[pb[0]]||0)-(MORD[pa[0]]||0);
 }
-function getAnos(obj){
-  return[...new Set(Object.keys(obj).map(k=>{const p=k.split("/");return p[1]||"";}))].filter(Boolean).sort((a,b)=>parseInt(b)-parseInt(a));
-}
-function filtrarPorAno(pm,ano){
-  if(ano==="todos")return pm;
-  const out={};Object.entries(pm).forEach(([k,v])=>{if(k.endsWith("/"+ano))out[k]=v;});return out;
-}
-function buildYrPills(cid,anos,ativo,onChange){
+function getAnos(obj){return[...new Set(Object.keys(obj).map(k=>k.split("/")[1]||""))].filter(Boolean).sort((a,b)=>parseInt(b)-parseInt(a));}
+function filtrarPorAno(pm,ano){if(ano==="todos")return pm;const o={};Object.entries(pm).forEach(([k,v])=>{if(k.endsWith("/"+ano))o[k]=v;});return o;}
+function buildYrPills(cid,anos,ativo,fn){
   const el=document.getElementById(cid);el.innerHTML="";
-  const t=document.createElement("span");t.className="yr-pill"+(ativo==="todos"?" on":"");t.textContent="Todos";t.onclick=()=>onChange("todos");el.appendChild(t);
-  anos.forEach(a=>{const p=document.createElement("span");p.className="yr-pill"+(ativo===a?" on":"");p.textContent=a;p.onclick=()=>onChange(a);el.appendChild(p);});
+  const t=document.createElement("span");t.className="yr-pill"+(ativo==="todos"?" on":"");t.textContent="Todos";t.onclick=()=>fn("todos");el.appendChild(t);
+  anos.forEach(a=>{const p=document.createElement("span");p.className="yr-pill"+(ativo===a?" on":"");p.textContent=a;p.onclick=()=>fn(a);el.appendChild(p);});
 }
 function renderGer(d){
   _gerData=d;
@@ -601,15 +548,13 @@ function renderGer(d){
 }
 function renderMesChart(){
   if(!_gerData)return;
-  const pm=_gerData.porMes||{};
-  const pmF=filtrarPorAno(pm,yrAtiv);
+  const pmF=filtrarPorAno(_gerData.porMes||{},yrAtiv);
   const chs=Object.keys(pmF).sort(mkSort);
   const mx=Math.max(...chs.map(k=>pmF[k]),1);
   document.getElementById("cM").innerHTML=chs.map(k=>`<div class="br"><div class="brl">${mkLbl(k)}</div><div class="brb"><div class="brf" style="width:${Math.round(pmF[k]/mx*100)}%"></div></div><div class="brn">${pmF[k]}</div></div>`).join("")||'<div style="text-align:center;color:var(--t3);font-size:12px;padding:16px;">Sem dados para este ano.</div>';
 }
 function renderVBar(){
-  const rd=window._rd||{};
-  const tot={};
+  const rd=window._rd||{},tot={};
   Object.entries(rd).forEach(([k,dias])=>{
     const ano=k.split("/")[1]||"";
     if(yrReu!=="todos"&&ano!==yrReu)return;
@@ -621,13 +566,10 @@ function renderVBar(){
   const el=document.getElementById("cVBar");
   if(!chs.length){el.innerHTML='<div style="text-align:center;color:var(--t3);font-size:12px;padding:16px;">Sem dados.</div>';return;}
   const show=chs.slice(-12);
-  const cols=show.map(k=>{
+  el.innerHTML=`<div class="vbar-wrap">${show.map(k=>{
     const h=Math.max(Math.round(tot[k]/maxM*100),4);
-    const horas=(tot[k]/60).toFixed(1)+"h";
-    const lblCurto=mkLbl(k).split("/")[0].substring(0,3);
-    return`<div class="vbar-col" title="${mkLbl(k)}: ${hm(tot[k])}"><div class="vbar-val">${horas}</div><div style="width:100%;border-radius:4px 4px 0 0;background:var(--pink);min-height:3px;height:${h}px;"></div><div class="vbar-lbl">${lblCurto}</div></div>`;
-  }).join("");
-  el.innerHTML=`<div class="vbar-wrap">${cols}</div>`;
+    return`<div class="vbar-col" title="${mkLbl(k)}: ${hm(tot[k])}"><div class="vbar-val">${(tot[k]/60).toFixed(1)}h</div><div style="width:100%;border-radius:4px 4px 0 0;background:var(--pink);height:${h}px;min-height:3px;"></div><div class="vbar-lbl">${mkLbl(k).split("/")[0].substring(0,3)}</div></div>`;
+  }).join("")}</div>`;
 }
 function buildSelRM(rd){
   const chs=Object.keys(rd).filter(k=>Object.keys(rd[k]).length>0).sort(mkSort);
@@ -636,9 +578,7 @@ function buildSelRM(rd){
   chs.forEach(k=>{const o=document.createElement("option");o.value=k;o.textContent=mkLbl(k);sel.appendChild(o);});
 }
 function renderReu(){
-  const rd=window._rd||{};
-  const fk=document.getElementById("selRM").value;
-  const fv=document.getElementById("selRV").value;
+  const rd=window._rd||{},fk=document.getElementById("selRM").value,fv=document.getElementById("selRV").value;
   const chs=fk==="todos"?Object.keys(rd):(rd[fk]?[fk]:[]);
   if(fv==="mes"){
     let tot=0;const lns=[];
@@ -652,7 +592,7 @@ function renderReu(){
     its.sort((a,b)=>b.ts-a.ts);
     document.getElementById("rV").textContent=tot?hm(tot):"0min";
     document.getElementById("rS").textContent="total em reuniões"+(fk!=="todos"?" — "+mkLbl(fk):"");
-    document.getElementById("rT").innerHTML=its.length?`<table class="rtbl"><thead><tr><th>Data</th><th>Mês/Ano</th><th>Tempo</th></tr></thead><tbody>`+its.map(i=>`<tr><td>${i.dia}</td><td>${i.lbl}</td><td>${hm(i.m)}</td></tr>`).join("")+`</tbody></table>`:'<div style="font-size:12px;color:var(--t3);text-align:center;padding:8px;">Sem dados de reunião.</div>';
+    document.getElementById("rT").innerHTML=its.length?`<table class="rtbl"><thead><tr><th>Data</th><th>Mês/Ano</th><th>Tempo</th></tr></thead><tbody>${its.map(i=>`<tr><td>${i.dia}</td><td>${i.lbl}</td><td>${hm(i.m)}</td></tr>`).join("")}</tbody></table>`:'<div style="font-size:12px;color:var(--t3);text-align:center;padding:8px;">Sem dados de reunião.</div>';
   }
 }
 function renderGerDemo(){
@@ -735,28 +675,23 @@ function renderDem(){
 // ── REGISTRAR ─────────────────────────────────────────────
 document.querySelectorAll(".chip").forEach(c=>{
   c.addEventListener("click",()=>{
-    const stP=document.getElementById("rStP").value;
     document.getElementById("rAtiv").value=c.dataset.n;
-    document.getElementById("rSt").value=stP;
+    document.getElementById("rSt").value=document.getElementById("rStP").value;
     document.getElementById("rAtiv").focus();
   });
 });
-
 function addAv(){
   const a=document.getElementById("rAtiv").value.trim();
   if(!a){toast("Informe a descrição.");return;}
-  dia.push({
-    atividade:a,
-    status:document.getElementById("rSt").value,
+  dia.push({atividade:a,status:document.getElementById("rSt").value,
     observacao:document.getElementById("rObs").value.trim(),
-    links:[...links],
-    data:document.getElementById("rData").value
-  });
+    links:[...links],data:document.getElementById("rData").value});
   document.getElementById("rAtiv").value="";
   document.getElementById("rObs").value="";
-  links=[];renderLnks();salvaRasc();renderPend();
+  links=[];renderLnks();
+  try{localStorage.setItem("mu_rasc",JSON.stringify(dia));}catch(e){}
+  renderPend();
 }
-
 function renderPend(){
   const wrap=document.getElementById("pendWrap");
   const empty=document.getElementById("pendEmpty");
@@ -774,72 +709,57 @@ function renderPend(){
         ${a.observacao?`<div class="pend-obs">${esc(a.observacao)}</div>`:""}
         ${lh?`<div class="pend-links">${lh}</div>`:""}
       </div>
-      <select class="ss" onchange="dia[${i}].status=this.value;salvaRasc()">${op}</select>
-      <button class="rmb" onclick="dia.splice(${i},1);salvaRasc();renderPend()">×</button>
+      <select class="ss" onchange="dia[${i}].status=this.value;try{localStorage.setItem('mu_rasc',JSON.stringify(dia));}catch(e){}">${op}</select>
+      <button class="rmb" onclick="dia.splice(${i},1);try{localStorage.setItem('mu_rasc',JSON.stringify(dia));}catch(e){}renderPend()">×</button>
     </div>`;
   }).join("");
 }
-
 function limpar(){
   if(!dia.length){toast("Nenhuma atividade para limpar.");return;}
   if(!confirm("Deseja limpar todas as atividades pendentes?"))return;
   dia=[];try{localStorage.removeItem("mu_rasc");}catch(e){}
   renderPend();toast("Registro limpo.");
 }
-function salvaRasc(){try{localStorage.setItem("mu_rasc",JSON.stringify(dia));}catch(e){}}
-function carRasc(){try{const r=localStorage.getItem("mu_rasc");if(r)dia=JSON.parse(r)||[];}catch(e){dia=[];}}
 
 // ── POST-IT ────────────────────────────────────────────────
 function renderPostIt(){
   const el=document.getElementById("postit");
-  const dateEl=document.getElementById("piDate");
-  const body=document.getElementById("piBody");
-
   if(!piSalvas.length){el.style.display="none";return;}
-
   el.style.display="block";
-  // Data do último salvo
   const dt=piSalvas[piSalvas.length-1].data||new Date().toISOString().split("T")[0];
   const dtFmt=new Date(dt+"T12:00:00").toLocaleDateString("pt-BR",{weekday:"short",day:"2-digit",month:"short"});
-  dateEl.textContent=dtFmt.toUpperCase();
-
-  body.innerHTML=piSalvas.map(a=>{
+  document.getElementById("piDate").textContent=dtFmt.toUpperCase();
+  document.getElementById("piBody").innerHTML=piSalvas.map(a=>{
     const nome=a.atividade||"";
     const isReu=nome.toUpperCase().includes("REUNIÃO");
-    // Extrai horário da observação se for reunião
     let hora="";
     if(isReu&&a.observacao){
       const m=a.observacao.match(/(\d{1,2}[h:]\d{0,2}\s*[-–]\s*\d{1,2}[h:]\d{0,2})/i);
       if(m)hora=m[1];
     }
-    // Nome limpo: remove prefixo "REUNIÃO - "
     const nomeExib=isReu?nome.replace(/^REUNIÃO\s*[-–]\s*/i,""):nome;
-    return`<div class="postit-item">
-      <div class="postit-dot"></div>
-      <span style="flex:1;overflow:hidden;text-overflow:ellipsis;">${esc(nomeExib)}</span>
-      ${hora?`<span class="postit-hora">(${hora})</span>`:""}
+    return`<div class="pi-item">
+      <div class="pi-dot"></div>
+      <span class="pi-nome">${esc(nomeExib)}</span>
+      ${hora?`<span class="pi-hora">(${hora})</span>`:""}
     </div>`;
   }).join("");
 }
 
-// ── SALVAR ─────────────────────────────────────────────────
+// ── SALVAR (bloco único) ───────────────────────────────────
 function salvar(){
   if(!dia.length){toast("Adicione pelo menos uma atividade antes de salvar.");return;}
   const data=document.getElementById("rData").value;
   const ativs=dia.map(a=>({
-    data:a.data||data,
-    atividade:a.atividade,
-    status:a.status,
+    data:a.data||data,atividade:a.atividade,status:a.status,
     observacao:a.observacao||"",
     linkNome:a.links&&a.links[0]?a.links[0].nome:"",
     linkUrl:a.links&&a.links[0]?a.links[0].url:""
   }));
-
   const btn=document.getElementById("btnS");
   btn.disabled=true;
   btn.innerHTML=`<span class="spin"></span> Salvando ${ativs.length} atividade${ativs.length!==1?"s":""}...`;
 
-  // Envia todas de uma vez em um único request
   api({
     action:"saveAtividades",
     usuario:usr,
@@ -849,29 +769,24 @@ function salvar(){
     btn.innerHTML=`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Salvar todas as atividades na planilha`;
 
     if(d&&d.ok){
-      const ins=d.inseridas||0;
-      const ign=d.ignoradas||0;
+      const ins=d.inseridas||0,ign=d.ignoradas||0;
       let msg="✓ "+ins+" atividade"+(ins!==1?"s":"")+" salva"+(ins!==1?"s":"")+"!";
-      if(ign>0)msg+=" ("+ign+" duplicada"+(ign!==1?"s":""+" ignorada"+(ign!==1?"s":"")+")");
+      if(ign>0)msg+=" ("+ign+" já existia"+(ign!==1?"m":"")+", ignorada"+(ign!==1?"s":"")+")";
       toast(msg);
-
-      // Move para o post-it
+      // Move para post-it
       piSalvas=[...piSalvas,...dia];
       try{localStorage.setItem("mu_pi",JSON.stringify(piSalvas));}catch(e){}
-
       // Limpa pendentes
-      dia=[];
-      try{localStorage.removeItem("mu_rasc");}catch(e){}
-      renderPend();
-      renderPostIt();
+      dia=[];try{localStorage.removeItem("mu_rasc");}catch(e){}
+      renderPend();renderPostIt();
       carHis();carGer();
     } else {
-      toast("Erro ao salvar: "+(d&&d.error?d.error:"tente novamente"));
+      toast("Erro: "+(d&&d.error?d.error:"sem resposta do servidor"));
     }
   });
 }
 
-// ── MODAL LINK ─────────────────────────────────────────────
+// ── MODAL ──────────────────────────────────────────────────
 function abrirM(){document.getElementById("mN").value="";document.getElementById("mU").value="";document.getElementById("mBg").classList.add("on");setTimeout(()=>document.getElementById("mN").focus(),50);}
 function fechaM(){document.getElementById("mBg").classList.remove("on");}
 function confL(){
@@ -880,9 +795,7 @@ function confL(){
   links.push({nome:n,url:u});renderLnks();fechaM();
 }
 function renderLnks(){
-  document.getElementById("lPrev").innerHTML=links.map((l,i)=>
-    `<span class="lc"><a href="${esc(l.url)}" target="_blank">📎 ${esc(l.nome)}</a><button class="lrm" onclick="links.splice(${i},1);renderLnks()">×</button></span>`
-  ).join("");
+  document.getElementById("lPrev").innerHTML=links.map((l,i)=>`<span class="lc"><a href="${esc(l.url)}" target="_blank">📎 ${esc(l.nome)}</a><button class="lrm" onclick="links.splice(${i},1);renderLnks()">×</button></span>`).join("");
 }
 document.getElementById("mBg").addEventListener("click",e=>{if(e.target===document.getElementById("mBg"))fechaM();});
 
