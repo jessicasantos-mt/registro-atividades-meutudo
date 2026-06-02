@@ -150,13 +150,14 @@ input:focus,select:focus,textarea:focus{border-color:var(--pink);background:var(
 .modal{background:var(--sf);border-radius:var(--rl);padding:22px;width:360px;max-width:90vw;}
 .modal h3{font-size:15px;font-weight:600;margin-bottom:14px;}
 /* LOGIN */
-.lw{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--bg);}
-.lc{background:var(--sf);border:0.5px solid var(--bd);border-radius:var(--rl);padding:32px;width:360px;max-width:90vw;text-align:center;}
-.lbrand{font-family:'Nunito',sans-serif;font-size:32px;font-weight:400;margin-bottom:4px;}
+.lw{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--bg);padding:16px;}
+.lc{background:var(--sf);border:0.5px solid var(--bd);border-radius:var(--rl);padding:32px;width:360px;max-width:100%;text-align:center;box-shadow:0 2px 16px rgba(0,0,0,.06);}
+.lbrand{font-family:'Nunito',sans-serif;font-size:36px;font-weight:400;margin-bottom:6px;display:block;}
 .lbrand strong{font-weight:800;}
 .lbrand .dot{color:var(--pink);}
-.lsub{font-size:13px;color:var(--t2);margin-bottom:20px;}
-.lc input{margin-bottom:10px;}
+.lsub{font-size:13px;color:var(--t2);margin-bottom:24px;display:block;}
+.lc .fg{margin-bottom:14px;}
+.lc input{margin-bottom:0;}
 .lc .btn{margin-top:6px;}
 @media(max-width:600px){
   .kpis{grid-template-columns:1fr 1fr;}
@@ -171,14 +172,14 @@ input:focus,select:focus,textarea:focus{border-color:var(--pink);background:var(
 <!-- LOGIN -->
 <div class="lw" id="lW">
   <div class="lc" id="lC">
-    <div class="lbrand">meu<strong>tudo</strong><span class="dot">.</span></div>
-    <div class="lsub">Painel de operações — cartões</div>
-    <div class="fg" style="text-align:left">
+    <span class="lbrand">meu<strong>tudo</strong><span class="dot">.</span></span>
+    <span class="lsub">Painel de operações — cartões</span>
+    <div class="fg" style="text-align:left;margin-bottom:14px;">
       <label class="fl">Seu nome completo</label>
-      <input type="text" id="lNome" placeholder="Ex: Jessica Nascimento" autocomplete="off">
+      <input type="text" id="lNome" placeholder="Ex: Jessica Nascimento" autocomplete="off" style="margin-top:4px;">
     </div>
     <button class="btn bp" onclick="login()">Entrar no painel</button>
-    <p style="font-size:11px;color:var(--t3);margin-top:12px;">Visitantes podem visualizar. Para registrar, informe seu nome.</p>
+    <p style="font-size:11px;color:var(--t3);margin-top:14px;line-height:1.5;">Visitantes podem visualizar todas as informações.<br>Para registrar atividades, informe seu nome.</p>
   </div>
 </div>
 
@@ -215,7 +216,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--pink);background:var(
     </div>
     <div class="charts">
       <div class="cc"><div class="slbl">Atividades por mês</div><div id="cM"><div class="loader"><span class="spin"></span>carregando...</div></div></div>
-      <div class="cc"><div class="slbl">Tipo de atividade</div><div id="cT"><div class="loader"><span class="spin"></span>carregando...</div></div></div>
+      <div class="cc"><div class="slbl">Status das atividades</div><div id="cT"><div class="loader"><span class="spin"></span>carregando...</div></div></div>
     </div>
     <div class="rb">
       <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
@@ -325,7 +326,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--pink);background:var(
 
 <script>
 // ══ CONFIGURE AQUI ═══════════════════════════════════════════
-const SURL = "https://script.google.com/macros/s/AKfycbxcjE2yFuCZRaEYXsLhIGhBJTnFO2pIFD1zmB1ge1I8subkjTs1IGwehjdxaud19WE/exec";
+const SURL = "https://script.google.com/macros/s/AKfycbxsi1cIKISXDqRb-jkx-tH62HtDyEzL8V_fkbSNNFDlLeQGyXoqfB7220CV3vLmplXF/exec";
 const PRINC = "Jessica Nascimento";
 // ═════════════════════════════════════════════════════════════
 
@@ -464,12 +465,12 @@ function renderGer(d){
     `<div class="br"><div class="brl">${mkLbl(k)}</div><div class="brb"><div class="brf" style="width:${Math.round(pm[k]/mx*100)}%"></div></div><div class="brn">${pm[k]}</div></div>`
   ).join("")||'<div class="loader">Sem dados</div>';
 
-  // Barras por tipo
-  const pt=d.porTipo||{};
-  const te=Object.entries(pt).filter(([,v])=>v>0).sort((a,b)=>b[1]-a[1]);
-  const mt=Math.max(...te.map(([,v])=>v),1);
-  document.getElementById("cT").innerHTML=te.map(([t,v])=>
-    `<div class="br"><div class="brl">${t}</div><div class="brb"><div class="brf" style="width:${Math.round(v/mt*100)}%"></div></div><div class="brn">${v}</div></div>`
+  // Barras por status (excluindo "Tempo de trabalho", sempre da aba principal)
+  const ps=d.porStatus||{};
+  const se=Object.entries(ps).filter(([,v])=>v>0).sort((a,b)=>b[1]-a[1]);
+  const ms=Math.max(...se.map(([,v])=>v),1);
+  document.getElementById("cT").innerHTML=se.map(([t,v])=>
+    `<div class="br"><div class="brl">${t}</div><div class="brb"><div class="brf" style="width:${Math.round(v/ms*100)}%"></div></div><div class="brn">${v}</div></div>`
   ).join("")||'<div class="loader">Sem dados</div>';
 
   // Reuniões
@@ -519,7 +520,7 @@ function renderReu(){
 function renderGerDemo(){
   renderGer({total:347,finalizadas:218,reunioes:104,totalDemandas:22,
     porMes:{"MAIO/2025":70,"ABRIL/2025":85,"MARÇO/2025":63,"FEVEREIRO/2025":52,"JANEIRO/2025":24,"DEZEMBRO/2024":38},
-    porTipo:{"Reuniões":104,"Análise/Tickets":76,"Verificar ClickUp":65,"Chamados Dock":44,"Auditorias":28,"Outras":30},
+    porStatus:{"Finalizado":218,"Em andamento":45,"Não Iniciado":12,"Aguardando retorno Dock":30,"Aguardando retorno Excelência":12},
     reuDia:{"DEZEMBRO/2024":{"01/12/2024":60,"02/12/2024":90},"JANEIRO/2025":{"06/01/2025":120}}});
 }
 
@@ -657,7 +658,7 @@ function limpar(){
 function salvaRasc(){try{localStorage.setItem("mu_rasc",JSON.stringify(dia));}catch(e){}}
 function carRasc(){try{const r=localStorage.getItem("mu_rasc");if(r)dia=JSON.parse(r)||[];}catch(e){dia=[];}}
 
-// ── SALVAR VIA JSONP ──────────────────────────────────────────
+// ── SALVAR: envia em lotes de 1 atividade via JSONP ──────────
 function salvar(){
   if(!dia.length){toast("Adicione pelo menos uma atividade antes de salvar.");return;}
   const data=document.getElementById("rData").value;
@@ -668,18 +669,35 @@ function salvar(){
     linkUrl: a.links&&a.links[0]?a.links[0].url:""
   }));
   const btn=document.getElementById("btnS");
-  btn.disabled=true; btn.innerHTML=`<span class="spin"></span> Salvando...`;
-  api({action:"saveAtividades", usuario:usr, dados:JSON.stringify(ativs)}, (d)=>{
-    if(d&&d.ok){
-      toast("✓ "+d.inseridas+" atividades salvas com sucesso!");
+  btn.disabled=true;
+  btn.innerHTML=`<span class="spin"></span> Salvando (0/${ativs.length})...`;
+
+  let salvos=0;
+  function salvarProximo(i){
+    if(i>=ativs.length){
+      // tudo salvo
+      toast("✓ "+salvos+" atividade"+(salvos!==1?"s":"")+" salva"+(salvos!==1?"s":"")+" com sucesso!");
       dia=[]; try{localStorage.removeItem("mu_rasc");}catch(e){}
       renderDia(); carHis(); carGer();
-    } else {
-      toast("Erro ao salvar: "+(d&&d.error?d.error:"tente novamente"));
+      btn.disabled=false;
+      btn.innerHTML=`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Salvar todas as atividades na planilha`;
+      return;
     }
-    btn.disabled=false;
-    btn.innerHTML=`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Salvar todas as atividades na planilha`;
-  });
+    btn.innerHTML=`<span class="spin"></span> Salvando (${i+1}/${ativs.length})...`;
+    api({
+      action:"saveAtividades",
+      usuario:usr,
+      dados:encodeURIComponent(JSON.stringify([ativs[i]]))
+    }, (d)=>{
+      if(d&&d.ok){ salvos++; salvarProximo(i+1); }
+      else {
+        toast("Erro ao salvar atividade "+(i+1)+": "+(d&&d.error?d.error:"tente novamente"));
+        btn.disabled=false;
+        btn.innerHTML=`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Salvar todas as atividades na planilha`;
+      }
+    });
+  }
+  salvarProximo(0);
 }
 
 // ── MODAL LINK ────────────────────────────────────────────────
