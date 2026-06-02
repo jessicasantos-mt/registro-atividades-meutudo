@@ -389,9 +389,43 @@ let mesFiltro = "todos", buscaAtiva = "";
 function fazerLogin(){
   const nome = document.getElementById("loginNome").value.trim();
   if(!nome){toast("Informe seu nome para continuar.");return;}
-  usuarioAtual = nome; modoVisualizacao = false; iniciarPainel();
+  usuarioAtual = nome; modoVisualizacao = false;
+  try{ localStorage.setItem("meutudo_usuario", nome); }catch(e){}
+  iniciarPainel();
 }
 document.getElementById("loginNome").addEventListener("keydown",e=>{if(e.key==="Enter")fazerLogin();});
+
+function loginRapido(nome){
+  document.getElementById("loginNome").value = nome;
+  fazerLogin();
+}
+
+// Recupera e exibe último usuário
+(function(){
+  try{
+    const ultimo = localStorage.getItem("meutudo_usuario");
+    if(!ultimo) return;
+    const loginCard = document.querySelector(".login-card");
+    const sub = loginCard.querySelector(".login-sub");
+    const inicial = ultimo.trim().charAt(0).toUpperCase();
+    const nomeEsc = ultimo.replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/'/g,"\'");
+    const quickDiv = document.createElement("div");
+    quickDiv.style="margin-bottom:16px;border:0.5px solid var(--border);border-radius:var(--radius);overflow:hidden;";
+    quickDiv.innerHTML=`
+      <div style="font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--text-3);padding:7px 14px;background:var(--bg);border-bottom:0.5px solid var(--border);">Último acesso</div>
+      <button onclick="loginRapido('${nomeEsc}')" style="width:100%;display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--surface);border:none;cursor:pointer;text-align:left;">
+        <div style="width:36px;height:36px;border-radius:50%;background:var(--pink);color:#fff;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;font-family:'Nunito',sans-serif;flex-shrink:0;">${inicial}</div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:13px;font-weight:600;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${ultimo}</div>
+          <div style="font-size:11px;color:var(--text-3);">Clique para entrar</div>
+        </div>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--text-3);flex-shrink:0;"><path d="M9 18l6-6-6-6"/></svg>
+      </button>`;
+    sub.insertAdjacentElement("afterend", quickDiv);
+    document.getElementById("loginNome").value = ultimo;
+  }catch(e){}
+})();
+
 const loginCard = document.querySelector(".login-card");
 const btnVis = document.createElement("button");
 btnVis.className="btn"; btnVis.style="margin-top:8px;background:var(--bg);color:var(--text-2);font-size:12px;";
