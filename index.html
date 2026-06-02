@@ -238,6 +238,14 @@ input:focus,select:focus,textarea:focus{border-color:var(--pink);background:var(
 
   <!-- GERENCIAL -->
   <div class="scr on" id="scr-ger">
+    <!-- Filtro de usuário — visível só no modo visualização -->
+    <div id="visFiltroGer" style="display:none;margin-bottom:14px;padding:10px 14px;background:var(--blbg);border-radius:var(--r);display:none;align-items:center;gap:10px;flex-wrap:wrap;">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--bltx)" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      <span style="font-size:12px;color:var(--bltx);font-weight:600;">Visualizando:</span>
+      <select class="fsel" id="visSelUsr" onchange="visChangeUsr()" style="font-size:12px;min-width:180px;border-color:var(--bltx);color:var(--bltx);">
+        <option value="todos">Todos os usuários</option>
+      </select>
+    </div>
     <div class="kpis">
       <div class="kpi"><div class="kl">Total atividades</div><div class="kv" id="kT">—</div><div class="ks" id="kTS">carregando...</div></div>
       <div class="kpi"><div class="kl">Finalizadas</div><div class="kv" id="kF">—</div><div class="ks" id="kFS"></div></div>
@@ -285,6 +293,14 @@ input:focus,select:focus,textarea:focus{border-color:var(--pink);background:var(
 
   <!-- HISTÓRICO -->
   <div class="scr" id="scr-his">
+    <!-- Filtro de usuário — visível só no modo visualização -->
+    <div id="visFiltroHis" style="display:none;margin-bottom:12px;padding:10px 14px;background:var(--blbg);border-radius:var(--r);align-items:center;gap:10px;flex-wrap:wrap;">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--bltx)" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      <span style="font-size:12px;color:var(--bltx);font-weight:600;">Usuário:</span>
+      <select class="fsel" id="visSelUsrHis" onchange="visChangeUsrHis()" style="font-size:12px;min-width:180px;border-color:var(--bltx);color:var(--bltx);">
+        <option value="todos">Todos os usuários</option>
+      </select>
+    </div>
     <div class="tb" id="mbtR"><div class="mbt on" data-k="todos" onclick="fMes(this)">Todos</div></div>
     <div class="tb">
       <select class="fsel" id="selDia" onchange="fDia()" style="font-size:11px;padding:4px 8px;"><option value="todos">Todos os dias</option></select>
@@ -296,6 +312,14 @@ input:focus,select:focus,textarea:focus{border-color:var(--pink);background:var(
 
   <!-- ENTREGAS -->
   <div class="scr" id="scr-dem">
+    <!-- Filtro de usuário — visível só no modo visualização -->
+    <div id="visFiltroEnt" style="display:none;margin-bottom:12px;padding:10px 14px;background:var(--blbg);border-radius:var(--r);align-items:center;gap:10px;flex-wrap:wrap;">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--bltx)" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      <span style="font-size:12px;color:var(--bltx);font-weight:600;">Usuário:</span>
+      <select class="fsel" id="visSelUsrEnt" onchange="visChangeUsrEnt()" style="font-size:12px;min-width:180px;border-color:var(--bltx);color:var(--bltx);">
+        <option value="todos">Todos os usuários</option>
+      </select>
+    </div>
     <div class="tb" style="margin-bottom:12px;">
       <span style="font-size:12px;color:var(--t2);font-weight:500;">Filtrar:</span>
       <select class="fsel" id="selDem" onchange="fDem()"><option value="todos">Todos os períodos</option></select>
@@ -405,7 +429,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--pink);background:var(
 
 <script>
 // ══ ATUALIZE COM A URL DA NOVA IMPLANTAÇÃO ═══════════════════
-const SURL  = "https://script.google.com/macros/s/AKfycby3tGa3gewYAeiWPgk5igNPP8sEG09do4k7LnIUGz6GtD_SB1lf85B9C_YHw33h31ND/exec";
+const SURL  = "https://script.google.com/macros/s/AKfycbwrWInoY4-2R2MFqpvRceTuHdZuRagtMW3cjPydF5OFOyf51StRjbIkNV9YOw7L8JwV/exec";
 const PRINC = "Jessica Nascimento";
 // ═════════════════════════════════════════════════════════════
 
@@ -413,6 +437,9 @@ let usr="",vis=false,regs=[],dems=[],links=[],dia=[];
 let mf="todos",df="todos",bf="",ug="todos";
 let _ci=0,yrAtiv="todos",yrReu="todos",yrReuTabela="todos",_gerData=null;
 let piSalvas=[];
+// Filtros do modo visualização
+let visUsrGer="todos", visUsrHis="todos", visUsrEnt="todos";
+let _usuariosList=[];
 
 const MORD={JANEIRO:1,FEVEREIRO:2,"MARÇO":3,ABRIL:4,MAIO:5,JUNHO:6,JULHO:7,AGOSTO:8,SETEMBRO:9,OUTUBRO:10,NOVEMBRO:11,DEZEMBRO:12};
 const SOPT=["Finalizado","Tempo de trabalho","Em andamento","Não Iniciado","Aguardando retorno Dock","Aguardando retorno Excelência"];
@@ -436,6 +463,8 @@ function api(params,cb,timeoutMs){
 function voltarLogin(){
   if(!confirm("Deseja sair e voltar à tela de login?"))return;
   usr="";vis=false;
+  visUsrGer="todos";visUsrHis="todos";visUsrEnt="todos";
+  _usuariosList=[];
   piSalvas=[];
   try{localStorage.removeItem("mu_pi");}catch(e){}
   document.getElementById("pW").style.display="none";
@@ -488,7 +517,26 @@ function start(){
   try{const r=localStorage.getItem("mu_rasc");if(r)dia=JSON.parse(r)||[];}catch(e){dia=[];}
   try{const p=localStorage.getItem("mu_pi");if(p)piSalvas=JSON.parse(p)||[];}catch(e){piSalvas=[];}
   renderPend();renderPostIt();
-  // Dados sempre do usuário logado
+  // No modo vis: mostra barras de filtro e carrega lista de usuários
+  if(vis){
+    ["visFiltroGer","visFiltroHis","visFiltroEnt"].forEach(id=>{
+      const el=document.getElementById(id);
+      if(el){el.style.display="flex";}
+    });
+    // Carrega usuários para os selects de filtro
+    api({action:"getUsuarios"},(d)=>{
+      _usuariosList=(d&&d.usuarios)||[];
+      ["visSelUsr","visSelUsrHis","visSelUsrEnt"].forEach(selId=>{
+        const sel=document.getElementById(selId);
+        if(!sel)return;
+        sel.innerHTML='<option value="todos">Todos os usuários</option>';
+        _usuariosList.forEach(u=>{
+          const o=document.createElement("option");
+          o.value=u;o.textContent=u;sel.appendChild(o);
+        });
+      });
+    });
+  }
   carGer();carHis();carDem();
 }
 function updTs(){
@@ -501,13 +549,14 @@ function goTab(id,el){
   document.getElementById("scr-"+id).classList.add("on");el.classList.add("on");
 }
 
-// ── GERENCIAL — usa aba do usuário logado ──────────────────
+// ── GERENCIAL — usa aba do usuário logado (ou filtro vis) ──
 function carGer(){
   fetchRes();
 }
 function fetchRes(){
-  // Passa sempre o usuário logado para filtrar os dados
-  const p={action:"getResumo",usuario:vis?"todos":usr};
+  // Modo vis: usa visUsrGer; modo normal: usa usr logado
+  const usuario = vis ? visUsrGer : usr;
+  const p={action:"getResumo", usuario:usuario};
   api(p,(d)=>{if(d&&!d.error&&!d._timeout)renderGer(d);else renderGerDemo();});
 }
 
@@ -524,8 +573,21 @@ function getAnos(obj){return[...new Set(Object.keys(obj).map(k=>k.split("/")[1]|
 function filtrarPorAno(pm,ano){if(ano==="todos")return pm;const o={};Object.entries(pm).forEach(([k,v])=>{if(k.endsWith("/"+ano))o[k]=v;});return o;}
 function buildYrPills(cid,anos,ativo,fn){
   const el=document.getElementById(cid);if(!el)return;el.innerHTML="";
-  const t=document.createElement("span");t.className="yr-pill"+(ativo==="todos"?" on":"");t.textContent="Todos";t.onclick=()=>fn("todos");el.appendChild(t);
-  anos.forEach(a=>{const p=document.createElement("span");p.className="yr-pill"+(ativo===a?" on":"");p.textContent=a;p.onclick=()=>fn(a);el.appendChild(p);});
+
+  function mkPill(label,value){
+    const p=document.createElement("span");
+    p.className="yr-pill"+(ativo===value?" on":"");
+    p.textContent=label;
+    p.onclick=()=>{
+      el.querySelectorAll(".yr-pill").forEach(x=>x.classList.remove("on"));
+      p.classList.add("on");
+      fn(value);
+    };
+    return p;
+  }
+
+  el.appendChild(mkPill("Todos","todos"));
+  anos.forEach(a=>el.appendChild(mkPill(a,a)));
 }
 function renderGer(d){
   _gerData=d;
@@ -616,10 +678,45 @@ function renderGerDemo(){
     reuDia:{"DEZEMBRO/2024":{"01/12/2024":60,"02/12/2024":90},"JANEIRO/2025":{"06/01/2025":120},"ABRIL/2026":{"30/04/2026":90,"29/04/2026":60},"MAIO/2026":{"02/05/2026":35}}});
 }
 
-// ── HISTÓRICO — filtra pelo usuário logado ─────────────────
+// ── HISTÓRICO — filtra pelo usuário logado (ou filtro vis) ─
 function carHis(){
-  const u=vis?PRINC:usr;
+  const u = vis ? (visUsrHis==="todos" ? "todos" : visUsrHis) : usr;
+  // Se vis e "todos": faz chamada para cada usuário e concatena
+  if(vis && visUsrHis==="todos"){
+    if(!_usuariosList.length){
+      // Ainda carregando usuários — aguarda
+      api({action:"getUsuarios"},(d)=>{
+        _usuariosList=(d&&d.usuarios)||[];
+        carHisTodos();
+      });
+    } else { carHisTodos(); }
+    return;
+  }
   api({action:"getAtividades",usuario:u},(d)=>{regs=(d&&d.rows)||[];buildMbt();buildDiaSel();renderTbl();});
+}
+
+function carHisTodos(){
+  // Carrega atividades de todos os usuários e mescla
+  regs=[];
+  let pendente=_usuariosList.length;
+  if(!pendente){buildMbt();buildDiaSel();renderTbl();return;}
+  _usuariosList.forEach(u=>{
+    api({action:"getAtividades",usuario:u},(d)=>{
+      const rows=(d&&d.rows)||[];
+      // Adiciona nome do usuário em cada linha para identificação
+      rows.forEach(r=>{ r._usuario=u; });
+      regs=[...regs,...rows];
+      pendente--;
+      if(pendente===0){
+        // Ordena por data desc
+        regs.sort((a,b)=>{
+          const pa=a.data.split("/"),pb=b.data.split("/");
+          return new Date(pb[2],pb[1]-1,pb[0])-new Date(pa[2],pa[1]-1,pa[0]);
+        });
+        buildMbt();buildDiaSel();renderTbl();
+      }
+    });
+  });
 }
 function regKey(r){return r.mes+"/"+(r.ano||"0000");}
 function buildMbt(){
@@ -645,8 +742,24 @@ function renderTbl(){
   if(df!=="todos")r=r.filter(x=>x.data===df);
   if(bf)r=r.filter(x=>x.atividade.toLowerCase().includes(bf)||x.observacao.toLowerCase().includes(bf));
   const b=document.getElementById("tB");
-  if(!r.length){b.innerHTML=`<tr><td colspan="4" style="text-align:center;color:var(--t3);padding:20px;">Nenhuma atividade encontrada.</td></tr>`;document.getElementById("tM").textContent="";return;}
-  b.innerHTML=r.map(x=>`<tr><td style="white-space:nowrap;color:var(--t2);">${x.data}</td><td>${esc(x.atividade)}</td><td>${pSt(x.status)}</td><td>${fObs(x.observacao)}</td></tr>`).join("");
+  // Modo vis + todos: mostra coluna extra com nome do usuário
+  const showUsr = vis && visUsrHis==="todos";
+  if(!r.length){
+    b.innerHTML=`<tr><td colspan="${showUsr?5:4}" style="text-align:center;color:var(--t3);padding:20px;">Nenhuma atividade encontrada.</td></tr>`;
+    document.getElementById("tM").textContent="";
+    // Atualiza cabeçalho da tabela
+    b.closest("table").querySelector("thead tr").innerHTML = showUsr
+      ? "<th>Data</th><th>Usuário</th><th>Atividade</th><th>Status</th><th>Observação</th>"
+      : "<th>Data</th><th>Atividade</th><th>Status</th><th>Observação</th>";
+    return;
+  }
+  b.closest("table").querySelector("thead tr").innerHTML = showUsr
+    ? "<th>Data</th><th>Usuário</th><th>Atividade</th><th>Status</th><th>Observação</th>"
+    : "<th>Data</th><th>Atividade</th><th>Status</th><th>Observação</th>";
+  b.innerHTML=r.map(x=>{
+    const usrCol=showUsr?`<td style="white-space:nowrap;color:var(--bltx);font-size:11px;">${esc(x._usuario||"")}</td>`:"";
+    return`<tr><td style="white-space:nowrap;color:var(--t2);">${x.data}</td>${usrCol}<td>${esc(x.atividade)}</td><td>${pSt(x.status)}</td><td>${fObs(x.observacao)}</td></tr>`;
+  }).join("");
   document.getElementById("tM").textContent="mostrando "+r.length+" de "+regs.length+" registros";
 }
 function fObs(o){
@@ -657,9 +770,12 @@ function fObs(o){
   }).join(" ");
 }
 
-// ── ENTREGAS — filtra pelo usuário logado via coluna C ─────
+// ── ENTREGAS — filtra pelo usuário (ou filtro vis) ─────────
 function carDem(){
-  const u=vis?"":usr;
+  // vis + todos: carrega sem filtro de usuário (backend já retorna todos quando usuario="")
+  // vis + usuário específico: filtra pelo usuário
+  // normal: filtra pelo usuário logado
+  const u = vis ? (visUsrEnt==="todos" ? "" : visUsrEnt) : usr;
   api({action:"getDemandas",usuario:u},(d)=>{dems=(d&&d.rows)||[];buildSelDem();renderDem();});
 }
 function normMA(raw){
@@ -691,6 +807,25 @@ function renderDem(){
       const mn=normMA(x.mesAno);
       return`<div class="er" ${i===r.length-1?'style="border-bottom:none"':''}><div class="edot" style="background:var(--pink)"></div><div class="ei"><div class="en">${esc(x.projeto)}</div><div class="ed">${mn}${x.responsavel?" · "+esc(x.responsavel):""}</div></div></div>`;
     }).join(""));
+}
+
+// ── FUNÇÕES DE FILTRO MODO VISUALIZAÇÃO ───────────────────
+function visChangeUsr(){
+  visUsrGer=document.getElementById("visSelUsr").value;
+  yrAtiv="todos";// reseta filtro de ano ao trocar usuário
+  document.getElementById("cM").innerHTML='<div class="loader"><span class="spin"></span>carregando...</div>';
+  document.getElementById("cT").innerHTML='<div class="loader"><span class="spin"></span>carregando...</div>';
+  carGer();
+}
+function visChangeUsrHis(){
+  visUsrHis=document.getElementById("visSelUsrHis").value;
+  mf="todos";df="todos";bf="";
+  document.getElementById("bI").value="";
+  carHis();
+}
+function visChangeUsrEnt(){
+  visUsrEnt=document.getElementById("visSelUsrEnt").value;
+  carDem();
 }
 
 // ── REGISTRAR ─────────────────────────────────────────────
