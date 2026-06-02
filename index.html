@@ -135,8 +135,8 @@ input:focus,select:focus,textarea:focus{border-color:var(--pink);background:var(
 .btn{display:flex;align-items:center;justify-content:center;gap:7px;padding:9px 18px;border-radius:var(--r);border:none;font-size:13px;font-weight:600;cursor:pointer;width:100%;transition:all .15s;}
 .bp{background:var(--pink);color:#fff;}
 .bp:hover{background:var(--pkd);}
-.bd{background:var(--pkd);color:#fff;}
-.bd:hover{background:#8c003f;}
+.bdd{background:var(--pkd);color:#fff;}
+.bdd:hover{background:#8c003f;}
 .btn:disabled{opacity:.5;cursor:not-allowed;}
 /* TOAST */
 .toast{position:fixed;bottom:24px;right:24px;background:var(--t);color:#fff;padding:10px 18px;border-radius:var(--r);font-size:13px;opacity:0;transform:translateY(8px);transition:all .3s;pointer-events:none;z-index:999;}
@@ -149,16 +149,33 @@ input:focus,select:focus,textarea:focus{border-color:var(--pink);background:var(
 .mbg.on{display:flex;}
 .modal{background:var(--sf);border-radius:var(--rl);padding:22px;width:360px;max-width:90vw;}
 .modal h3{font-size:15px;font-weight:600;margin-bottom:14px;}
-/* LOGIN */
+
+/* ═══════════════════════════════════════════════
+   LOGIN — CORRIGIDO: tudo dentro da caixa
+   ═══════════════════════════════════════════════ */
 .lw{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--bg);padding:16px;}
-.lc{background:var(--sf);border:0.5px solid var(--bd);border-radius:var(--rl);padding:32px;width:360px;max-width:100%;text-align:center;box-shadow:0 2px 16px rgba(0,0,0,.06);}
-.lbrand{font-family:'Nunito',sans-serif;font-size:36px;font-weight:400;margin-bottom:6px;display:block;}
+.lbox{background:var(--sf);border:0.5px solid var(--bd);border-radius:var(--rl);padding:32px;width:400px;max-width:100%;box-shadow:0 2px 16px rgba(0,0,0,.06);}
+.lbrand{font-family:'Nunito',sans-serif;font-size:36px;font-weight:400;margin-bottom:6px;display:block;text-align:center;}
 .lbrand strong{font-weight:800;}
 .lbrand .dot{color:var(--pink);}
-.lsub{font-size:13px;color:var(--t2);margin-bottom:24px;display:block;}
-.lc .fg{margin-bottom:14px;}
-.lc input{margin-bottom:0;}
-.lc .btn{margin-top:6px;}
+.lsub{font-size:13px;color:var(--t2);margin-bottom:24px;display:block;text-align:center;}
+.lbox .fg{margin-bottom:14px;}
+.lbox .btn{margin-top:6px;}
+.lnote{font-size:11px;color:var(--t3);margin-top:12px;line-height:1.5;text-align:center;}
+
+/* GRÁFICO DE BARRAS VERTICAIS */
+.vbar-wrap{display:flex;align-items:flex-end;gap:6px;height:120px;margin-top:8px;padding-bottom:2px;}
+.vbar-col{display:flex;flex-direction:column;align-items:center;flex:1;gap:3px;min-width:0;}
+.vbar-bar{width:100%;border-radius:4px 4px 0 0;background:var(--pink);min-height:3px;transition:height .3s;}
+.vbar-lbl{font-size:9px;color:var(--t3);text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:100%;transform:none;}
+.vbar-val{font-size:10px;color:var(--t2);font-weight:600;}
+
+/* FILTRO ANUAL */
+.yr-pills{display:flex;gap:5px;margin-bottom:10px;}
+.yr-pill{font-size:11px;padding:3px 10px;border-radius:20px;border:0.5px solid var(--bd);background:var(--bg);color:var(--t2);cursor:pointer;transition:all .15s;}
+.yr-pill:hover{border-color:var(--pink);color:var(--pink);}
+.yr-pill.on{background:var(--pink);color:#fff;border-color:var(--pink);}
+
 @media(max-width:600px){
   .kpis{grid-template-columns:1fr 1fr;}
   .charts,.fr{grid-template-columns:1fr;}
@@ -169,21 +186,31 @@ input:focus,select:focus,textarea:focus{border-color:var(--pink);background:var(
 </head>
 <body>
 
-<!-- LOGIN -->
+<!-- ═══════════════ LOGIN (CORRIGIDO) ═══════════════ -->
 <div class="lw" id="lW">
-  <div class="lc" id="lC">
+  <div class="lbox" id="lC">
     <span class="lbrand">meu<strong>tudo</strong><span class="dot">.</span></span>
     <span class="lsub">Painel de operações — cartões</span>
+
+    <!-- Último acesso (inserido por JS aqui) -->
+    <div id="lUltimo"></div>
+
     <div class="fg" style="text-align:left;margin-bottom:14px;">
       <label class="fl">Seu nome completo</label>
       <input type="text" id="lNome" placeholder="Ex: Jessica Nascimento" autocomplete="off" style="margin-top:4px;">
     </div>
-    <button class="btn bp" onclick="login()">Entrar no painel</button>
-    <p style="font-size:11px;color:var(--t3);margin-top:14px;line-height:1.5;">Visitantes podem visualizar todas as informações.<br>Para registrar atividades, informe seu nome.</p>
+    <button class="btn bp" onclick="login()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+      Entrar no painel
+    </button>
+    <button class="btn" id="btnVis" style="margin-top:8px;background:var(--bg);color:var(--t2);font-size:12px;" onclick="entrarVis()">
+      Entrar apenas para visualizar
+    </button>
+    <p class="lnote">Visitantes podem visualizar todas as informações.<br>Para registrar atividades, informe seu nome.</p>
   </div>
 </div>
 
-<!-- PAINEL -->
+<!-- ═══════════════ PAINEL ═══════════════ -->
 <div class="w" id="pW" style="display:none">
   <div class="hdr">
     <div class="hdr-t">
@@ -200,7 +227,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--pink);background:var(
     <div class="ntab" onclick="goTab('reg',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg><span>Registrar dia</span></div>
   </nav>
 
-  <!-- GERENCIAL -->
+  <!-- ═══ GERENCIAL ═══ -->
   <div class="scr on" id="scr-ger">
     <div class="tb" style="margin-bottom:14px;">
       <span style="font-size:12px;color:var(--t2);font-weight:500;">Visualizando:</span>
@@ -214,29 +241,56 @@ input:focus,select:focus,textarea:focus{border-color:var(--pink);background:var(
       <div class="kpi"><div class="kl">Reuniões</div><div class="kv" id="kR">—</div><div class="ks" id="kRS"></div></div>
       <div class="kpi"><div class="kl">Entregas do setor</div><div class="kv" id="kD">—</div><div class="ks">projetos realizados</div></div>
     </div>
+
+    <!-- GRID CHARTS: Atividades por mês + Status -->
     <div class="charts">
-      <div class="cc"><div class="slbl">Atividades por mês</div><div id="cM"><div class="loader"><span class="spin"></span>carregando...</div></div></div>
-      <div class="cc"><div class="slbl">Status das atividades</div><div id="cT"><div class="loader"><span class="spin"></span>carregando...</div></div></div>
-    </div>
-    <div class="rb">
-      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
-        <div class="slbl" style="margin:0;">Tempo em reunião</div>
-        <div style="display:flex;gap:8px;">
-          <select class="fsel" id="selRM" onchange="renderReu()" style="font-size:11px;padding:4px 8px;"></select>
-          <select class="fsel" id="selRV" onchange="renderReu()" style="font-size:11px;padding:4px 8px;">
-            <option value="mes">Por mês</option>
-            <option value="dia">Por dia</option>
-          </select>
+      <!-- Atividades por mês com filtro anual -->
+      <div class="cc">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:10px;">
+          <div class="slbl" style="margin:0;">Atividades por mês</div>
+          <div class="yr-pills" id="yrPills"></div>
         </div>
+        <div id="cM"><div class="loader"><span class="spin"></span>carregando...</div></div>
       </div>
-      <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:10px;">
-        <div class="rv" id="rV">—</div><div class="rs" id="rS">total em reuniões</div>
+      <!-- Status das atividades -->
+      <div class="cc">
+        <div class="slbl">Status das atividades</div>
+        <div id="cT"><div class="loader"><span class="spin"></span>carregando...</div></div>
       </div>
-      <div id="rT"><div class="loader"><span class="spin"></span>carregando...</div></div>
+    </div>
+
+    <!-- SEGUNDA LINHA: Reunião mensal (tabela) + Gráfico barras verticais reunião -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+      <!-- Tempo em reunião (tabela existente) -->
+      <div class="rb">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
+          <div class="slbl" style="margin:0;">Tempo em reunião</div>
+          <div style="display:flex;gap:8px;">
+            <select class="fsel" id="selRM" onchange="renderReu()" style="font-size:11px;padding:4px 8px;"></select>
+            <select class="fsel" id="selRV" onchange="renderReu()" style="font-size:11px;padding:4px 8px;">
+              <option value="mes">Por mês</option>
+              <option value="dia">Por dia</option>
+            </select>
+          </div>
+        </div>
+        <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:10px;">
+          <div class="rv" id="rV">—</div><div class="rs" id="rS">total em reuniões</div>
+        </div>
+        <div id="rT"><div class="loader"><span class="spin"></span>carregando...</div></div>
+      </div>
+
+      <!-- NOVO: Gráfico de barras verticais reunião por mês -->
+      <div class="cc">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:8px;">
+          <div class="slbl" style="margin:0;">Reunião por mês (horas)</div>
+          <div class="yr-pills" id="yrPillsReu"></div>
+        </div>
+        <div id="cVBar"><div class="loader"><span class="spin"></span>carregando...</div></div>
+      </div>
     </div>
   </div>
 
-  <!-- HISTÓRICO -->
+  <!-- ═══ HISTÓRICO ═══ -->
   <div class="scr" id="scr-his">
     <div class="tb" id="mbtR"><div class="mbt on" data-k="todos" onclick="fMes(this)">Todos</div></div>
     <div class="tb">
@@ -247,7 +301,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--pink);background:var(
     <div class="tmeta" id="tM"></div>
   </div>
 
-  <!-- ENTREGAS -->
+  <!-- ═══ ENTREGAS ═══ -->
   <div class="scr" id="scr-dem">
     <div class="tb" style="margin-bottom:12px;">
       <span style="font-size:12px;color:var(--t2);font-weight:500;">Filtrar:</span>
@@ -257,7 +311,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--pink);background:var(
     <div class="el" id="lDem"><div class="eh">Entregas do setor</div><div class="loader"><span class="spin"></span>carregando...</div></div>
   </div>
 
-  <!-- REGISTRAR -->
+  <!-- ═══ REGISTRAR ═══ -->
   <div class="scr" id="scr-reg">
     <div id="dNeg" style="display:none;text-align:center;padding:24px;">
       <p style="color:var(--t2);font-size:14px;margin-bottom:8px;">Você está no modo visualização.</p>
@@ -305,7 +359,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--pink);background:var(
         </div>
         <div id="dlB" style="color:var(--t3);font-size:12px;padding:12px;text-align:center;">Nenhuma atividade adicionada ainda.</div>
       </div>
-      <button class="btn bd" id="btnS" onclick="salvar()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>Salvar todas as atividades na planilha</button>
+      <button class="btn bdd" id="btnS" onclick="salvar()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>Salvar todas as atividades na planilha</button>
     </div>
   </div>
 </div>
@@ -333,6 +387,10 @@ const PRINC = "Jessica Nascimento";
 let usr="", vis=false, regs=[], dems=[], links=[], dia=[];
 let mf="todos", df="todos", bf="", ug="todos";
 let _ci=0;
+// Filtros anuais
+let yrAtiv="todos", yrReu="todos";
+// Cache dados gerencial
+let _gerData=null;
 
 const MORD={JANEIRO:1,FEVEREIRO:2,"MARÇO":3,ABRIL:4,MAIO:5,JUNHO:6,JULHO:7,AGOSTO:8,SETEMBRO:9,OUTUBRO:10,NOVEMBRO:11,DEZEMBRO:12};
 const SOPT=["Finalizado","Tempo de trabalho","Em andamento","Não Iniciado","Aguardando retorno Dock","Aguardando retorno Excelência"];
@@ -356,20 +414,14 @@ function login(){
   try{localStorage.setItem("mu_usr",n);}catch(e){}
   start();
 }
-document.getElementById("lNome").addEventListener("keydown",e=>{if(e.key==="Enter")login();});
+function entrarVis(){usr="Visitante";vis=true;start();}
 
-// Botão visualizar
-const bv=document.createElement("button");
-bv.className="btn"; bv.style="margin-top:8px;background:var(--bg);color:var(--t2);font-size:12px;";
-bv.textContent="Entrar apenas para visualizar";
-bv.onclick=()=>{usr="Visitante";vis=true;start();};
-document.getElementById("lC").appendChild(bv);
+document.getElementById("lNome").addEventListener("keydown",e=>{if(e.key==="Enter")login();});
 
 // Último acesso
 (function(){
   try{
     const u=localStorage.getItem("mu_usr"); if(!u)return;
-    const lC=document.getElementById("lC"), sub=lC.querySelector(".lsub");
     const ini=u.trim()[0].toUpperCase();
     const dv=document.createElement("div");
     dv.style="margin-bottom:14px;border:0.5px solid var(--bd);border-radius:var(--r);overflow:hidden;";
@@ -379,7 +431,7 @@ document.getElementById("lC").appendChild(bv);
       <div style="flex:1;min-width:0;"><div style="font-size:13px;font-weight:600;color:var(--t);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${u}</div><div style="font-size:11px;color:var(--t3);">Clique para entrar</div></div>
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--t3);flex-shrink:0;"><path d="M9 18l6-6-6-6"/></svg>
     </button>`;
-    sub.insertAdjacentElement("afterend",dv);
+    document.getElementById("lUltimo").appendChild(dv);
     document.getElementById("lNome").value=u;
   }catch(e){}
 })();
@@ -436,7 +488,6 @@ function fetchRes(){
 function hm(m){const h=Math.floor(m/60),r=m%60;return h>0?(r>0?h+"h "+r+"min":h+"h"):r+"min";}
 function cap(s){return s?s[0].toUpperCase()+s.slice(1).toLowerCase():"";}
 
-// mesKey format from backend: "MAIO/2025"
 function mkLbl(k){
   const p=k.split("/"); if(p.length<2)return cap(k);
   return cap(p[0])+"/"+(p[1]||"");
@@ -448,7 +499,42 @@ function mkSort(a,b){
   return (MORD[pb[0]]||0)-(MORD[pa[0]]||0);
 }
 
+// Extrai anos disponíveis de um objeto {MES/ANO: valor}
+function getAnos(obj){
+  const anos=[...new Set(Object.keys(obj).map(k=>{const p=k.split("/");return p[1]||"";}))].filter(Boolean).sort((a,b)=>parseInt(b)-parseInt(a));
+  return anos;
+}
+
+// Filtra porMes pelo ano selecionado
+function filtrarPorAno(pm, ano){
+  if(ano==="todos") return pm;
+  const out={};
+  Object.entries(pm).forEach(([k,v])=>{if(k.endsWith("/"+ano))out[k]=v;});
+  return out;
+}
+
+// Constrói pills de ano
+function buildYrPills(containerId, anos, anoAtivo, onChange){
+  const el=document.getElementById(containerId);
+  el.innerHTML="";
+  // pill "Todos"
+  const t=document.createElement("span");
+  t.className="yr-pill"+(anoAtivo==="todos"?" on":"");
+  t.textContent="Todos";
+  t.onclick=()=>onChange("todos");
+  el.appendChild(t);
+  anos.forEach(a=>{
+    const p=document.createElement("span");
+    p.className="yr-pill"+(anoAtivo===a?" on":"");
+    p.textContent=a;
+    p.onclick=()=>onChange(a);
+    el.appendChild(p);
+  });
+}
+
 function renderGer(d){
+  _gerData=d; // salva cache
+
   document.getElementById("kT").textContent=d.total||0;
   document.getElementById("kTS").textContent="registros históricos";
   document.getElementById("kF").textContent=d.finalizadas||0;
@@ -457,15 +543,13 @@ function renderGer(d){
   document.getElementById("kRS").textContent=(d.total?Math.round(d.reunioes/d.total*100):0)+"% do total";
   document.getElementById("kD").textContent=d.totalDemandas||0;
 
-  // Barras por mês
+  // Anos disponíveis no porMes
   const pm=d.porMes||{};
-  const chs=Object.keys(pm).sort(mkSort);
-  const mx=Math.max(...chs.map(k=>pm[k]),1);
-  document.getElementById("cM").innerHTML=chs.map(k=>
-    `<div class="br"><div class="brl">${mkLbl(k)}</div><div class="brb"><div class="brf" style="width:${Math.round(pm[k]/mx*100)}%"></div></div><div class="brn">${pm[k]}</div></div>`
-  ).join("")||'<div class="loader">Sem dados</div>';
+  const anos=getAnos(pm);
+  buildYrPills("yrPills", anos, yrAtiv, (a)=>{yrAtiv=a; renderMesChart();});
+  renderMesChart();
 
-  // Barras por status (excluindo "Tempo de trabalho", sempre da aba principal)
+  // Status
   const ps=d.porStatus||{};
   const se=Object.entries(ps).filter(([,v])=>v>0).sort((a,b)=>b[1]-a[1]);
   const ms=Math.max(...se.map(([,v])=>v),1);
@@ -475,8 +559,65 @@ function renderGer(d){
 
   // Reuniões
   window._rd=d.reuDia||{};
-  buildSelRM(window._rd); renderReu();
+  buildSelRM(window._rd);
+  // Anos reunião
+  const anosReu=getAnos(window._rd);
+  buildYrPills("yrPillsReu", anosReu, yrReu, (a)=>{yrReu=a; renderVBar();});
+  renderReu();
+  renderVBar();
 }
+
+function renderMesChart(){
+  if(!_gerData) return;
+  const pm=_gerData.porMes||{};
+  const pmF=filtrarPorAno(pm, yrAtiv);
+  const chs=Object.keys(pmF).sort(mkSort);
+  const mx=Math.max(...chs.map(k=>pmF[k]),1);
+  document.getElementById("cM").innerHTML=chs.map(k=>
+    `<div class="br"><div class="brl">${mkLbl(k)}</div><div class="brb"><div class="brf" style="width:${Math.round(pmF[k]/mx*100)}%"></div></div><div class="brn">${pmF[k]}</div></div>`
+  ).join("")||'<div style="text-align:center;color:var(--t3);font-size:12px;padding:16px;">Sem dados para este ano.</div>';
+}
+
+// ── GRÁFICO BARRAS VERTICAIS REUNIÃO ──────────────────────────
+function renderVBar(){
+  const rd=window._rd||{};
+  // Monta dados: soma minutos por mesKey, filtrado por ano
+  const totPorMes={};
+  Object.entries(rd).forEach(([mesKey,dias])=>{
+    const ano=mesKey.split("/")[1]||"";
+    if(yrReu!=="todos"&&ano!==yrReu) return;
+    let tot=0; Object.values(dias).forEach(v=>tot+=v);
+    if(tot>0) totPorMes[mesKey]=tot;
+  });
+  const chs=Object.keys(totPorMes).sort(mkSort).reverse(); // ordem cronológica
+  const maxMin=Math.max(...Object.values(totPorMes),1);
+  const el=document.getElementById("cVBar");
+
+  if(!chs.length){
+    el.innerHTML='<div style="text-align:center;color:var(--t3);font-size:12px;padding:16px;">Sem dados para este período.</div>';
+    return;
+  }
+
+  // Limita a 12 meses para não ficar apertado
+  const show=chs.slice(-12);
+  const barH=100; // px área de barras
+
+  const cols=show.map(k=>{
+    const h=Math.max(Math.round(totPorMes[k]/maxMin*barH),4);
+    const lbl=mkLbl(k).replace("/","\n").split("\n"); // "Maio\n2025"
+    const horas=(totPorMes[k]/60).toFixed(1)+"h";
+    // Label curto: só mês (3 letras)
+    const lblCurto=lbl[0].substring(0,3);
+    return `<div class="vbar-col" title="${mkLbl(k)}: ${hm(totPorMes[k])}">
+      <div class="vbar-val">${horas}</div>
+      <div class="vbar-bar" style="height:${h}px;background:var(--pink);"></div>
+      <div class="vbar-lbl">${lblCurto}</div>
+    </div>`;
+  }).join("");
+
+  el.innerHTML=`<div class="vbar-wrap">${cols}</div>`;
+}
+
 function buildSelRM(rd){
   const chs=Object.keys(rd).filter(k=>Object.keys(rd[k]).length>0).sort(mkSort);
   const sel=document.getElementById("selRM");
@@ -519,9 +660,9 @@ function renderReu(){
 }
 function renderGerDemo(){
   renderGer({total:347,finalizadas:218,reunioes:104,totalDemandas:22,
-    porMes:{"MAIO/2025":70,"ABRIL/2025":85,"MARÇO/2025":63,"FEVEREIRO/2025":52,"JANEIRO/2025":24,"DEZEMBRO/2024":38},
+    porMes:{"MAIO/2025":70,"ABRIL/2025":85,"MARÇO/2025":63,"FEVEREIRO/2025":52,"JANEIRO/2025":24,"DEZEMBRO/2024":38,"MAIO/2026":14,"ABRIL/2026":65,"MARÇO/2026":74,"FEVEREIRO/2026":61,"JANEIRO/2026":64},
     porStatus:{"Finalizado":218,"Em andamento":45,"Não Iniciado":12,"Aguardando retorno Dock":30,"Aguardando retorno Excelência":12},
-    reuDia:{"DEZEMBRO/2024":{"01/12/2024":60,"02/12/2024":90},"JANEIRO/2025":{"06/01/2025":120}}});
+    reuDia:{"DEZEMBRO/2024":{"01/12/2024":60,"02/12/2024":90},"JANEIRO/2025":{"06/01/2025":120},"ABRIL/2026":{"30/04/2026":90,"29/04/2026":60},"MAIO/2026":{"02/05/2026":35}}});
 }
 
 // ── HISTÓRICO ─────────────────────────────────────────────────
@@ -532,7 +673,6 @@ function carHis(){
     buildMbt(); buildDiaSel(); renderTbl();
   });
 }
-// mesKey para histórico: "MES/ANO" construído no frontend
 function regKey(r){ return r.mes+"/"+(r.ano||"0000"); }
 
 function buildMbt(){
@@ -617,7 +757,9 @@ function renderDem(){
 // ── REGISTRAR ─────────────────────────────────────────────────
 document.querySelectorAll(".chip").forEach(c=>{
   c.addEventListener("click",()=>{
+    const stP=document.getElementById("rStP").value;
     document.getElementById("rAtiv").value=c.dataset.n;
+    document.getElementById("rSt").value=stP;
     document.getElementById("rAtiv").focus();
   });
 });
@@ -658,7 +800,7 @@ function limpar(){
 function salvaRasc(){try{localStorage.setItem("mu_rasc",JSON.stringify(dia));}catch(e){}}
 function carRasc(){try{const r=localStorage.getItem("mu_rasc");if(r)dia=JSON.parse(r)||[];}catch(e){dia=[];}}
 
-// ── SALVAR: envia em lotes de 1 atividade via JSONP ──────────
+// ── SALVAR na planilha correta ────────────────────────────────
 function salvar(){
   if(!dia.length){toast("Adicione pelo menos uma atividade antes de salvar.");return;}
   const data=document.getElementById("rData").value;
@@ -675,7 +817,6 @@ function salvar(){
   let salvos=0;
   function salvarProximo(i){
     if(i>=ativs.length){
-      // tudo salvo
       toast("✓ "+salvos+" atividade"+(salvos!==1?"s":"")+" salva"+(salvos!==1?"s":"")+" com sucesso!");
       dia=[]; try{localStorage.removeItem("mu_rasc");}catch(e){}
       renderDia(); carHis(); carGer();
