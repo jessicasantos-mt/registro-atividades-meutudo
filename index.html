@@ -118,7 +118,6 @@ input:focus,select:focus,textarea:focus{border-color:var(--pink);background:var(
 .mbg.on{display:flex;}
 .modal{background:var(--sf);border-radius:var(--rl);padding:22px;width:360px;max-width:90vw;}
 .modal h3{font-size:15px;font-weight:600;margin-bottom:14px;}
-/* LOGIN */
 .lw{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--bg);padding:16px;}
 .lbox{background:var(--sf);border:0.5px solid var(--bd);border-radius:var(--rl);padding:32px;width:400px;max-width:100%;box-shadow:0 2px 16px rgba(0,0,0,.06);}
 .lbrand{font-family:'Nunito',sans-serif;font-size:36px;font-weight:400;margin-bottom:6px;display:block;text-align:center;}
@@ -128,17 +127,14 @@ input:focus,select:focus,textarea:focus{border-color:var(--pink);background:var(
 .lbox .fg{margin-bottom:14px;}
 .lbox .btn{margin-top:6px;}
 .lnote{font-size:11px;color:var(--t3);margin-top:12px;line-height:1.5;text-align:center;}
-/* FILTRO ANUAL */
 .yr-pills{display:flex;gap:5px;flex-wrap:wrap;}
 .yr-pill{font-size:11px;padding:3px 10px;border-radius:20px;border:0.5px solid var(--bd);background:var(--bg);color:var(--t2);cursor:pointer;transition:all .15s;}
 .yr-pill:hover{border-color:var(--pink);color:var(--pink);}
 .yr-pill.on{background:var(--pink);color:#fff;border-color:var(--pink);}
-/* BARRAS VERTICAIS */
 .vbar-wrap{display:flex;align-items:flex-end;gap:6px;height:120px;margin-top:8px;padding-bottom:2px;}
 .vbar-col{display:flex;flex-direction:column;align-items:center;flex:1;gap:3px;min-width:0;}
 .vbar-lbl{font-size:9px;color:var(--t3);text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:100%;}
 .vbar-val{font-size:10px;color:var(--t2);font-weight:600;}
-/* PENDENTES */
 .pend-wrap{border:0.5px solid var(--bd);border-radius:var(--r);overflow:hidden;margin-bottom:12px;}
 .pend-hdr{background:var(--bg);padding:8px 12px;font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--t3);border-bottom:0.5px solid var(--bd);display:flex;align-items:center;justify-content:space-between;}
 .pend-item{display:flex;align-items:center;gap:8px;padding:8px 12px;border-bottom:0.5px solid var(--bd);}
@@ -158,46 +154,18 @@ input:focus,select:focus,textarea:focus{border-color:var(--pink);background:var(
   background:#fce8ee;
   border-radius:3px 3px 10px 3px;
   box-shadow:3px 5px 16px rgba(0,0,0,.2),0 1px 3px rgba(0,0,0,.1);
-  padding:38px 16px 18px;
+  padding:40px 16px 18px 16px;
   z-index:50;display:none;
   font-family:'Nunito',sans-serif;
   clip-path:polygon(0 0,100% 0,100% calc(100% - 20px),calc(100% - 20px) 100%,0 100%);
 }
-#postit::after{
-  content:'';position:absolute;bottom:0;right:0;
-  width:20px;height:20px;
-  background:linear-gradient(135deg,#e8a0b8 50%,transparent 50%);
-}
-/* grampo SVG inline via pseudo não funciona — usamos div */
-.pi-clip{
-  position:absolute;top:-8px;left:50%;transform:translateX(-50%);
-  width:44px;height:26px;
-  border:3.5px solid #999;border-bottom:none;
-  border-radius:18px 18px 0 0;
-  background:transparent;
-  box-shadow:inset 0 3px 0 #ddd,0 -1px 4px rgba(0,0,0,.15);
-  z-index:53;
-}
-.pi-clip::after{
-  content:'';position:absolute;
-  top:2px;left:50%;transform:translateX(-50%);
-  width:18px;height:16px;
-  border:2.5px solid #bbb;border-bottom:none;
-  border-radius:12px 12px 0 0;
-  background:linear-gradient(180deg,#eee 0%,#ccc 100%);
-}
-.pi-date{
-  font-size:11px;font-weight:800;color:#9b2d52;
-  letter-spacing:.05em;text-transform:uppercase;
-  margin-bottom:9px;border-bottom:1.5px dashed #f0a0be;padding-bottom:5px;
-}
-.pi-item{
-  font-size:11.5px;color:#4a1028;
-  padding:3.5px 0;border-bottom:1px solid rgba(180,60,100,.1);
-  display:flex;align-items:baseline;gap:5px;line-height:1.35;
-}
+#postit::after{content:'';position:absolute;bottom:0;right:0;width:20px;height:20px;background:linear-gradient(135deg,#e8a0b8 50%,transparent 50%);}
+.pi-clip{position:absolute;top:-8px;left:50%;transform:translateX(-50%);width:44px;height:26px;border:3.5px solid #999;border-bottom:none;border-radius:18px 18px 0 0;background:transparent;box-shadow:inset 0 3px 0 #ddd,0 -1px 4px rgba(0,0,0,.15);z-index:53;}
+.pi-clip::after{content:'';position:absolute;top:2px;left:50%;transform:translateX(-50%);width:18px;height:16px;border:2.5px solid #bbb;border-bottom:none;border-radius:12px 12px 0 0;background:linear-gradient(180deg,#eee 0%,#ccc 100%);}
+.pi-date{font-size:11px;font-weight:800;color:#9b2d52;letter-spacing:.05em;text-transform:uppercase;margin-bottom:9px;border-bottom:1.5px dashed #f0a0be;padding-bottom:5px;}
+.pi-item{font-size:11.5px;color:#4a1028;padding:3.5px 0;border-bottom:1px solid rgba(180,60,100,.1);display:flex;align-items:baseline;gap:5px;line-height:1.35;}
 .pi-item:last-child{border-bottom:none;}
-.pi-dot{width:5px;height:5px;border-radius:50%;background:#da0075;flex-shrink:0;margin-top:4px;}
+.pi-dot{width:5px;height:5px;border-radius:50%;background:#da0075;flex-shrink:0;margin-top:5px;}
 .pi-nome{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .pi-hora{font-size:10px;color:#9b2d52;font-weight:700;white-space:nowrap;flex-shrink:0;}
 .pi-empty{font-size:11px;color:#c08090;text-align:center;padding:6px 0;font-style:italic;}
@@ -363,7 +331,6 @@ input:focus,select:focus,textarea:focus{border-color:var(--pink);background:var(
           Adicionar ao registro do dia
         </button>
       </div>
-      <!-- PENDENTES -->
       <div class="pend-wrap" id="pendWrap" style="display:none;">
         <div class="pend-hdr">
           <span id="pendH">Aguardando envio</span>
@@ -402,7 +369,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--pink);background:var(
 <div class="toast" id="toastEl"></div>
 
 <script>
-// ══ ATUALIZE ESTA URL APÓS NOVA IMPLANTAÇÃO ══════════════════
+// ══ ATUALIZE COM A URL DA NOVA IMPLANTAÇÃO ═══════════════════
 const SURL  = "https://script.google.com/macros/s/AKfycbwir0Vi4ZX_dyBKDFyHRhxzm2S0YRytB_XtMupEb6Xl_1IX3uaDwvur-nr67t44jPY-/exec";
 const PRINC = "Jessica Nascimento";
 // ═════════════════════════════════════════════════════════════
@@ -415,25 +382,142 @@ let piSalvas=[];
 const MORD={JANEIRO:1,FEVEREIRO:2,"MARÇO":3,ABRIL:4,MAIO:5,JUNHO:6,JULHO:7,AGOSTO:8,SETEMBRO:9,OUTUBRO:10,NOVEMBRO:11,DEZEMBRO:12};
 const SOPT=["Finalizado","Tempo de trabalho","Em andamento","Não Iniciado","Aguardando retorno Dock","Aguardando retorno Excelência"];
 
-// ── JSONP ──────────────────────────────────────────────────
-function api(params,cb){
-  const name="_c"+(++_ci);
-  const qs=Object.entries(params).map(([k,v])=>k+"="+encodeURIComponent(v)).join("&");
-  window[name]=function(d){
+// ── JSONP com timeout ──────────────────────────────────────
+function api(params, cb, timeoutMs) {
+  const name = "_c"+(++_ci);
+  const myIdx = _ci;
+  let done = false;
+  const qs = Object.entries(params).map(([k,v])=>k+"="+encodeURIComponent(v)).join("&");
+
+  let timer = null;
+  if(timeoutMs){
+    timer = setTimeout(()=>{
+      if(done) return;
+      done = true;
+      delete window[name];
+      const s = document.getElementById("_s"+myIdx);
+      if(s) s.remove();
+      cb({_timeout: true});
+    }, timeoutMs);
+  }
+
+  window[name] = function(d){
+    if(done) return;
+    done = true;
+    if(timer) clearTimeout(timer);
     delete window[name];
-    const s=document.getElementById("_s"+_ci);
-    if(s)s.remove();
+    const s = document.getElementById("_s"+myIdx);
+    if(s) s.remove();
     cb(d);
   };
-  const s=document.createElement("script");
-  s.id="_s"+_ci;
-  s.src=SURL+"?"+qs+"&callback="+name;
-  s.onerror=function(){
+
+  const s = document.createElement("script");
+  s.id = "_s"+myIdx;
+  s.src = SURL+"?"+qs+"&callback="+name;
+  s.onerror = function(){
+    if(done) return;
+    done = true;
+    if(timer) clearTimeout(timer);
     delete window[name];
     s.remove();
     cb({error:"Erro de conexão"});
   };
   document.head.appendChild(s);
+}
+
+// ── SALVAR com fallback por polling ───────────────────────
+// Envia os dados e, se não receber resposta em 10s,
+// consulta a planilha para checar se foi salvo mesmo assim
+function salvar(){
+  if(!dia.length){toast("Adicione pelo menos uma atividade antes de salvar.");return;}
+  const data = document.getElementById("rData").value;
+  const ativs = dia.map(a=>({
+    data: a.data||data, atividade: a.atividade, status: a.status,
+    observacao: a.observacao||"",
+    linkNome: a.links&&a.links[0]?a.links[0].nome:"",
+    linkUrl:  a.links&&a.links[0]?a.links[0].url:""
+  }));
+
+  const btn = document.getElementById("btnS");
+  const btnOrigHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Salvar todas as atividades na planilha`;
+  btn.disabled = true;
+  btn.innerHTML = `<span class="spin"></span> Salvando ${ativs.length} atividade${ativs.length!==1?"s":""}...`;
+
+  // Primeira atividade que enviamos — usada para verificar se chegou na planilha
+  const primeiraAtiv = ativs[0].atividade;
+  const primeiraData = ativs[0].data;
+
+  function onSucesso(ins, ign){
+    const msg = "✓ "+ins+" atividade"+(ins!==1?"s":"")+" salva"+(ins!==1?"s":"")+"!"
+      + (ign>0?" ("+ign+" duplicada"+(ign!==1?"s":"")+" ignorada"+(ign!==1?"s":"")+")":"");
+    toast(msg);
+    piSalvas = [...piSalvas, ...dia];
+    try{localStorage.setItem("mu_pi", JSON.stringify(piSalvas));}catch(e){}
+    dia = [];
+    try{localStorage.removeItem("mu_rasc");}catch(e){}
+    renderPend();
+    renderPostIt();
+    carHis();
+    carGer();
+    btn.disabled = false;
+    btn.innerHTML = btnOrigHTML;
+  }
+
+  function onFalha(msg){
+    toast("Erro: "+msg);
+    btn.disabled = false;
+    btn.innerHTML = btnOrigHTML;
+  }
+
+  // Envia os dados com timeout de 12 segundos
+  api({
+    action: "saveAtividades",
+    usuario: usr,
+    dados: encodeURIComponent(JSON.stringify(ativs))
+  }, (d)=>{
+    // Resposta chegou normalmente
+    if(d && d._timeout){
+      // Timeout — verifica na planilha se foi salvo
+      btn.innerHTML = `<span class="spin"></span> Verificando...`;
+      verificarSeSalvou(primeiraAtiv, primeiraData, ativs.length, onSucesso, onFalha);
+      return;
+    }
+    if(d && d.ok){
+      onSucesso(d.inseridas||0, d.ignoradas||0);
+    } else {
+      // Resposta veio mas com erro — ainda verifica, pois pode ter salvo antes do erro
+      verificarSeSalvou(primeiraAtiv, primeiraData, ativs.length, onSucesso, onFalha);
+    }
+  }, 12000);
+}
+
+// Consulta getAtividades e verifica se a primeira atividade do lote está lá
+function verificarSeSalvou(nomeAtiv, dataAtiv, qtd, onSucesso, onFalha){
+  api({action:"getAtividades", usuario:usr}, (d)=>{
+    if(!d || d.error){
+      onFalha("sem resposta do servidor");
+      return;
+    }
+    const rows = d.rows || [];
+    // Formata a data para comparar no mesmo formato dd/MM/yyyy
+    let dataFmt = "";
+    try{
+      const dt = new Date(dataAtiv+"T12:00:00");
+      dataFmt = dt.toLocaleDateString("pt-BR");
+    }catch(e){ dataFmt = dataAtiv; }
+
+    const encontrou = rows.some(r =>
+      r.atividade && r.atividade.trim().toLowerCase() === nomeAtiv.trim().toLowerCase() &&
+      r.data === dataFmt
+    );
+
+    if(encontrou){
+      // Foi salvo com sucesso, só o callback que falhou
+      onSucesso(qtd, 0);
+    } else {
+      onFalha("não foi possível confirmar o salvamento. Verifique a planilha.");
+    }
+  }, 10000);
 }
 
 // ── LOGIN ──────────────────────────────────────────────────
@@ -507,7 +591,7 @@ function trocaUsr(){
 }
 function fetchRes(){
   const p={action:"getResumo"};if(ug!=="todos")p.usuario=ug;
-  api(p,(d)=>{if(d&&!d.error)renderGer(d);else renderGerDemo();});
+  api(p,(d)=>{if(d&&!d.error&&!d._timeout)renderGer(d);else renderGerDemo();});
 }
 function hm(m){const h=Math.floor(m/60),r=m%60;return h>0?(r>0?h+"h "+r+"min":h+"h"):r+"min";}
 function cap(s){return s?s[0].toUpperCase()+s.slice(1).toLowerCase():"";}
@@ -556,17 +640,14 @@ function renderMesChart(){
 function renderVBar(){
   const rd=window._rd||{},tot={};
   Object.entries(rd).forEach(([k,dias])=>{
-    const ano=k.split("/")[1]||"";
-    if(yrReu!=="todos"&&ano!==yrReu)return;
-    let t=0;Object.values(dias).forEach(v=>t+=v);
-    if(t>0)tot[k]=t;
+    const ano=k.split("/")[1]||"";if(yrReu!=="todos"&&ano!==yrReu)return;
+    let t=0;Object.values(dias).forEach(v=>t+=v);if(t>0)tot[k]=t;
   });
   const chs=Object.keys(tot).sort(mkSort).reverse();
   const maxM=Math.max(...Object.values(tot),1);
   const el=document.getElementById("cVBar");
   if(!chs.length){el.innerHTML='<div style="text-align:center;color:var(--t3);font-size:12px;padding:16px;">Sem dados.</div>';return;}
-  const show=chs.slice(-12);
-  el.innerHTML=`<div class="vbar-wrap">${show.map(k=>{
+  el.innerHTML=`<div class="vbar-wrap">${chs.slice(-12).map(k=>{
     const h=Math.max(Math.round(tot[k]/maxM*100),4);
     return`<div class="vbar-col" title="${mkLbl(k)}: ${hm(tot[k])}"><div class="vbar-val">${(tot[k]/60).toFixed(1)}h</div><div style="width:100%;border-radius:4px 4px 0 0;background:var(--pink);height:${h}px;min-height:3px;"></div><div class="vbar-lbl">${mkLbl(k).split("/")[0].substring(0,3)}</div></div>`;
   }).join("")}</div>`;
@@ -588,7 +669,7 @@ function renderReu(){
     document.getElementById("rT").innerHTML=lns.length?`<table class="rtbl"><thead><tr><th>Mês/Ano</th><th>Tempo total</th></tr></thead><tbody>${lns.join("")}</tbody></table>`:'<div style="font-size:12px;color:var(--t3);text-align:center;padding:8px;">Sem dados de reunião.</div>';
   }else{
     let tot=0;const its=[];
-    chs.forEach(k=>{Object.entries(rd[k]).forEach(([dia,m])=>{if(!m)return;tot+=m;const p=dia.split("/");its.push({dia,lbl:mkLbl(k),m,ts:new Date(p[2],p[1]-1,p[0]).getTime()});});});
+    chs.forEach(k=>{Object.entries(rd[k]).forEach(([d2,m])=>{if(!m)return;tot+=m;const p=d2.split("/");its.push({dia:d2,lbl:mkLbl(k),m,ts:new Date(p[2],p[1]-1,p[0]).getTime()});});});
     its.sort((a,b)=>b.ts-a.ts);
     document.getElementById("rV").textContent=tot?hm(tot):"0min";
     document.getElementById("rS").textContent="total em reuniões"+(fk!=="todos"?" — "+mkLbl(fk):"");
@@ -693,25 +774,15 @@ function addAv(){
   renderPend();
 }
 function renderPend(){
-  const wrap=document.getElementById("pendWrap");
-  const empty=document.getElementById("pendEmpty");
-  const b=document.getElementById("pendB");
-  const h=document.getElementById("pendH");
+  const wrap=document.getElementById("pendWrap"),empty=document.getElementById("pendEmpty");
+  const b=document.getElementById("pendB"),h=document.getElementById("pendH");
   if(!dia.length){wrap.style.display="none";empty.style.display="block";return;}
   wrap.style.display="block";empty.style.display="none";
   h.textContent="Aguardando envio ("+dia.length+")";
   b.innerHTML=dia.map((a,i)=>{
     const lh=(a.links||[]).map(l=>`<a class="pend-link" href="${esc(l.url)}" target="_blank">📎 ${esc(l.nome)}</a>`).join("");
     const op=SOPT.map(s=>`<option${s===a.status?" selected":""}>${s}</option>`).join("");
-    return`<div class="pend-item">
-      <div style="flex:1;min-width:0;">
-        <div class="pend-name" title="${esc(a.atividade)}">${esc(a.atividade)}</div>
-        ${a.observacao?`<div class="pend-obs">${esc(a.observacao)}</div>`:""}
-        ${lh?`<div class="pend-links">${lh}</div>`:""}
-      </div>
-      <select class="ss" onchange="dia[${i}].status=this.value;try{localStorage.setItem('mu_rasc',JSON.stringify(dia));}catch(e){}">${op}</select>
-      <button class="rmb" onclick="dia.splice(${i},1);try{localStorage.setItem('mu_rasc',JSON.stringify(dia));}catch(e){}renderPend()">×</button>
-    </div>`;
+    return`<div class="pend-item"><div style="flex:1;min-width:0;"><div class="pend-name" title="${esc(a.atividade)}">${esc(a.atividade)}</div>${a.observacao?`<div class="pend-obs">${esc(a.observacao)}</div>`:""}${lh?`<div class="pend-links">${lh}</div>`:""}</div><select class="ss" onchange="dia[${i}].status=this.value;try{localStorage.setItem('mu_rasc',JSON.stringify(dia));}catch(e){}">${op}</select><button class="rmb" onclick="dia.splice(${i},1);try{localStorage.setItem('mu_rasc',JSON.stringify(dia));}catch(e){}renderPend()">×</button></div>`;
   }).join("");
 }
 function limpar(){
@@ -727,63 +798,15 @@ function renderPostIt(){
   if(!piSalvas.length){el.style.display="none";return;}
   el.style.display="block";
   const dt=piSalvas[piSalvas.length-1].data||new Date().toISOString().split("T")[0];
-  const dtFmt=new Date(dt+"T12:00:00").toLocaleDateString("pt-BR",{weekday:"short",day:"2-digit",month:"short"});
-  document.getElementById("piDate").textContent=dtFmt.toUpperCase();
+  document.getElementById("piDate").textContent=new Date(dt+"T12:00:00").toLocaleDateString("pt-BR",{weekday:"short",day:"2-digit",month:"short"}).toUpperCase();
   document.getElementById("piBody").innerHTML=piSalvas.map(a=>{
     const nome=a.atividade||"";
     const isReu=nome.toUpperCase().includes("REUNIÃO");
     let hora="";
-    if(isReu&&a.observacao){
-      const m=a.observacao.match(/(\d{1,2}[h:]\d{0,2}\s*[-–]\s*\d{1,2}[h:]\d{0,2})/i);
-      if(m)hora=m[1];
-    }
+    if(isReu&&a.observacao){const m=a.observacao.match(/(\d{1,2}[h:]\d{0,2}\s*[-–]\s*\d{1,2}[h:]\d{0,2})/i);if(m)hora=m[1];}
     const nomeExib=isReu?nome.replace(/^REUNIÃO\s*[-–]\s*/i,""):nome;
-    return`<div class="pi-item">
-      <div class="pi-dot"></div>
-      <span class="pi-nome">${esc(nomeExib)}</span>
-      ${hora?`<span class="pi-hora">(${hora})</span>`:""}
-    </div>`;
+    return`<div class="pi-item"><div class="pi-dot"></div><span class="pi-nome">${esc(nomeExib)}</span>${hora?`<span class="pi-hora">(${hora})</span>`:""}</div>`;
   }).join("");
-}
-
-// ── SALVAR (bloco único) ───────────────────────────────────
-function salvar(){
-  if(!dia.length){toast("Adicione pelo menos uma atividade antes de salvar.");return;}
-  const data=document.getElementById("rData").value;
-  const ativs=dia.map(a=>({
-    data:a.data||data,atividade:a.atividade,status:a.status,
-    observacao:a.observacao||"",
-    linkNome:a.links&&a.links[0]?a.links[0].nome:"",
-    linkUrl:a.links&&a.links[0]?a.links[0].url:""
-  }));
-  const btn=document.getElementById("btnS");
-  btn.disabled=true;
-  btn.innerHTML=`<span class="spin"></span> Salvando ${ativs.length} atividade${ativs.length!==1?"s":""}...`;
-
-  api({
-    action:"saveAtividades",
-    usuario:usr,
-    dados:encodeURIComponent(JSON.stringify(ativs))
-  },(d)=>{
-    btn.disabled=false;
-    btn.innerHTML=`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Salvar todas as atividades na planilha`;
-
-    if(d&&d.ok){
-      const ins=d.inseridas||0,ign=d.ignoradas||0;
-      let msg="✓ "+ins+" atividade"+(ins!==1?"s":"")+" salva"+(ins!==1?"s":"")+"!";
-      if(ign>0)msg+=" ("+ign+" já existia"+(ign!==1?"m":"")+", ignorada"+(ign!==1?"s":"")+")";
-      toast(msg);
-      // Move para post-it
-      piSalvas=[...piSalvas,...dia];
-      try{localStorage.setItem("mu_pi",JSON.stringify(piSalvas));}catch(e){}
-      // Limpa pendentes
-      dia=[];try{localStorage.removeItem("mu_rasc");}catch(e){}
-      renderPend();renderPostIt();
-      carHis();carGer();
-    } else {
-      toast("Erro: "+(d&&d.error?d.error:"sem resposta do servidor"));
-    }
-  });
 }
 
 // ── MODAL ──────────────────────────────────────────────────
