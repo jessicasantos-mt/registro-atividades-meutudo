@@ -209,6 +209,10 @@ input:focus,select:focus,textarea:focus{border-color:var(--pink);background:var(
       Entrar no painel
     </button>
     <button class="btn" style="margin-top:8px;background:var(--bg);color:var(--t2);font-size:12px;" onclick="entrarVis()">Entrar apenas para visualizar</button>
+    <button class="btn" style="margin-top:8px;background:var(--bg);color:var(--t3);font-size:11px;border:0.5px solid var(--bd);" onclick="location.reload()">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+      Atualizar página
+    </button>
     <p class="lnote">Visitantes podem visualizar todas as informações.<br>Para registrar atividades, informe seu nome.</p>
   </div>
 </div>
@@ -245,6 +249,10 @@ input:focus,select:focus,textarea:focus{border-color:var(--pink);background:var(
       <select class="fsel" id="visSelUsr" onchange="visChangeUsr()" style="font-size:12px;min-width:180px;border-color:var(--bltx);color:var(--bltx);">
         <option value="todos">Todos os usuários</option>
       </select>
+      <button onclick="visChangeUsr()" style="display:flex;align-items:center;gap:5px;font-size:11px;color:#fff;background:var(--pink);border:none;border-radius:20px;padding:5px 13px;cursor:pointer;font-weight:600;white-space:nowrap;">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+        Atualizar
+      </button>
     </div>
     <div class="kpis">
       <div class="kpi"><div class="kl">Total atividades</div><div class="kv" id="kT">—</div><div class="ks" id="kTS">carregando...</div></div>
@@ -300,6 +308,10 @@ input:focus,select:focus,textarea:focus{border-color:var(--pink);background:var(
       <select class="fsel" id="visSelUsrHis" onchange="visChangeUsrHis()" style="font-size:12px;min-width:180px;border-color:var(--bltx);color:var(--bltx);">
         <option value="todos">Todos os usuários</option>
       </select>
+      <button onclick="visChangeUsrHis()" style="display:flex;align-items:center;gap:5px;font-size:11px;color:#fff;background:var(--pink);border:none;border-radius:20px;padding:5px 13px;cursor:pointer;font-weight:600;white-space:nowrap;">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+        Atualizar
+      </button>
     </div>
     <div class="tb" id="mbtR"><div class="mbt on" data-k="todos" onclick="fMes(this)">Todos</div></div>
     <div class="tb">
@@ -319,6 +331,10 @@ input:focus,select:focus,textarea:focus{border-color:var(--pink);background:var(
       <select class="fsel" id="visSelUsrEnt" onchange="visChangeUsrEnt()" style="font-size:12px;min-width:180px;border-color:var(--bltx);color:var(--bltx);">
         <option value="todos">Todos os usuários</option>
       </select>
+      <button onclick="visChangeUsrEnt()" style="display:flex;align-items:center;gap:5px;font-size:11px;color:#fff;background:var(--pink);border:none;border-radius:20px;padding:5px 13px;cursor:pointer;font-weight:600;white-space:nowrap;">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+        Atualizar
+      </button>
     </div>
     <div class="tb" style="margin-bottom:12px;">
       <span style="font-size:12px;color:var(--t2);font-weight:500;">Filtrar:</span>
@@ -337,9 +353,20 @@ input:focus,select:focus,textarea:focus{border-color:var(--pink);background:var(
     <div id="dForm">
       <p style="font-size:13px;color:var(--t2);margin-bottom:14px;">Adicione as atividades e clique em salvar para enviar tudo de uma vez para a planilha.</p>
       <div class="fr" style="margin-bottom:2px;">
-        <div class="fg"><label class="fl">Data</label><input type="date" id="rData"></div>
-        <div class="fg"><label class="fl">Status padrão para os chips</label>
-          <select id="rStP"><option>Finalizado</option><option>Tempo de trabalho</option><option>Em andamento</option><option>Não Iniciado</option><option>Aguardando retorno Dock</option><option>Aguardando retorno Excelência</option></select>
+        <div class="fg"><label class="fl">Data</label><input type="date" id="rData" onchange="carAtivRetro()"></div>
+      </div>
+      <!-- ATIVIDADES DO DIA SELECIONADO (retroativo) -->
+      <div id="retroWrap" style="display:none;margin-bottom:14px;border:0.5px solid var(--bd);border-radius:var(--r);overflow:hidden;">
+        <div style="background:var(--ambg);padding:8px 12px;font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--amtx);border-bottom:0.5px solid var(--bd);display:flex;align-items:center;justify-content:space-between;">
+          <span id="retroTitulo">Atividades registradas</span>
+          <span style="font-size:10px;font-weight:400;color:var(--amtx);">Clique no status para editar</span>
+        </div>
+        <div id="retroB"><div class="loader"><span class="spin"></span>carregando...</div></div>
+        <div style="padding:10px 12px;border-top:0.5px solid var(--bd);background:var(--bg);">
+          <button class="btn bp" id="btnRetroSalvar" onclick="salvarRetro()" style="width:auto;padding:7px 18px;font-size:12px;" disabled>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>
+            Salvar alterações de status
+          </button>
         </div>
       </div>
       <div class="fg">
@@ -429,7 +456,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--pink);background:var(
 
 <script>
 // ══ ATUALIZE COM A URL DA NOVA IMPLANTAÇÃO ═══════════════════
-const SURL  = "https://script.google.com/macros/s/AKfycbw-ljIs_AftNtrnxFoIhquhrkU2UwIzOaqDcW41aFIZgpSG95_SKCmrWiHFj1IFrbyR/exec";
+const SURL  = "https://script.google.com/macros/s/AKfycbzxCnsLUdHJl6gpN15yW4UeSxl1ubhEwZARsgKeaIwMmjuOlhuBXkW0tWMGvhmp0Mvg/exec";
 const PRINC = "Jessica Nascimento";
 // ═════════════════════════════════════════════════════════════
 
@@ -828,6 +855,113 @@ function visChangeUsrEnt(){
   carDem();
 }
 
+// ── EDIÇÃO RETROATIVA DE STATUS ───────────────────────────
+let retroAtivs = []; // atividades do dia selecionado
+let retroAlterados = {}; // {linha: novoStatus}
+
+function carAtivRetro(){
+  const data = document.getElementById("rData").value;
+  if(!data) return;
+
+  // Verifica se é hoje ou data futura — não mostra retroativo
+  const hoje = new Date().toISOString().split("T")[0];
+  const retroWrap = document.getElementById("retroWrap");
+
+  if(data >= hoje){
+    retroWrap.style.display = "none";
+    retroAtivs = [];
+    retroAlterados = {};
+    return;
+  }
+
+  // Data retroativa — busca atividades daquele dia
+  const dtFmt = new Date(data+"T12:00:00").toLocaleDateString("pt-BR");
+  retroWrap.style.display = "block";
+  retroAlterados = {};
+  document.getElementById("btnRetroSalvar").disabled = true;
+  document.getElementById("retroTitulo").textContent = "Atividades de "+dtFmt;
+  document.getElementById("retroB").innerHTML = '<div class="loader"><span class="spin"></span>carregando...</div>';
+
+  api({action:"getAtividades", usuario:usr}, (d)=>{
+    const rows = (d&&d.rows)||[];
+    retroAtivs = rows.filter(r => r.data === dtFmt);
+
+    if(!retroAtivs.length){
+      document.getElementById("retroB").innerHTML = '<div style="padding:12px;text-align:center;color:var(--t3);font-size:12px;">Nenhuma atividade registrada nesta data.</div>';
+      return;
+    }
+    renderRetro();
+  });
+}
+
+function renderRetro(){
+  const b = document.getElementById("retroB");
+  b.innerHTML = retroAtivs.map((a,i)=>{
+    const statusAtual = retroAlterados[i] !== undefined ? retroAlterados[i] : a.status;
+    const op = SOPT.map(s=>`<option value="${s}"${s===statusAtual?" selected":""}>${s}</option>`).join("");
+    return`<div class="pend-item">
+      <div style="flex:1;min-width:0;">
+        <div class="pend-name" title="${esc(a.atividade)}">${esc(a.atividade)}</div>
+        ${a.observacao?`<div class="pend-obs">${esc(a.observacao)}</div>`:""}
+      </div>
+      <select class="ss" onchange="retroMudaStatus(${i},this.value)">${op}</select>
+    </div>`;
+  }).join("");
+}
+
+function retroMudaStatus(idx, novoStatus){
+  retroAlterados[idx] = novoStatus;
+  const temAlteracao = Object.keys(retroAlterados).length > 0;
+  document.getElementById("btnRetroSalvar").disabled = !temAlteracao;
+}
+
+function salvarRetro(){
+  const indicesToSalvar = Object.keys(retroAlterados);
+  if(!indicesToSalvar.length){ toast("Nenhuma alteração para salvar."); return; }
+
+  const btn = document.getElementById("btnRetroSalvar");
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spin"></span> Salvando...';
+
+  // Monta lista de atividades com status alterado para reenviar
+  // Como não temos API de update, usamos a estratégia de reenviar
+  // as atividades alteradas. O backend tem anti-duplicata por data+atividade,
+  // então precisamos de uma ação de update no backend.
+  // Por ora, salva via saveAtividades com flag de update.
+  const ativs = indicesToSalvar.map(idx=>{
+    const a = retroAtivs[idx];
+    const novoStatus = retroAlterados[idx];
+    return {
+      data: a.data.split("/").reverse().join("-"), // dd/MM/yyyy → yyyy-MM-dd
+      atividade: a.atividade,
+      status: novoStatus,
+      observacao: a.observacao||"",
+      linkNome: "", linkUrl: "",
+      linha: a.linha, // número da linha na planilha
+      _update: true
+    };
+  });
+
+  api({
+    action:"updateStatus",
+    usuario:usr,
+    dados:encodeURIComponent(JSON.stringify(ativs))
+  },(d)=>{
+    btn.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg> Salvar alterações de status`;
+    if(d&&d.ok){
+      toast("✓ Status atualizado"+(ativs.length!==1?"s":"")+" com sucesso!");
+      retroAlterados = {};
+      // Atualiza local
+      indicesToSalvar.forEach(idx=>{ retroAtivs[idx].status = ativs.find(a=>a.linha===retroAtivs[idx].linha)?.status||retroAtivs[idx].status; });
+      renderRetro();
+      carHis();
+    } else {
+      toast("Erro ao atualizar: "+(d&&d.error?d.error:"tente novamente"));
+      btn.disabled = false;
+    }
+  }, 12000);
+}
+
 // ── REGISTRAR ─────────────────────────────────────────────
 function toggleTipo(){
   const t=document.getElementById("rTipo").value;
@@ -836,7 +970,7 @@ function toggleTipo(){
 document.querySelectorAll(".chip").forEach(c=>{
   c.addEventListener("click",()=>{
     document.getElementById("rAtiv").value=c.dataset.n;
-    document.getElementById("rSt").value=document.getElementById("rStP").value;
+    document.getElementById("rSt").value="Finalizado";
     document.getElementById("rTipo").value="atividade";
     toggleTipo();
     document.getElementById("rAtiv").focus();
