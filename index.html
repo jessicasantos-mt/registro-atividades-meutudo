@@ -183,6 +183,10 @@ input:focus,select:focus,textarea:focus{border-color:var(--pink);background:var(
 .pi-nome{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .pi-hora{font-size:10px;color:#9b2d52;font-weight:700;white-space:nowrap;flex-shrink:0;}
 .pi-empty{font-size:11px;color:#c08090;text-align:center;padding:6px 0;font-style:italic;}
+/* Botão editar no post-it */
+.pi-edit{background:none;border:none;cursor:pointer;padding:0 0 0 4px;opacity:0;transition:opacity .15s;flex-shrink:0;color:#b0406a;font-size:13px;line-height:1;}
+.pi-item:hover .pi-edit{opacity:.7;}
+.pi-item:hover .pi-edit:hover{opacity:1;}
 @media(max-width:700px){
   .kpis{grid-template-columns:1fr 1fr;}
   .charts,.fr,.fr3{grid-template-columns:1fr;}
@@ -444,6 +448,36 @@ input:focus,select:focus,textarea:focus{border-color:var(--pink);background:var(
   <div class="pi-clip"></div>
   <div class="pi-date" id="piDate">—</div>
   <div id="piBody"><div class="pi-empty">Nenhuma atividade salva hoje.</div></div>
+</div>
+
+<!-- MODAL EDITAR ITEM DO POST-IT -->
+<div class="mbg" id="mPi">
+  <div class="modal">
+    <h3>✏️ Editar atividade</h3>
+    <div class="fg">
+      <label class="fl">Atividade</label>
+      <input type="text" id="mPiNome" readonly style="opacity:.6;cursor:not-allowed;">
+    </div>
+    <div class="fg">
+      <label class="fl">Status</label>
+      <select id="mPiStatus">
+        <option>Finalizado</option>
+        <option>Tempo de trabalho</option>
+        <option>Em andamento</option>
+        <option>Não Iniciado</option>
+        <option>Aguardando retorno Dock</option>
+        <option>Aguardando retorno Excelência</option>
+      </select>
+    </div>
+    <div class="fg">
+      <label class="fl">Observação <span style="font-size:10px;color:var(--t3);">(ex: 11h - 11:35 para reunião)</span></label>
+      <input type="text" id="mPiObs" placeholder="Contexto, horário...">
+    </div>
+    <div style="display:flex;gap:8px;margin-top:4px;">
+      <button class="btn bp" style="flex:1" onclick="confPiEdit()">Salvar</button>
+      <button class="btn" style="flex:1;background:var(--bg);color:var(--t)" onclick="fechaPiEdit()">Cancelar</button>
+    </div>
+  </div>
 </div>
 
 <!-- MODAL LINK -->
@@ -1067,6 +1101,41 @@ function limpar(){
   renderPend();toast("Registro limpo.");
 }
 
+// ── EDITAR ITEM DO POST-IT ─────────────────────────────────
+let _piEditIdx = -1;
+
+function abrirPiEdit(idx){
+  _piEditIdx = idx;
+  const a = piSalvas[idx];
+  if(!a) return;
+  document.getElementById("mPiNome").value = a.atividade||"";
+  document.getElementById("mPiStatus").value = a.status||"Finalizado";
+  document.getElementById("mPiObs").value = a.observacao||"";
+  document.getElementById("mPi").classList.add("on");
+  setTimeout(()=>document.getElementById("mPiObs").focus(), 50);
+}
+
+function fechaPiEdit(){
+  document.getElementById("mPi").classList.remove("on");
+  _piEditIdx = -1;
+}
+
+function confPiEdit(){
+  if(_piEditIdx < 0) return;
+  const novoStatus = document.getElementById("mPiStatus").value;
+  const novaObs    = document.getElementById("mPiObs").value.trim();
+  piSalvas[_piEditIdx].status     = novoStatus;
+  piSalvas[_piEditIdx].observacao = novaObs;
+  try{localStorage.setItem("mu_pi", JSON.stringify(piSalvas));}catch(e){}
+  fechaPiEdit();
+  renderPostIt();
+  toast("✓ Atividade atualizada no post-it.");
+}
+
+document.getElementById("mPi").addEventListener("click", e=>{
+  if(e.target===document.getElementById("mPi")) fechaPiEdit();
+});
+
 // ── TOGGLE FINALIZADO NO POST-IT ──────────────────────────
 function togglePiDone(idx){
   if(!piSalvas[idx]) return;
@@ -1090,10 +1159,11 @@ function renderPostIt(){
     if(isReu&&a.observacao){const m=a.observacao.match(/(\d{1,2}[h:]\d{0,2}\s*[-–]\s*\d{1,2}[h:]\d{0,2})/i);if(m)hora=m[1];}
     const nomeExib=isReu?nome.replace(/^REUNIÃO\s*[-–]\s*/i,""):nome;
     const title=isDone?"Clique para desmarcar como finalizado":"Clique para marcar como finalizado";
-    return`<div class="pi-item${isDone?" done":""}" onclick="togglePiDone(${i})" title="${title}">
-      <div class="pi-dot"></div>
-      <span class="pi-nome">${esc(nomeExib)}</span>
-      ${hora?`<span class="pi-hora">(${hora})</span>`:""}
+    return`<div class="pi-item${isDone?" done":""}" title="${title}">
+      <div class="pi-dot" onclick="togglePiDone(${i})" style="cursor:pointer;flex-shrink:0;margin-top:5px;width:5px;height:5px;border-radius:50%;"></div>
+      <span class="pi-nome" onclick="togglePiDone(${i})">${esc(nomeExib)}</span>
+      ${hora?`<span class="pi-hora" onclick="togglePiDone(${i})">(${hora})</span>`:""}
+      <button class="pi-edit" onclick="abrirPiEdit(${i})" title="Editar observação e status">✏️</button>
     </div>`;
   }).join("");
 }
