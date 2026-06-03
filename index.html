@@ -227,10 +227,16 @@ input:focus,select:focus,textarea:focus{border-color:var(--pink);background:var(
     </div>
     <div class="hdr-sub">
       <span>Gestão de atividades e demandas &nbsp;·&nbsp; <span id="nEl">—</span></span>
-      <button class="back-btn" onclick="voltarLogin()">
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
-        Voltar ao menu
-      </button>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <button class="back-btn" onclick="atualizarPainel()" title="Atualizar dados da planilha">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+          Atualizar
+        </button>
+        <button class="back-btn" onclick="voltarLogin()">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+          Voltar ao menu
+        </button>
+      </div>
     </div>
   </div>
   <nav class="nav">
@@ -456,7 +462,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--pink);background:var(
 
 <script>
 // ══ ATUALIZE COM A URL DA NOVA IMPLANTAÇÃO ═══════════════════
-const SURL  = "https://script.google.com/macros/s/AKfycbzxCnsLUdHJl6gpN15yW4UeSxl1ubhEwZARsgKeaIwMmjuOlhuBXkW0tWMGvhmp0Mvg/exec";
+const SURL  = "https://script.google.com/macros/s/AKfycbw-ljIs_AftNtrnxFoIhquhrkU2UwIzOaqDcW41aFIZgpSG95_SKCmrWiHFj1IFrbyR/exec";
 const PRINC = "Jessica Nascimento";
 // ═════════════════════════════════════════════════════════════
 
@@ -484,6 +490,44 @@ function api(params,cb,timeoutMs){
   s.id="_s"+myIdx;s.src=SURL+"?"+qs+"&callback="+name;
   s.onerror=function(){if(done)return;done=true;if(timer)clearTimeout(timer);delete window[name];s.remove();cb({error:"Erro de conexão"});};
   document.head.appendChild(s);
+}
+
+// ── ATUALIZAR PAINEL ───────────────────────────────────────
+function atualizarPainel(){
+  const btn = document.querySelector('[onclick="atualizarPainel()"]');
+  if(btn){
+    btn.disabled = true;
+    btn.innerHTML = `<span class="spin" style="width:10px;height:10px;border-width:1.5px;margin-right:4px;"></span> Atualizando...`;
+  }
+  // Recarrega todos os dados simultaneamente
+  let pendentes = 3;
+  function concluiu(){
+    pendentes--;
+    if(pendentes === 0 && btn){
+      btn.disabled = false;
+      btn.innerHTML = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> Atualizar`;
+      toast("✓ Dados atualizados!");
+      updTs();
+    }
+  }
+  // Reseta rascunho retroativo se estava aberto
+  const retroWrap = document.getElementById("retroWrap");
+  if(retroWrap && retroWrap.style.display !== "none"){
+    carAtivRetro();
+  }
+  // Atualiza as três fontes de dados
+  const pGer = {action:"getResumo", usuario: vis ? visUsrGer : usr};
+  api(pGer,(d)=>{ if(d&&!d.error&&!d._timeout) renderGer(d); concluiu(); });
+
+  const uHis = vis ? (visUsrHis==="todos" ? "todos" : visUsrHis) : usr;
+  if(vis && visUsrHis==="todos"){
+    carHisTodos(); concluiu();
+  } else {
+    api({action:"getAtividades", usuario:uHis},(d)=>{ regs=(d&&d.rows)||[]; buildMbt(); buildDiaSel(); renderTbl(); concluiu(); });
+  }
+
+  const uDem = vis ? (visUsrEnt==="todos" ? "" : visUsrEnt) : usr;
+  api({action:"getDemandas", usuario:uDem},(d)=>{ dems=(d&&d.rows)||[]; buildSelDem(); renderDem(); concluiu(); });
 }
 
 // ── VOLTAR AO LOGIN ────────────────────────────────────────
