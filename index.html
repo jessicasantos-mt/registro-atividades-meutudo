@@ -176,14 +176,12 @@ input:focus,select:focus,textarea:focus{border-color:var(--pink);background:var(
 .pi-item{font-size:11.5px;color:#4a1028;padding:3.5px 0;border-bottom:1px solid rgba(180,60,100,.1);display:flex;align-items:baseline;gap:5px;line-height:1.35;cursor:pointer;border-radius:4px;transition:background .12s;}
 .pi-item:last-child{border-bottom:none;}
 .pi-item:hover{background:rgba(218,0,117,.07);}
-/* Riscado quando Finalizado */
 .pi-item.done .pi-nome{text-decoration:line-through;opacity:.55;}
 .pi-item.done .pi-dot{background:#aaa;}
 .pi-dot{width:5px;height:5px;border-radius:50%;background:#da0075;flex-shrink:0;margin-top:5px;}
 .pi-nome{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .pi-hora{font-size:10px;color:#9b2d52;font-weight:700;white-space:nowrap;flex-shrink:0;}
 .pi-empty{font-size:11px;color:#c08090;text-align:center;padding:6px 0;font-style:italic;}
-/* Botão editar no post-it */
 .pi-edit{background:none;border:none;cursor:pointer;padding:0 0 0 4px;opacity:0;transition:opacity .15s;flex-shrink:0;color:#b0406a;font-size:13px;line-height:1;}
 .pi-item:hover .pi-edit{opacity:.7;}
 .pi-item:hover .pi-edit:hover{opacity:1;}
@@ -252,7 +250,6 @@ input:focus,select:focus,textarea:focus{border-color:var(--pink);background:var(
 
   <!-- GERENCIAL -->
   <div class="scr on" id="scr-ger">
-    <!-- Filtro de usuário — visível só no modo visualização -->
     <div id="visFiltroGer" style="display:none;margin-bottom:14px;padding:10px 14px;background:var(--blbg);border-radius:var(--r);align-items:center;gap:10px;flex-wrap:wrap;">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--bltx)" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
       <span style="font-size:12px;color:var(--bltx);font-weight:600;">Visualizando:</span>
@@ -288,7 +285,6 @@ input:focus,select:focus,textarea:focus{border-color:var(--pink);background:var(
         <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:10px;">
           <div class="slbl" style="margin:0;">Tempo em reunião</div>
           <div style="display:flex;gap:6px;flex-wrap:wrap;">
-            <!-- NOVO: filtro de ano para reunião -->
             <div class="yr-pills" id="yrPillsReuTabela"></div>
             <select class="fsel" id="selRM" onchange="renderReu()" style="font-size:11px;padding:4px 8px;"></select>
             <select class="fsel" id="selRV" onchange="renderReu()" style="font-size:11px;padding:4px 8px;"><option value="mes">Por mês</option><option value="dia">Por dia</option></select>
@@ -311,7 +307,6 @@ input:focus,select:focus,textarea:focus{border-color:var(--pink);background:var(
 
   <!-- HISTÓRICO -->
   <div class="scr" id="scr-his">
-    <!-- Filtro de usuário — visível só no modo visualização -->
     <div id="visFiltroHis" style="display:none;margin-bottom:12px;padding:10px 14px;background:var(--blbg);border-radius:var(--r);align-items:center;gap:10px;flex-wrap:wrap;">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--bltx)" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
       <span style="font-size:12px;color:var(--bltx);font-weight:600;">Usuário:</span>
@@ -334,7 +329,6 @@ input:focus,select:focus,textarea:focus{border-color:var(--pink);background:var(
 
   <!-- ENTREGAS -->
   <div class="scr" id="scr-dem">
-    <!-- Filtro de usuário — visível só no modo visualização -->
     <div id="visFiltroEnt" style="display:none;margin-bottom:12px;padding:10px 14px;background:var(--blbg);border-radius:var(--r);align-items:center;gap:10px;flex-wrap:wrap;">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--bltx)" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
       <span style="font-size:12px;color:var(--bltx);font-weight:600;">Usuário:</span>
@@ -393,7 +387,6 @@ input:focus,select:focus,textarea:focus{border-color:var(--pink);background:var(
       </div>
       <div style="border:0.5px solid var(--bd);border-radius:var(--r);padding:14px;margin-bottom:13px;">
         <div class="slbl" style="margin-bottom:10px;">Atividade</div>
-        <!-- NOVO: grade 3 colunas: Tipo | Descrição | Status -->
         <div class="fr3" style="margin-bottom:0;">
           <div class="fg">
             <label class="fl">Tipo</label>
@@ -407,7 +400,6 @@ input:focus,select:focus,textarea:focus{border-color:var(--pink);background:var(
             <input type="text" id="rAtiv" placeholder="Clique em um chip acima ou escreva aqui...">
           </div>
         </div>
-        <!-- Campos só para Atividade -->
         <div id="camposAtiv">
           <div class="fr">
             <div class="fg"><label class="fl">Status</label>
@@ -504,7 +496,6 @@ let usr="",vis=false,regs=[],dems=[],links=[],dia=[];
 let mf="todos",df="todos",bf="",ug="todos";
 let _ci=0,yrAtiv="todos",yrReu="todos",yrReuTabela="todos",_gerData=null;
 let piSalvas=[];
-// Filtros do modo visualização
 let visUsrGer="todos", visUsrHis="todos", visUsrEnt="todos";
 let _usuariosList=[];
 
@@ -533,7 +524,6 @@ function atualizarPainel(){
     btn.disabled = true;
     btn.innerHTML = `<span class="spin" style="width:10px;height:10px;border-width:1.5px;margin-right:4px;"></span> Atualizando...`;
   }
-  // Recarrega todos os dados simultaneamente
   let pendentes = 3;
   function concluiu(){
     pendentes--;
@@ -544,22 +534,16 @@ function atualizarPainel(){
       updTs();
     }
   }
-  // Reseta rascunho retroativo se estava aberto
   const retroWrap = document.getElementById("retroWrap");
-  if(retroWrap && retroWrap.style.display !== "none"){
-    carAtivRetro();
-  }
-  // Atualiza as três fontes de dados
+  if(retroWrap && retroWrap.style.display !== "none"){ carAtivRetro(); }
   const pGer = {action:"getResumo", usuario: vis ? visUsrGer : usr};
   api(pGer,(d)=>{ if(d&&!d.error&&!d._timeout) renderGer(d); concluiu(); });
-
   const uHis = vis ? (visUsrHis==="todos" ? "todos" : visUsrHis) : usr;
   if(vis && visUsrHis==="todos"){
     carHisTodos(); concluiu();
   } else {
     api({action:"getAtividades", usuario:uHis},(d)=>{ regs=(d&&d.rows)||[]; buildMbt(); buildDiaSel(); renderTbl(); concluiu(); });
   }
-
   const uDem = vis ? (visUsrEnt==="todos" ? "" : visUsrEnt) : usr;
   api({action:"getDemandas", usuario:uDem},(d)=>{ dems=(d&&d.rows)||[]; buildSelDem(); renderDem(); concluiu(); });
 }
@@ -571,12 +555,11 @@ function voltarLogin(){
   visUsrGer="todos";visUsrHis="todos";visUsrEnt="todos";
   _usuariosList=[];
   piSalvas=[];
-  try{localStorage.removeItem("mu_pi");}catch(e){}
+  // Não limpa mu_pi — o post-it deve persistir entre sessões
   document.getElementById("pW").style.display="none";
   document.getElementById("postit").style.display="none";
   document.getElementById("lW").style.display="flex";
   document.getElementById("lNome").value="";
-  // Reseta abas
   document.querySelectorAll(".ntab").forEach((t,i)=>{t.classList.toggle("on",i===0);});
   document.querySelectorAll(".scr").forEach((s,i)=>{s.classList.toggle("on",i===0);});
 }
@@ -610,25 +593,36 @@ document.getElementById("lNome").addEventListener("keydown",e=>{if(e.key==="Ente
 })();
 function lrR(n){document.getElementById("lNome").value=n;login();}
 
+// ── START ──────────────────────────────────────────────────
 function start(){
   document.getElementById("lW").style.display="none";
   document.getElementById("pW").style.display="block";
   updTs();setInterval(updTs,60000);
-  // Nome no cabeçalho
   if(vis) document.getElementById("nEl").textContent="Modo visualização";
   else document.getElementById("nEl").textContent=usr+(usr===PRINC?" — Agente de Ops. III":"");
   if(vis){document.getElementById("dForm").style.display="none";document.getElementById("dNeg").style.display="block";}
   document.getElementById("rData").value=new Date().toISOString().split("T")[0];
   try{const r=localStorage.getItem("mu_rasc");if(r)dia=JSON.parse(r)||[];}catch(e){dia=[];}
-  try{const p=localStorage.getItem("mu_pi");if(p)piSalvas=JSON.parse(p)||[];}catch(e){piSalvas=[];}
-  renderPend();renderPostIt();
+  // Carrega post-it filtrando apenas atividades de hoje
+  try{
+    const p=localStorage.getItem("mu_pi");
+    if(p){
+      const todos=JSON.parse(p)||[];
+      const hojeStr=new Date().toISOString().split("T")[0];
+      piSalvas=todos.filter(a=>a.data===hojeStr);
+      localStorage.setItem("mu_pi",JSON.stringify(piSalvas));
+    }
+  }catch(e){piSalvas=[];}
+  renderPend();
+  renderPostIt();
+  // Carrega atividades de hoje da planilha para garantir que o post-it apareça
+  carPostItHoje();
   // No modo vis: mostra barras de filtro e carrega lista de usuários
   if(vis){
     ["visFiltroGer","visFiltroHis","visFiltroEnt"].forEach(id=>{
       const el=document.getElementById(id);
       if(el){el.style.display="flex";}
     });
-    // Carrega usuários para os selects de filtro
     api({action:"getUsuarios"},(d)=>{
       _usuariosList=(d&&d.usuarios)||[];
       ["visSelUsr","visSelUsrHis","visSelUsrEnt"].forEach(selId=>{
@@ -644,6 +638,7 @@ function start(){
   }
   carGer();carHis();carDem();
 }
+
 function updTs(){
   const n=new Date();
   document.getElementById("tsEl").textContent="atualizado em "+n.toLocaleDateString("pt-BR")+" às "+n.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"});
@@ -654,12 +649,9 @@ function goTab(id,el){
   document.getElementById("scr-"+id).classList.add("on");el.classList.add("on");
 }
 
-// ── GERENCIAL — usa aba do usuário logado (ou filtro vis) ──
-function carGer(){
-  fetchRes();
-}
+// ── GERENCIAL ─────────────────────────────────────────────
+function carGer(){ fetchRes(); }
 function fetchRes(){
-  // Modo vis: usa visUsrGer; modo normal: usa usr logado
   const usuario = vis ? visUsrGer : usr;
   const p={action:"getResumo", usuario:usuario};
   api(p,(d)=>{if(d&&!d.error&&!d._timeout)renderGer(d);else renderGerDemo();});
@@ -678,7 +670,6 @@ function getAnos(obj){return[...new Set(Object.keys(obj).map(k=>k.split("/")[1]|
 function filtrarPorAno(pm,ano){if(ano==="todos")return pm;const o={};Object.entries(pm).forEach(([k,v])=>{if(k.endsWith("/"+ano))o[k]=v;});return o;}
 function buildYrPills(cid,anos,ativo,fn){
   const el=document.getElementById(cid);if(!el)return;el.innerHTML="";
-
   function mkPill(label,value){
     const p=document.createElement("span");
     p.className="yr-pill"+(ativo===value?" on":"");
@@ -690,7 +681,6 @@ function buildYrPills(cid,anos,ativo,fn){
     };
     return p;
   }
-
   el.appendChild(mkPill("Todos","todos"));
   anos.forEach(a=>el.appendChild(mkPill(a,a)));
 }
@@ -712,7 +702,6 @@ function renderGer(d){
   document.getElementById("cT").innerHTML=se.map(([t,v])=>`<div class="br"><div class="brl">${t}</div><div class="brb"><div class="brf" style="width:${Math.round(v/ms*100)}%"></div></div><div class="brn">${v}</div></div>`).join("")||'<div class="loader">Sem dados</div>';
   window._rd=d.reuDia||{};
   const anosReu=getAnos(window._rd);
-  // Pills para tabela de reunião E para gráfico de barras
   buildYrPills("yrPillsReuTabela",anosReu,yrReuTabela,(a)=>{yrReuTabela=a;buildSelRM(window._rd);renderReu();});
   buildYrPills("yrPillsReu",anosReu,yrReu,(a)=>{yrReu=a;renderVBar();});
   buildSelRM(window._rd);
@@ -741,7 +730,6 @@ function renderVBar(){
   }).join("")}</div>`;
 }
 function buildSelRM(rd){
-  // Filtra meses pelo ano selecionado em yrReuTabela
   const chs=Object.keys(rd).filter(k=>{
     if(!Object.keys(rd[k]).length)return false;
     if(yrReuTabela==="todos")return true;
@@ -751,14 +739,12 @@ function buildSelRM(rd){
   const cur=sel.value;
   sel.innerHTML='<option value="todos">Todos os meses</option>';
   chs.forEach(k=>{const o=document.createElement("option");o.value=k;o.textContent=mkLbl(k);sel.appendChild(o);});
-  // Mantém seleção se ainda disponível
   if([...sel.options].some(o=>o.value===cur))sel.value=cur;
 }
 function renderReu(){
   const rd=window._rd||{};
   const fk=document.getElementById("selRM").value;
   const fv=document.getElementById("selRV").value;
-  // Filtra por ano da tabela
   let chsBase=fk==="todos"?Object.keys(rd):(rd[fk]?[fk]:[]);
   if(yrReuTabela!=="todos") chsBase=chsBase.filter(k=>k.endsWith("/"+yrReuTabela));
   if(fv==="mes"){
@@ -783,13 +769,11 @@ function renderGerDemo(){
     reuDia:{"DEZEMBRO/2024":{"01/12/2024":60,"02/12/2024":90},"JANEIRO/2025":{"06/01/2025":120},"ABRIL/2026":{"30/04/2026":90,"29/04/2026":60},"MAIO/2026":{"02/05/2026":35}}});
 }
 
-// ── HISTÓRICO — filtra pelo usuário logado (ou filtro vis) ─
+// ── HISTÓRICO ─────────────────────────────────────────────
 function carHis(){
   const u = vis ? (visUsrHis==="todos" ? "todos" : visUsrHis) : usr;
-  // Se vis e "todos": faz chamada para cada usuário e concatena
   if(vis && visUsrHis==="todos"){
     if(!_usuariosList.length){
-      // Ainda carregando usuários — aguarda
       api({action:"getUsuarios"},(d)=>{
         _usuariosList=(d&&d.usuarios)||[];
         carHisTodos();
@@ -799,21 +783,17 @@ function carHis(){
   }
   api({action:"getAtividades",usuario:u},(d)=>{regs=(d&&d.rows)||[];buildMbt();buildDiaSel();renderTbl();});
 }
-
 function carHisTodos(){
-  // Carrega atividades de todos os usuários e mescla
   regs=[];
   let pendente=_usuariosList.length;
   if(!pendente){buildMbt();buildDiaSel();renderTbl();return;}
   _usuariosList.forEach(u=>{
     api({action:"getAtividades",usuario:u},(d)=>{
       const rows=(d&&d.rows)||[];
-      // Adiciona nome do usuário em cada linha para identificação
       rows.forEach(r=>{ r._usuario=u; });
       regs=[...regs,...rows];
       pendente--;
       if(pendente===0){
-        // Ordena por data desc
         regs.sort((a,b)=>{
           const pa=a.data.split("/"),pb=b.data.split("/");
           return new Date(pb[2],pb[1]-1,pb[0])-new Date(pa[2],pa[1]-1,pa[0]);
@@ -847,12 +827,10 @@ function renderTbl(){
   if(df!=="todos")r=r.filter(x=>x.data===df);
   if(bf)r=r.filter(x=>x.atividade.toLowerCase().includes(bf)||x.observacao.toLowerCase().includes(bf));
   const b=document.getElementById("tB");
-  // Modo vis + todos: mostra coluna extra com nome do usuário
   const showUsr = vis && visUsrHis==="todos";
   if(!r.length){
     b.innerHTML=`<tr><td colspan="${showUsr?5:4}" style="text-align:center;color:var(--t3);padding:20px;">Nenhuma atividade encontrada.</td></tr>`;
     document.getElementById("tM").textContent="";
-    // Atualiza cabeçalho da tabela
     b.closest("table").querySelector("thead tr").innerHTML = showUsr
       ? "<th>Data</th><th>Usuário</th><th>Atividade</th><th>Status</th><th>Observação</th>"
       : "<th>Data</th><th>Atividade</th><th>Status</th><th>Observação</th>";
@@ -875,18 +853,14 @@ function fObs(o){
   }).join(" ");
 }
 
-// ── ENTREGAS — filtra pelo usuário (ou filtro vis) ─────────
+// ── ENTREGAS ──────────────────────────────────────────────
 function carDem(){
-  // vis + todos: carrega sem filtro de usuário (backend já retorna todos quando usuario="")
-  // vis + usuário específico: filtra pelo usuário
-  // normal: filtra pelo usuário logado
   const u = vis ? (visUsrEnt==="todos" ? "" : visUsrEnt) : usr;
   api({action:"getDemandas",usuario:u},(d)=>{dems=(d&&d.rows)||[];buildSelDem();renderDem();});
 }
 function normMA(raw){
   if(!raw)return"";const s=String(raw).trim();
   if(/^\d{1,2}\/\d{4}$/.test(s)){const[m,a]=s.split("/");return m.padStart(2,"0")+"/"+a;}
-  // Formato "JAN/2025"
   if(/^[A-Z]{3}\/\d{4}$/i.test(s)) return s;
   const dt=new Date(s);if(!isNaN(dt.getTime()))return String(dt.getMonth()+1).padStart(2,"0")+"/"+dt.getFullYear();
   return s;
@@ -914,10 +888,10 @@ function renderDem(){
     }).join(""));
 }
 
-// ── FUNÇÕES DE FILTRO MODO VISUALIZAÇÃO ───────────────────
+// ── FILTROS MODO VISUALIZAÇÃO ─────────────────────────────
 function visChangeUsr(){
   visUsrGer=document.getElementById("visSelUsr").value;
-  yrAtiv="todos";// reseta filtro de ano ao trocar usuário
+  yrAtiv="todos";
   document.getElementById("cM").innerHTML='<div class="loader"><span class="spin"></span>carregando...</div>';
   document.getElementById("cT").innerHTML='<div class="loader"><span class="spin"></span>carregando...</div>';
   carGer();
@@ -934,36 +908,29 @@ function visChangeUsrEnt(){
 }
 
 // ── EDIÇÃO RETROATIVA DE STATUS ───────────────────────────
-let retroAtivs = []; // atividades do dia selecionado
-let retroAlterados = {}; // {linha: novoStatus}
+let retroAtivs = [];
+let retroAlterados = {};
 
 function carAtivRetro(){
   const data = document.getElementById("rData").value;
   if(!data) return;
-
-  // Verifica se é hoje ou data futura — não mostra retroativo
   const hoje = new Date().toISOString().split("T")[0];
   const retroWrap = document.getElementById("retroWrap");
-
   if(data >= hoje){
     retroWrap.style.display = "none";
     retroAtivs = [];
     retroAlterados = {};
     return;
   }
-
-  // Data retroativa — busca atividades daquele dia
   const dtFmt = new Date(data+"T12:00:00").toLocaleDateString("pt-BR");
   retroWrap.style.display = "block";
   retroAlterados = {};
   document.getElementById("btnRetroSalvar").disabled = true;
   document.getElementById("retroTitulo").textContent = "Atividades de "+dtFmt;
   document.getElementById("retroB").innerHTML = '<div class="loader"><span class="spin"></span>carregando...</div>';
-
   api({action:"getAtividades", usuario:usr}, (d)=>{
     const rows = (d&&d.rows)||[];
     retroAtivs = rows.filter(r => r.data === dtFmt);
-
     if(!retroAtivs.length){
       document.getElementById("retroB").innerHTML = '<div style="padding:12px;text-align:center;color:var(--t3);font-size:12px;">Nenhuma atividade registrada nesta data.</div>';
       return;
@@ -971,7 +938,6 @@ function carAtivRetro(){
     renderRetro();
   });
 }
-
 function renderRetro(){
   const b = document.getElementById("retroB");
   b.innerHTML = retroAtivs.map((a,i)=>{
@@ -986,40 +952,30 @@ function renderRetro(){
     </div>`;
   }).join("");
 }
-
 function retroMudaStatus(idx, novoStatus){
   retroAlterados[idx] = novoStatus;
   const temAlteracao = Object.keys(retroAlterados).length > 0;
   document.getElementById("btnRetroSalvar").disabled = !temAlteracao;
 }
-
 function salvarRetro(){
   const indicesToSalvar = Object.keys(retroAlterados);
   if(!indicesToSalvar.length){ toast("Nenhuma alteração para salvar."); return; }
-
   const btn = document.getElementById("btnRetroSalvar");
   btn.disabled = true;
   btn.innerHTML = '<span class="spin"></span> Salvando...';
-
-  // Monta lista de atividades com status alterado para reenviar
-  // Como não temos API de update, usamos a estratégia de reenviar
-  // as atividades alteradas. O backend tem anti-duplicata por data+atividade,
-  // então precisamos de uma ação de update no backend.
-  // Por ora, salva via saveAtividades com flag de update.
   const ativs = indicesToSalvar.map(idx=>{
     const a = retroAtivs[idx];
     const novoStatus = retroAlterados[idx];
     return {
-      data: a.data.split("/").reverse().join("-"), // dd/MM/yyyy → yyyy-MM-dd
+      data: a.data.split("/").reverse().join("-"),
       atividade: a.atividade,
       status: novoStatus,
       observacao: a.observacao||"",
       linkNome: "", linkUrl: "",
-      linha: a.linha, // número da linha na planilha
+      linha: a.linha,
       _update: true
     };
   });
-
   api({
     action:"updateStatus",
     usuario:usr,
@@ -1029,7 +985,6 @@ function salvarRetro(){
     if(d&&d.ok){
       toast("✓ Status atualizado"+(ativs.length!==1?"s":"")+" com sucesso!");
       retroAlterados = {};
-      // Atualiza local
       indicesToSalvar.forEach(idx=>{ retroAtivs[idx].status = ativs.find(a=>a.linha===retroAtivs[idx].linha)?.status||retroAtivs[idx].status; });
       renderRetro();
       carHis();
@@ -1114,12 +1069,10 @@ function abrirPiEdit(idx){
   document.getElementById("mPi").classList.add("on");
   setTimeout(()=>document.getElementById("mPiObs").focus(), 50);
 }
-
 function fechaPiEdit(){
   document.getElementById("mPi").classList.remove("on");
   _piEditIdx = -1;
 }
-
 function confPiEdit(){
   if(_piEditIdx < 0) return;
   const novoStatus = document.getElementById("mPiStatus").value;
@@ -1131,7 +1084,6 @@ function confPiEdit(){
   renderPostIt();
   toast("✓ Atividade atualizada no post-it.");
 }
-
 document.getElementById("mPi").addEventListener("click", e=>{
   if(e.target===document.getElementById("mPi")) fechaPiEdit();
 });
@@ -1144,7 +1096,7 @@ function togglePiDone(idx){
   renderPostIt();
 }
 
-// ── POST-IT com risca para Finalizado ─────────────────────
+// ── RENDERIZAR POST-IT ────────────────────────────────────
 function renderPostIt(){
   const el=document.getElementById("postit");
   if(!piSalvas.length){el.style.display="none";return;}
@@ -1168,11 +1120,36 @@ function renderPostIt(){
   }).join("");
 }
 
-// ── SALVAR (atividades + projetos separados) ───────────────
+// ── CARREGAR ATIVIDADES DE HOJE PARA O POST-IT ────────────
+function carPostItHoje(){
+  if(vis) return;
+  const hoje = new Date().toLocaleDateString("pt-BR");
+  api({action:"getAtividades", usuario:usr}, (d)=>{
+    const rows = (d&&d.rows)||[];
+    const deHoje = rows.filter(r => r.data === hoje);
+    if(!deHoje.length) return;
+    const jaTemNomes = new Set(piSalvas.map(a => a.atividade.trim().toLowerCase()));
+    const novas = deHoje.filter(r => !jaTemNomes.has(r.atividade.trim().toLowerCase()));
+    if(!novas.length) return;
+    const hoje8601 = new Date().toISOString().split("T")[0];
+    novas.forEach(r => {
+      piSalvas.push({
+        atividade: r.atividade,
+        status: r.status,
+        observacao: r.observacao||"",
+        links: [],
+        data: hoje8601
+      });
+    });
+    try{localStorage.setItem("mu_pi", JSON.stringify(piSalvas));}catch(e){}
+    renderPostIt();
+  }, 10000);
+}
+
+// ── SALVAR ────────────────────────────────────────────────
 function salvar(){
   if(!dia.length){toast("Adicione pelo menos uma atividade antes de salvar.");return;}
   const data=document.getElementById("rData").value;
-
   const ativs=dia.filter(a=>a.tipo!=="projeto").map(a=>({
     data:a.data||data,atividade:a.atividade,status:a.status,
     observacao:a.observacao||"",
@@ -1184,21 +1161,16 @@ function salvar(){
     descricao:a.atividade,
     responsavel:usr
   }));
-
   const btn=document.getElementById("btnS");
   const btnOrig=`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Salvar todas as atividades na planilha`;
   btn.disabled=true;
   btn.innerHTML=`<span class="spin"></span> Salvando...`;
-
   const primeiraAtiv=ativs.length?ativs[0].atividade:(projs.length?projs[0].descricao:"");
   const primeiraData=ativs.length?ativs[0].data:(projs.length?projs[0].data:data);
-
-  // Envia atividades
   function enviarAtivs(cb2){
     if(!ativs.length){cb2(true,0,0);return;}
     api({action:"saveAtividades",usuario:usr,dados:encodeURIComponent(JSON.stringify(ativs))},(d)=>{
       if(d&&d._timeout||d&&d.error){
-        // Fallback: verifica se foi salvo
         verificarSeSalvou(primeiraAtiv,primeiraData,ativs.length,(ok)=>cb2(ok,ativs.length,d.ignoradas||0));
       } else if(d&&d.ok){
         cb2(true,d.inseridas||0,d.ignoradas||0);
@@ -1207,15 +1179,12 @@ function salvar(){
       }
     },12000);
   }
-
-  // Envia projetos
   function enviarProjs(cb2){
     if(!projs.length){cb2(true,0);return;}
     api({action:"saveProjeto",usuario:usr,dados:encodeURIComponent(JSON.stringify(projs))},(d)=>{
       cb2(d&&d.ok,d&&d.inseridas||0);
     },12000);
   }
-
   enviarAtivs((okA,insA,ignA)=>{
     enviarProjs((okP,insP)=>{
       btn.disabled=false;
@@ -1238,7 +1207,6 @@ function salvar(){
     });
   });
 }
-
 function verificarSeSalvou(nomeAtiv,dataAtiv,qtd,cb){
   api({action:"getAtividades",usuario:usr},(d)=>{
     if(!d||d.error){cb(false);return;}
