@@ -502,6 +502,9 @@ let _usuariosList=[];
 const MORD={JANEIRO:1,FEVEREIRO:2,"MARÇO":3,ABRIL:4,MAIO:5,JUNHO:6,JULHO:7,AGOSTO:8,SETEMBRO:9,OUTUBRO:10,NOVEMBRO:11,DEZEMBRO:12};
 const SOPT=["Finalizado","Tempo de trabalho","Em andamento","Não Iniciado","Aguardando retorno Dock","Aguardando retorno Excelência"];
 
+// ── Chave do localStorage isolada por usuário ──────────────
+function piKey(){ return "mu_pi_" + usr; }
+
 // ── JSONP com timeout ──────────────────────────────────────
 function api(params,cb,timeoutMs){
   const name="_c"+(++_ci);
@@ -555,7 +558,6 @@ function voltarLogin(){
   visUsrGer="todos";visUsrHis="todos";visUsrEnt="todos";
   _usuariosList=[];
   piSalvas=[];
-  // Não limpa mu_pi — o post-it deve persistir entre sessões
   document.getElementById("pW").style.display="none";
   document.getElementById("postit").style.display="none";
   document.getElementById("lW").style.display="flex";
@@ -603,16 +605,19 @@ function start(){
   if(vis){document.getElementById("dForm").style.display="none";document.getElementById("dNeg").style.display="block";}
   document.getElementById("rData").value=new Date().toISOString().split("T")[0];
   try{const r=localStorage.getItem("mu_rasc");if(r)dia=JSON.parse(r)||[];}catch(e){dia=[];}
-  // Carrega post-it filtrando apenas atividades de hoje
+
+  // ── Carrega post-it isolado por usuário (chave mu_pi_NOME) ──
   try{
-    const p=localStorage.getItem("mu_pi");
+    const p=localStorage.getItem(piKey());
     if(p){
       const todos=JSON.parse(p)||[];
       const hojeStr=new Date().toISOString().split("T")[0];
       piSalvas=todos.filter(a=>a.data===hojeStr);
-      localStorage.setItem("mu_pi",JSON.stringify(piSalvas));
+      // Persiste já filtrado (remove dias anteriores)
+      localStorage.setItem(piKey(),JSON.stringify(piSalvas));
     }
   }catch(e){piSalvas=[];}
+
   renderPend();
   renderPostIt();
   // Carrega atividades de hoje da planilha para garantir que o post-it apareça
@@ -1079,7 +1084,8 @@ function confPiEdit(){
   const novaObs    = document.getElementById("mPiObs").value.trim();
   piSalvas[_piEditIdx].status     = novoStatus;
   piSalvas[_piEditIdx].observacao = novaObs;
-  try{localStorage.setItem("mu_pi", JSON.stringify(piSalvas));}catch(e){}
+  // ── Salva isolado por usuário ──
+  try{localStorage.setItem(piKey(), JSON.stringify(piSalvas));}catch(e){}
   fechaPiEdit();
   renderPostIt();
   toast("✓ Atividade atualizada no post-it.");
@@ -1092,7 +1098,8 @@ document.getElementById("mPi").addEventListener("click", e=>{
 function togglePiDone(idx){
   if(!piSalvas[idx]) return;
   piSalvas[idx].status = piSalvas[idx].status === "Finalizado" ? "Em andamento" : "Finalizado";
-  try{localStorage.setItem("mu_pi", JSON.stringify(piSalvas));}catch(e){}
+  // ── Salva isolado por usuário ──
+  try{localStorage.setItem(piKey(), JSON.stringify(piSalvas));}catch(e){}
   renderPostIt();
 }
 
@@ -1141,7 +1148,8 @@ function carPostItHoje(){
         data: hoje8601
       });
     });
-    try{localStorage.setItem("mu_pi", JSON.stringify(piSalvas));}catch(e){}
+    // ── Salva isolado por usuário ──
+    try{localStorage.setItem(piKey(), JSON.stringify(piSalvas));}catch(e){}
     renderPostIt();
   }, 10000);
 }
@@ -1197,8 +1205,9 @@ function salvar(){
         if(insP>0)parts.push(insP+" projeto"+(insP!==1?"s":""));
         if(parts.length)msg="✓ "+parts.join(", ")+".";
         toast(msg);
+        // ── Atualiza post-it isolado por usuário ──
         piSalvas=[...piSalvas,...dia];
-        try{localStorage.setItem("mu_pi",JSON.stringify(piSalvas));}catch(e){}
+        try{localStorage.setItem(piKey(),JSON.stringify(piSalvas));}catch(e){}
         dia=[];try{localStorage.removeItem("mu_rasc");}catch(e){}
         renderPend();renderPostIt();carHis();carGer();carDem();
       } else {
