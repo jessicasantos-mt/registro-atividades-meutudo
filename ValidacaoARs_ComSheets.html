@@ -587,13 +587,18 @@ async function gravarNoSheets(tipo, rows, statusElId) {
     `Gravando ${rows.length} AR(s) no Consolidado CRM...`, '');
 
   try {
+    // Apps Script exige redirect follow + FormData para aceitar POST cross-origin
+    const form = new FormData();
+    form.append('payload', JSON.stringify({ tipo, rows }));
+
     const res = await fetch(url, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ tipo, rows })
+      body: form,
+      redirect: 'follow'
     });
 
-    const data = await res.json();
+    const text = await res.text();
+    const data = JSON.parse(text);
 
     if (data.ok) {
       const partes = [];
