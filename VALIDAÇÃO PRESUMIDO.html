@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Validação Lançamento Presumido</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
+
+  :root {
+    --bg:       #0d0e14;
+    --surface:  #13141d;
+    --surface2: #1a1c28;
+    --border:   #252736;
+    --border2:  #2f3147;
+    --accent:   #6c63ff;
+    --accent2:  #8b85ff;
+    --accent-dim: rgba(108,99,255,0.15);
+    --text:     #e8e9f0;
+    --muted:    #6b6e8a;
+    --success:  #3ecf8e;
+    --error:    #f87171;
+    --warning:  #fbbf24;
+    --info:     #60a5fa;
+    --radius:   12px;
+    --radius-sm: 8px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 0 0 60px;
+  }
+
+  /* ── Header ── */
+  .header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 18px 40px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+  .header-icon {
+    width: 36px; height: 36px;
+    background: var(--accent-dim);
+    border: 1px solid var(--accent);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 17px;
+  }
+  .header h1 { font-size: 18px; font-weight: 600; }
+  .header h1 span { color: var(--accent2); }
+  .header p { font-size: 13px; color: var(--muted); margin-top: 2px; }
+
+  /* ── Stepper ── */
+  .stepper {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    padding: 24px 40px 0;
+    max-width: 900px;
+  }
+  .step {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 13px; font-weight: 500; color: var(--muted);
+    transition: color .3s;
+  }
+  .step.active { color: var(--text); }
+  .step.done { color: var(--success); }
+  .step-num {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    border: 1.5px solid var(--border2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 600;
+    transition: all .3s;
+  }
+  .step.active .step-num {
+    border-color: var(--accent);
+    background: var(--accent-dim);
+    color: var(--accent2);
+  }
+  .step.done .step-num {
+    border-color: var(--success);
+    background: rgba(62,207,142,.12);
+    color: var(--success);
+  }
+  .step-line {
+    flex: 1; height: 1px;
+    background: var(--border);
+    margin: 0 12px;
+    max-width: 120px;
+  }
+
+  /* ── Main wrapper ── */
+  .main { max-width: 1100px; padding: 32px 40px; }
+
+  /* ── Section title ── */
+  .section-label {
+    font-size: 11px; font-weight: 600; letter-spacing: .1em;
+    color: var(--muted); text-transform: uppercase; margin-bottom: 16px;
+  }
+
+  /* ── Cards grid ── */
+  .cards-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+
+  .upload-card {
+    background: var(--surface);
+    border: 1.5px dashed var(--border2);
+    border-radius: var(--radius);
+    padding: 32px 24px;
+    display: flex; flex-direction: column; align-items: center;
+    text-align: center; gap: 14px;
+    cursor: pointer;
+    transition: border-color .2s, background .2s;
+    position: relative;
+    min-height: 200px;
+    justify-content: center;
+  }
+  .upload-card:hover, .upload-card.dragover {
+    border-color: var(--accent);
+    background: var(--accent-dim);
+  }
+  .upload-card.has-file {
+    border-style: solid;
+    border-color: var(--success);
+    background: rgba(62,207,142,.06);
+  }
+  .upload-card input[type=file] {
+    position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+  }
+  .card-icon {
+    width: 48px; height: 48px;
+    background: var(--surface2);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+  }
+  .upload-card.has-file .card-icon { background: rgba(62,207,142,.12); }
+  .step-badge {
+    font-size: 10px; font-weight: 700; letter-spacing: .08em;
+    background: var(--accent-dim); color: var(--accent2);
+    border: 1px solid rgba(108,99,255,.3);
+    padding: 3px 10px; border-radius: 20px;
+  }
+  .upload-card.has-file .step-badge {
+    background: rgba(62,207,142,.12); color: var(--success);
+    border-color: rgba(62,207,142,.3);
+  }
+  .card-title { font-size: 16px; font-weight: 600; }
+  .card-sub { font-size: 12px; color: var(--muted); }
+  .file-name {
+    font-size: 12px; color: var(--success);
+    font-family: 'DM Mono', monospace;
+    background: rgba(62,207,142,.1);
+    padding: 4px 10px; border-radius: 6px;
+    max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+
+  /* ── Email panel ── */
+  .email-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+  .email-panel .section-label { margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
+  .email-panel .section-label::before { content: '✉'; font-size: 13px; }
+
+  .email-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .field-group { display: flex; flex-direction: column; gap: 6px; }
+  .field-group.full { grid-column: 1 / -1; }
+  .field-group label { font-size: 12px; color: var(--muted); font-weight: 500; }
+  .field-group input {
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    border-radius: var(--radius-sm);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    padding: 10px 14px;
+    outline: none;
+    transition: border-color .2s;
+  }
+  .field-group input:focus { border-color: var(--accent); }
+  .field-group .hint { font-size: 11px; color: var(--muted); }
+
+  /* ── Gmail note ── */
+  .gmail-note {
+    background: rgba(96,165,250,.08);
+    border: 1px solid rgba(96,165,250,.2);
+    border-radius: var(--radius-sm);
+    padding: 12px 16px;
+    font-size: 12px;
+    color: var(--info);
+    margin-top: 16px;
+    line-height: 1.6;
+  }
+  .gmail-note strong { color: #93c5fd; }
+  .gmail-note a { color: #93c5fd; }
+
+  /* ── App password fields ── */
+  .gmail-creds { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 14px; }
+
+  /* ── Run button ── */
+  .run-bar {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 28px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .btn-run {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px; font-weight: 600;
+    padding: 14px 40px;
+    cursor: pointer;
+    display: flex; align-items: center; gap: 10px;
+    transition: background .2s, transform .1s, opacity .2s;
+    letter-spacing: .01em;
+  }
+  .btn-run:hover { background: var(--accent2); }
+  .btn-run:active { transform: scale(.98); }
+  .btn-run:disabled { opacity: .4; cursor: not-allowed; transform: none; }
+  .btn-run .icon { font-size: 17px; }
+
+  /* ── Progress ── */
+  .progress-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-top: 24px;
+    display: none;
+  }
+  .progress-wrap.visible { display: block; }
+  .progress-label { font-size: 13px; color: var(--muted); margin-bottom: 10px; }
+  .progress-bar-bg {
+    height: 6px; background: var(--surface2); border-radius: 99px; overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%; background: var(--accent); border-radius: 99px;
+    transition: width .4s ease;
+    width: 0%;
+  }
+  .progress-steps { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
+  .progress-step {
+    font-size: 13px; color: var(--muted);
+    display: flex; align-items: center; gap: 10px;
+    opacity: 0; transform: translateY(4px);
+    transition: opacity .3s, transform .3s;
+  }
+  .progress-step.show { opacity: 1; transform: none; }
+  .progress-step .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--border2); flex-shrink: 0;
+    transition: background .3s;
+  }
+  .progress-step.ok .dot { background: var(--success); }
+  .progress-step.err .dot { background: var(--error); }
+  .progress-step.running .dot { background: var(--accent); animation: pulse 1s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+  /* ── Results ── */
+  .results-wrap {
+    margin-top: 24px;
+    display: none;
+  }
+  .results-wrap.visible { display: block; }
+
+  .summary-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+  .summary-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+  }
+  .summary-card .s-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 8px; }
+  .summary-card .s-value { font-size: 28px; font-weight: 700; font-family: 'DM Mono', monospace; }
+  .summary-card.ok .s-value { color: var(--success); }
+  .summary-card.err .s-value { color: var(--error); }
+  .summary-card.warn .s-value { color: var(--warning); }
+  .summary-card.info .s-value { color: var(--info); }
+
+  /* ── Status banner ── */
+  .status-banner {
+    border-radius: var(--radius);
+    padding: 16px 22px;
+    margin-bottom: 20px;
+    font-size: 14px; font-weight: 600;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .status-banner.all-ok {
+    background: rgba(62,207,142,.1);
+    border: 1px solid rgba(62,207,142,.3);
+    color: var(--success);
+  }
+  .status-banner.has-errors {
+    background: rgba(248,113,113,.08);
+    border: 1px solid rgba(248,113,113,.3);
+    color: var(--error);
+  }
+
+  /* ── Table ── */
+  .table-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  .table-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .table-header h3 { font-size: 14px; font-weight: 600; }
+  .table-scroll { overflow-x: auto; max-height: 400px; overflow-y: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  thead th {
+    background: var(--surface2);
+    padding: 10px 14px;
+    text-align: left;
+    font-size: 11px; font-weight: 600; letter-spacing: .06em;
+    color: var(--muted); text-transform: uppercase;
+    position: sticky; top: 0; z-index: 1;
+    white-space: nowrap;
+  }
+  tbody tr { border-bottom: 1px solid var(--border); }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: var(--surface2); }
+  tbody td { padding: 9px 14px; color: var(--text); white-space: nowrap; }
+  tbody td.mono { font-family: 'DM Mono', monospace; font-size: 12px; }
+
+  /* Status pills */
+  .pill {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 3px 10px; border-radius: 99px;
+    font-size: 11px; font-weight: 600;
+  }
+  .pill.ok    { background: rgba(62,207,142,.12); color: var(--success); }
+  .pill.err   { background: rgba(248,113,113,.12); color: var(--error); }
+  .pill.warn  { background: rgba(251,191,36,.12);  color: var(--warning); }
+  .pill.info  { background: rgba(96,165,250,.12);  color: var(--info); }
+
+  /* ── Download button ── */
+  .btn-download {
+    background: transparent;
+    border: 1.5px solid var(--success);
+    color: var(--success);
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px; font-weight: 600;
+    padding: 12px 28px;
+    cursor: pointer;
+    display: inline-flex; align-items: center; gap: 8px;
+    transition: background .2s, color .2s;
+  }
+  .btn-download:hover { background: rgba(62,207,142,.1); }
+
+  .btn-email {
+    background: transparent;
+    border: 1.5px solid var(--info);
+    color: var(--info);
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px; font-weight: 600;
+    padding: 12px 28px;
+    cursor: pointer;
+    display: inline-flex; align-items: center; gap: 8px;
+    transition: background .2s, color .2s;
+  }
+  .btn-email:hover { background: rgba(96,165,250,.1); }
+
+  .action-bar { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 8px; }
+
+  /* ── Toast ── */
+  .toast {
+    position: fixed; bottom: 28px; right: 28px;
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    border-radius: var(--radius);
+    padding: 14px 20px;
+    font-size: 13px;
+    box-shadow: 0 8px 32px rgba(0,0,0,.4);
+    z-index: 999;
+    display: none;
+    max-width: 340px;
+    line-height: 1.5;
+  }
+  .toast.show { display: block; animation: slideIn .3s ease; }
+  .toast.success { border-color: rgba(62,207,142,.4); color: var(--success); }
+  .toast.error   { border-color: rgba(248,113,113,.4); color: var(--error); }
+  .toast.info    { border-color: rgba(96,165,250,.4);  color: var(--info); }
+  @keyframes slideIn { from{ transform: translateY(12px); opacity:0 } to{ transform:none; opacity:1 } }
+
+  /* ── Scrollbar ── */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 99px; }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <div class="header-icon">🗂</div>
+  <div>
+    <h1>Validação <span>Lançamento Presumido</span></h1>
+    <p>Valida se todos os lançamentos enviados ao TI foram realizados corretamente.</p>
+  </div>
+</div>
+
+<!-- Stepper -->
+<div class="stepper" id="stepper">
+  <div class="step active" id="s1"><div class="step-num">1</div> Carregar arquivos</div>
+  <div class="step-line"></div>
+  <div class="step" id="s2"><div class="step-num">2</div> Configurar e-mail</div>
+  <div class="step-line"></div>
+  <div class="step" id="s3"><div class="step-num">3</div> Rodar conferência</div>
+  <div class="step-line"></div>
+  <div class="step" id="s4"><div class="step-num">4</div> Resultado</div>
+</div>
+
+<div class="main">
+
+  <!-- Upload cards -->
+  <div class="cards-grid">
+    <!-- Card 1 -->
+    <div class="upload-card" id="card1" ondragover="onDrag(event,'card1')" ondragleave="offDrag('card1')" ondrop="onDrop(event,'card1','xlsInput')">
+      <input type="file" id="xlsInput" accept=".xls,.xlsx" onchange="handleFile(event,'card1','xls')">
+      <div class="card-icon" id="icon1">📄</div>
+      <div class="step-badge" id="badge1">PASSO 1</div>
+      <div class="card-title">Planilha de lançamento</div>
+      <div class="card-sub" id="sub1">Arquivo XLS do mês</div>
+      <div class="file-name" id="fname1" style="display:none"></div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="upload-card" id="card2" ondragover="onDrag(event,'card2')" ondragleave="offDrag('card2')" ondrop="onDrop(event,'card2','csvInput')">
+      <input type="file" id="csvInput" accept=".csv" onchange="handleFile(event,'card2','csv')">
+      <div class="card-icon" id="icon2">🗄</div>
+      <div class="step-badge" id="badge2">PASSO 2</div>
+      <div class="card-title">Base diária</div>
+      <div class="card-sub" id="sub2">base_cartao_diario_XXXXXX.csv</div>
+      <div class="file-name" id="fname2" style="display:none"></div>
+    </div>
+  </div>
+
+  <!-- Email panel -->
+  <div class="email-panel">
+    <div class="section-label">CONFIGURAÇÃO DE E-MAIL (SALVO AUTOMATICAMENTE)</div>
+    <div class="email-grid">
+      <div class="field-group">
+        <label>Seu e-mail (remetente)</label>
+        <input type="email" id="emailFrom" placeholder="seu@gmail.com">
+      </div>
+      <div class="field-group">
+        <label>Destinatário principal</label>
+        <input type="email" id="emailTo" placeholder="destinatario@empresa.com">
+      </div>
+      <div class="field-group full">
+        <label>Outros destinatários (separados por vírgula)</label>
+        <input type="text" id="emailCC" placeholder="outro@empresa.com, mais@empresa.com">
+        <span class="hint">Todos receberão o relatório ao mesmo tempo.</span>
+      </div>
+  </div>
+
+  <!-- Run bar -->
+  <div class="run-bar">
+    <button class="btn-run" id="btnRun" onclick="runValidation()" disabled>
+      <span class="icon">▷</span> Rodar conferência
+    </button>
+  </div>
+
+  <!-- Progress -->
+  <div class="progress-wrap" id="progressWrap">
+    <div class="progress-label" id="progressLabel">Iniciando validação...</div>
+    <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressBar"></div></div>
+    <div class="progress-steps" id="progressSteps"></div>
+  </div>
+
+  <!-- Results -->
+  <div class="results-wrap" id="resultsWrap">
+    <div id="statusBanner" class="status-banner"></div>
+
+    <div class="summary-grid" id="summaryGrid"></div>
+
+    <div class="action-bar">
+      <button class="btn-download" onclick="downloadCSV()">⬇ Baixar relatório CSV</button>
+      <button class="btn-email" id="btnEmail" onclick="sendEmailReport()">✉ Enviar relatório por e-mail</button>
+    </div>
+
+    <div class="table-wrap">
+      <div class="table-header">
+        <h3>📋 Detalhamento por account_id</h3>
+        <span id="tableCount" style="font-size:12px;color:var(--muted)"></span>
+      </div>
+      <div class="table-scroll">
+        <table id="resultTable">
+          <thead>
+            <tr>
+              <th>account_id</th>
+              <th>valorAjuste Enviado</th>
+              <th>brl_value Encontrado</th>
+              <th>transaction_date</th>
+              <th>Status</th>
+              <th>Observação</th>
+            </tr>
+          </thead>
+          <tbody id="resultBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ─────────────────────────────────────────────
+// State
+// ─────────────────────────────────────────────
+let xlsData = null;
+let csvData = null;
+let resultRows = [];
+let summaryData = {};
+
+// Persist email config — igual ao HTML de referência
+window.addEventListener('load', () => {
+  ['emailFrom','emailTo','emailCC'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const v = localStorage.getItem('vp_' + id);
+    if (v) el.value = v;
+    el.addEventListener('input', e => localStorage.setItem('vp_' + id, e.target.value));
+  });
+});
+
+// ─────────────────────────────────────────────
+// Upload / Drag
+// ─────────────────────────────────────────────
+function onDrag(e, cardId) {
+  e.preventDefault();
+  document.getElementById(cardId).classList.add('dragover');
+}
+function offDrag(cardId) {
+  document.getElementById(cardId).classList.remove('dragover');
+}
+function onDrop(e, cardId, inputId) {
+  e.preventDefault();
+  offDrag(cardId);
+  const file = e.dataTransfer.files[0];
+  if (!file) return;
+  const inp = document.getElementById(inputId);
+  const dt = new DataTransfer();
+  dt.items.add(file);
+  inp.files = dt.files;
+  const type = inputId === 'xlsInput' ? 'xls' : 'csv';
+  handleFile({ target: inp }, cardId, type);
+}
+
+function handleFile(e, cardId, type) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const card = document.getElementById(cardId);
+  const n = cardId.slice(-1);
+  card.classList.add('has-file');
+  document.getElementById('icon' + n).textContent = type === 'xls' ? '📗' : '📊';
+  document.getElementById('sub' + n).style.display = 'none';
+  const fn = document.getElementById('fname' + n);
+  fn.textContent = file.name;
+  fn.style.display = 'block';
+
+  const reader = new FileReader();
+  if (type === 'xls') {
+    reader.onload = ev => {
+      const wb = XLSX.read(ev.target.result, { type: 'binary' });
+      const ws = wb.Sheets[wb.SheetNames[0]];
+      // header: idTipoAjust, dataAjuste, valorAjuste, idConta
+      // col C = valorAjuste (index 2), col D = idConta/account_id (index 3)
+      const raw = XLSX.utils.sheet_to_json(ws, { defval: '' });
+      xlsData = raw.map(r => ({
+        account_id: String(r['idConta'] || '').trim(),
+        valorAjuste: parseFloat(String(r['valorAjuste'] || '0').replace(',', '.')) || 0,
+      })).filter(r => r.account_id !== '');
+      showToast('✅ Planilha carregada: ' + xlsData.length + ' registros', 'success');
+      checkReady();
+    };
+    reader.readAsBinaryString(file);
+  } else {
+    reader.onload = ev => {
+      csvData = parseCSV(ev.target.result);
+      showToast('✅ Base diária carregada: ' + csvData.length + ' registros', 'success');
+      checkReady();
+    };
+    reader.readAsText(file, 'UTF-8');
+  }
+}
+
+function parseCSV(text) {
+  const lines = text.split('\n').filter(l => l.trim());
+  if (lines.length < 2) return [];
+  // Auto-detecta separador — igual ao HTML de referência
+  const sep = lines[0].includes(';') ? ';' : ',';
+  const headers = lines[0].split(sep).map(h => h.trim().replace(/^"|"$/g, ''));
+  return lines.slice(1).map(line => {
+    const vals = splitCSVLine(line, sep);
+    const obj = {};
+    headers.forEach((h, i) => obj[h] = (vals[i] || '').trim().replace(/^"|"$/g, ''));
+    return obj;
+  });
+}
+
+function splitCSVLine(line, sep = ',') {
+  const result = [];
+  let cur = '', inQ = false;
+  for (let i = 0; i < line.length; i++) {
+    if (line[i] === '"') { inQ = !inQ; continue; }
+    if (line[i] === sep && !inQ) { result.push(cur); cur = ''; continue; }
+    cur += line[i];
+  }
+  result.push(cur);
+  return result;
+}
+
+function checkReady() {
+  document.getElementById('btnRun').disabled = !(xlsData && csvData);
+  updateStepper();
+}
+
+// ─────────────────────────────────────────────
+// Stepper
+// ─────────────────────────────────────────────
+function updateStepper(step) {
+  if (!step) step = (xlsData && csvData) ? 3 : 1;
+  ['s1','s2','s3','s4'].forEach((id, i) => {
+    const el = document.getElementById(id);
+    el.className = 'step';
+    if (i + 1 < step) el.classList.add('done');
+    else if (i + 1 === step) el.classList.add('active');
+  });
+}
+
+// ─────────────────────────────────────────────
+// Validation logic
+// ─────────────────────────────────────────────
+const VALID_DESCS = ['Pag Deb Folha', 'Inc Pag Deb Folha Perda', 'Inc Pag Deb Folha Creliq'];
+
+function parseDate(str) {
+  if (!str) return null;
+  // formats: YYYY-MM-DDTHH:mm:ss.sss  |  YYYY-MM-DD  |  DD/MM/YYYY
+  const s = str.trim();
+  if (/^\d{4}-\d{2}-\d{2}/.test(s)) {
+    const parts = s.split('T')[0].split('-');
+    return { year: +parts[0], month: +parts[1], day: +parts[2] };
+  }
+  if (/^\d{2}\/\d{2}\/\d{4}/.test(s)) {
+    const parts = s.split('/');
+    return { day: +parts[0], month: +parts[1], year: +parts[2] };
+  }
+  return null;
+}
+
+// Converts any supported date string → "DD/MM/YYYY" for display
+function formatDateBR(str) {
+  const d = parseDate(str);
+  if (!d) return str || '-';
+  return String(d.day).padStart(2,'0') + '/' + String(d.month).padStart(2,'0') + '/' + d.year;
+}
+
+async function runValidation() {
+  if (!xlsData || !csvData) return;
+  updateStepper(3);
+
+  const prog = document.getElementById('progressWrap');
+  prog.classList.add('visible');
+  document.getElementById('resultsWrap').classList.remove('visible');
+  document.getElementById('progressSteps').innerHTML = '';
+
+  const steps = [
+    'Lendo planilha de lançamentos...',
+    'Filtrando descrições válidas na base diária...',
+    'Identificando mês de referência...',
+    'Indexando account_ids...',
+    'Validando lançamentos...',
+  ];
+
+  async function addStep(i, status, customLabel) {
+    await delay(350);
+    setProgress(Math.round(((i + 1) / steps.length) * 100), customLabel || steps[i]);
+    addProgressStep(customLabel || steps[i], status);
+  }
+
+  // ── PASSO 0: planilha XLS lida ────────────────────────────────────────────
+  await addStep(0, 'ok', `Planilha de lançamentos: ${xlsData.length} registros carregados`);
+
+  // ── PASSO 1: filtrar base diária pelas short_descriptions válidas ─────────
+  const sepDetectado = csvData.length > 0 ? 'separador detectado automaticamente' : '';
+
+  const rowsDesc = csvData.filter(r =>
+    VALID_DESCS.includes((r['short_description'] || '').trim())
+  );
+
+  // Diagnóstico: se não encontrou nada, mostrar os valores reais da coluna
+  if (rowsDesc.length === 0) {
+    const descUnicas = [...new Set(
+      csvData.slice(0, 200).map(r => r['short_description'] || '(vazio/undefined)')
+    )].slice(0, 10);
+    await addStep(1, 'err',
+      `0 registros com descrições esperadas. Descrições encontradas no CSV: ${descUnicas.join(' | ')}`
+    );
+    setProgress(100, 'Validação encerrada com aviso.');
+    summaryData = { total: xlsData.length, corretos: 0, divergentes: 0, naoEncontrados: xlsData.length, duplicidades: 0, refDate: '—', totalCSV: 0, totalXLS: xlsData.length };
+    resultRows = xlsData.map(xls => ({ account_id: xls.account_id, valorAjuste_enviado: xls.valorAjuste, brl_value_encontrado: '', transaction_date: '', status: 'NÃO ENCONTRADO', obs: 'Descrições da base não coincidem com as esperadas' }));
+    renderResults(); updateStepper(4); return;
+  }
+
+  await addStep(1, 'ok',
+    `${rowsDesc.length} registros encontrados com as descrições esperadas na base diária`
+  );
+
+  // ── PASSO 2: identificar mês de referência ────────────────────────────────
+  // Pega todas as transaction_date, ordena decrescente, usa a mais recente
+  // Extrai YYYY-MM (substring 0,7) para filtrar o mês inteiro
+  // Exatamente como o HTML de referência faz com substring(0,10) para um dia
+  const datas = rowsDesc
+    .map(r => r['transaction_date'])
+    .filter(Boolean)
+    .sort()
+    .reverse();
+
+  // Exatamente igual ao HTML de referência:
+  // pega o dia mais recente (substring 0,10 = "YYYY-MM-DD") e filtra com startsWith
+  const dataRef = datas[0] ? datas[0].substring(0, 10) : null; // ex: "2026-05-19"
+  const mesLabel = dataRef
+    ? new Date(dataRef + 'T12:00:00').toLocaleDateString('pt-BR') // ex: "19/05/2026"
+    : '—';
+
+  if (!dataRef) {
+    await addStep(2, 'err', 'Não foi possível identificar a data de referência na base diária');
+    renderResults(); updateStepper(4); return;
+  }
+
+  // startsWith(dataRef) — igual ao HTML de referência
+  const rowsRef = rowsDesc.filter(r =>
+    r['transaction_date'] && r['transaction_date'].startsWith(dataRef)
+  );
+
+  await addStep(2, 'ok',
+    `Data de referência: ${mesLabel} — ${rowsRef.length} lançamentos válidos encontrados`
+  );
+
+  // ── PASSO 3: indexar account_ids da base filtrada ─────────────────────────
+  // account_id → array de linhas (pode ter mais de uma = duplicidade)
+  const csvMap = {};
+  rowsRef.forEach(r => {
+    const id = (r['account_id'] || '').trim();
+    if (!id) return;
+    if (!csvMap[id]) csvMap[id] = [];
+    csvMap[id].push(r);
+  });
+
+  await addStep(3, 'ok',
+    `${Object.keys(csvMap).length} account_ids únicos indexados — cruzando com ${xlsData.length} da planilha...`
+  );
+
+  // ── PASSO 4: validar cada lançamento da planilha ──────────────────────────
+  resultRows = [];
+
+  xlsData.forEach(xls => {
+    const id      = String(xls.account_id).trim();
+    const matches = csvMap[id] || [];
+
+    // Não encontrado
+    if (matches.length === 0) {
+      resultRows.push({
+        account_id: id,
+        valorAjuste_enviado: xls.valorAjuste,
+        brl_value_encontrado: '',
+        transaction_date: '',
+        status: 'NÃO ENCONTRADO',
+        obs: `account_id não encontrado na base diária em ${mesLabel} com as descrições esperadas`,
+      });
+      return;
+    }
+
+    // Duplicidade
+    if (matches.length > 1) {
+      matches.forEach((m, idx) => {
+        const brl  = parseFloat((m['brl_value'] || '0').replace(',', '.')) || 0;
+        const same = Math.abs(brl - xls.valorAjuste) < 0.01;
+        resultRows.push({
+          account_id: id,
+          valorAjuste_enviado: xls.valorAjuste,
+          brl_value_encontrado: brl,
+          transaction_date: m['transaction_date'] || '',
+          status: 'DUPLICIDADE',
+          obs: `Duplicidade ${idx + 1}/${matches.length} — desc: "${m['short_description']}"${same ? '' : ` — valor divergente (esperado: ${xls.valorAjuste} | encontrado: ${brl})`}`,
+        });
+      });
+      return;
+    }
+
+    // Lançamento único — conferir valor
+    const m    = matches[0];
+    const brl  = parseFloat((m['brl_value'] || '0').replace(',', '.')) || 0;
+    const same = Math.abs(brl - xls.valorAjuste) < 0.01;
+    resultRows.push({
+      account_id: id,
+      valorAjuste_enviado: xls.valorAjuste,
+      brl_value_encontrado: brl,
+      transaction_date: m['transaction_date'] || '',
+      status: same ? 'CORRETO' : 'VALOR DIVERGENTE',
+      obs: same
+        ? `Correto — desc: "${m['short_description']}"`
+        : `Valor divergente — desc: "${m['short_description']}" — esperado: ${xls.valorAjuste} | encontrado: ${brl}`,
+    });
+  });
+
+  summaryData = {
+    total:          xlsData.length,
+    corretos:       resultRows.filter(r => r.status === 'CORRETO').length,
+    divergentes:    resultRows.filter(r => r.status === 'VALOR DIVERGENTE').length,
+    naoEncontrados: resultRows.filter(r => r.status === 'NÃO ENCONTRADO').length,
+    duplicidades:   resultRows.filter(r => r.status === 'DUPLICIDADE').length,
+    refDate:        mesLabel,
+    totalCSV:       rowsRef.length,
+    totalXLS:       xlsData.length,
+  };
+
+  await addStep(4, 'ok', 'Validação concluída com sucesso');
+  setProgress(100, 'Concluído!');
+  await delay(400);
+  renderResults();
+  updateStepper(4);
+}
+
+function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+function setProgress(pct, label) {
+  document.getElementById('progressBar').style.width = pct + '%';
+  document.getElementById('progressLabel').textContent = label;
+}
+
+function addProgressStep(text, status) {
+  const div = document.createElement('div');
+  div.className = 'progress-step';
+  div.innerHTML = `<span class="dot"></span>${text}`;
+  document.getElementById('progressSteps').appendChild(div);
+  setTimeout(() => {
+    div.classList.add('show');
+    div.classList.add(status);
+  }, 50);
+}
+
+// ─────────────────────────────────────────────
+// Render results
+// ─────────────────────────────────────────────
+function renderResults() {
+  const wrap = document.getElementById('resultsWrap');
+  wrap.classList.add('visible');
+
+  const allOk = summaryData.divergentes === 0 && summaryData.naoEncontrados === 0 && summaryData.duplicidades === 0;
+
+  // Banner
+  const banner = document.getElementById('statusBanner');
+  if (allOk) {
+    banner.className = 'status-banner all-ok';
+    banner.innerHTML = '✅ VALIDAÇÃO FINALIZADA — Todos os lançamentos estão corretos.';
+  } else {
+    banner.className = 'status-banner has-errors';
+    banner.innerHTML = `⚠️ VALIDAÇÃO FINALIZADA — Foram encontradas inconsistências. Verifique o relatório abaixo.`;
+  }
+
+  // Summary cards
+  const grid = document.getElementById('summaryGrid');
+  grid.innerHTML = `
+    <div class="summary-card info">
+      <div class="s-label">Total enviados</div>
+      <div class="s-value">${summaryData.total}</div>
+    </div>
+    <div class="summary-card ok">
+      <div class="s-label">Corretos</div>
+      <div class="s-value">${summaryData.corretos}</div>
+    </div>
+    <div class="summary-card warn">
+      <div class="s-label">Divergentes + Dupl.</div>
+      <div class="s-value">${summaryData.divergentes + summaryData.duplicidades}</div>
+    </div>
+    <div class="summary-card err">
+      <div class="s-label">Não encontrados</div>
+      <div class="s-value">${summaryData.naoEncontrados}</div>
+    </div>
+  `;
+
+  // Table
+  const tbody = document.getElementById('resultBody');
+  tbody.innerHTML = '';
+  resultRows.forEach(r => {
+    const tr = document.createElement('tr');
+    const pillClass = r.status === 'CORRETO' ? 'ok' : r.status === 'DUPLICIDADE' ? 'warn' : 'err';
+    tr.innerHTML = `
+      <td class="mono">${r.account_id}</td>
+      <td class="mono">${r.valorAjuste_enviado !== '' ? Number(r.valorAjuste_enviado).toFixed(2) : '-'}</td>
+      <td class="mono">${r.brl_value_encontrado !== '' ? Number(r.brl_value_encontrado).toFixed(2) : '-'}</td>
+      <td class="mono">${r.transaction_date ? formatDateBR(r.transaction_date) : '-'}</td>
+      <td><span class="pill ${pillClass}">${r.status}</span></td>
+      <td style="color:var(--muted);font-size:12px;">${r.obs}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+  document.getElementById('tableCount').textContent = resultRows.length + ' registros';
+}
+
+// ─────────────────────────────────────────────
+// CSV Download
+// ─────────────────────────────────────────────
+function downloadCSV() {
+  const bom = '\uFEFF';
+  const header = 'account_id,valorAjuste_enviado,brl_value_encontrado,transaction_date,status,observacao\n';
+  const rows = resultRows.map(r =>
+    [r.account_id, r.valorAjuste_enviado, r.brl_value_encontrado, r.transaction_date ? formatDateBR(r.transaction_date) : '', r.status, '"' + r.obs.replace(/"/g,'""') + '"'].join(',')
+  ).join('\n');
+  const blob = new Blob([bom + header + rows], { type: 'text/csv;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  const now = new Date();
+  a.download = `validacao_presumido_${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}${String(now.getDate()).padStart(2,'0')}.csv`;
+  a.click();
+  showToast('📥 Arquivo CSV baixado com sucesso!', 'success');
+}
+
+// ─────────────────────────────────────────────
+// Email — abre Gmail no navegador (igual ao HTML de referência)
+// ─────────────────────────────────────────────
+function gerarCorpoEmail() {
+  const allOk = summaryData.divergentes === 0 && summaryData.naoEncontrados === 0 && summaryData.duplicidades === 0;
+  const agora  = new Date().toLocaleString('pt-BR');
+
+  const statusLinha = allOk
+    ? '✅ VALIDAÇÃO FINALIZADA — Todos os lançamentos estão corretos.'
+    : `⚠️ DIVERGÊNCIAS ENCONTRADAS — ${summaryData.divergentes + summaryData.naoEncontrados + summaryData.duplicidades} registro(s) precisam de atenção.`;
+
+  const problemas = resultRows.filter(r => r.status !== 'CORRETO');
+
+  let detalhe = '';
+  if (problemas.length > 0) {
+    detalhe += '\n\nREGISTROS COM DIVERGÊNCIA:\n';
+    detalhe += '━'.repeat(40) + '\n';
+    problemas.forEach((r, i) => {
+      detalhe += `\n${i + 1}.\n`;
+      detalhe += `  Account_id:     ${r.account_id}\n`;
+      detalhe += `  Valor Enviado:  ${Number(r.valorAjuste_enviado).toFixed(2)}\n`;
+      detalhe += `  Status:         ${r.status}\n`;
+    });
+    detalhe += '\n' + '━'.repeat(40);
+  }
+
+  return `${statusLinha}
+
+RESUMO DA CONFERÊNCIA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Data de referência da base: ${summaryData.refDate}
+Executado em: ${agora}
+
+Total de registros enviados: ${summaryData.total}
+Lançados corretamente: ${summaryData.corretos}
+Valor divergente: ${summaryData.divergentes}
+Duplicidades: ${summaryData.duplicidades}
+Não encontrados: ${summaryData.naoEncontrados}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${detalhe}
+
+---
+Conferência realizada automaticamente pelo sistema de Validação de Presumido.`;
+}
+
+function sendEmailReport() {
+  const to = document.getElementById('emailTo').value.trim();
+  const cc = document.getElementById('emailCC').value.trim();
+
+  if (!to) {
+    showToast('⚠️ Informe o e-mail do destinatário.', 'error');
+    return;
+  }
+
+  const allOk = summaryData.divergentes === 0 && summaryData.naoEncontrados === 0 && summaryData.duplicidades === 0;
+  const temProblema = !allOk;
+
+  const assunto = encodeURIComponent(
+    temProblema
+      ? `⚠️ Validação Lançamento Presumido ${summaryData.refDate} — ${summaryData.divergentes + summaryData.naoEncontrados + summaryData.duplicidades} divergência(s) encontrada(s)`
+      : `✅ Validação Lançamento Presumido ${summaryData.refDate} — Tudo correto`
+  );
+
+  const corpo   = encodeURIComponent(gerarCorpoEmail());
+  const ccParam = cc ? `&cc=${encodeURIComponent(cc)}` : '';
+  const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(to)}${ccParam}&su=${assunto}&body=${corpo}`;
+
+  window.open(gmailUrl, '_blank');
+  showToast('✉ E-mail aberto no Gmail!', 'success');
+}
+
+// ─────────────────────────────────────────────
+// Toast
+// ─────────────────────────────────────────────
+let toastTimer;
+function showToast(msg, type = 'info') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show ' + type;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 4000);
+}
+</script>
+</body>
+</html>
