@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Validação de ARs — Meutudo</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+:root{
+  --bg:#f5f5f8;--s1:#ffffff;--s2:#f0f0f5;--s3:#e8e8f0;
+  --bd:#dcdce8;--bd2:#c8c8dc;
+  --pk:#e8197d;--pk2:#b01460;--pkg:rgba(232,25,125,.16);--pkg2:rgba(232,25,125,.07);
+  --tx:#1a1a2e;--tx2:#555577;--tx3:#8888a8;
+  --gn:#1de9a0;--gnd:rgba(29,233,160,.12);
+  --yl:#f5c842;--yld:rgba(245,200,66,.12);
+  --rd:#ff4d6d;--rdd:rgba(255,77,109,.12);
+  --bl:#5b8dee;--bld:rgba(91,141,238,.12);
+  --r:12px;--rs:8px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Syne',sans-serif;background:var(--bg);color:var(--tx);min-height:100vh}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(ellipse 70% 45% at 15% -5%,rgba(232,25,125,.04) 0%,transparent 55%),
+             radial-gradient(ellipse 50% 35% at 85% 105%,rgba(91,141,238,.03) 0%,transparent 55%)}
+
+.wrap{position:relative;z-index:1;max-width:1060px;margin:0 auto;padding:0 24px 80px}
+
+.hd{display:flex;align-items:center;gap:16px;padding:32px 0 36px;border-bottom:1px solid var(--bd);margin-bottom:32px}
+.hd-icon{width:46px;height:46px;background:var(--s2);border:1px solid var(--bd2);border-radius:var(--rs);display:grid;place-items:center;font-size:20px;flex-shrink:0}
+.hd h1{font-size:21px;font-weight:800;letter-spacing:-.4px}
+.hd h1 em{font-style:normal;color:var(--pk)}
+.hd p{font-size:12px;color:var(--tx2);margin-top:3px;font-family:'DM Mono',monospace}
+
+.upload-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
+@media(max-width:600px){.upload-row{grid-template-columns:1fr}}
+.ucard{background:var(--s1);border:1.5px dashed var(--bd2);border-radius:var(--r);padding:26px 20px;cursor:pointer;
+  transition:border-color .2s,background .2s,box-shadow .2s;position:relative;text-align:center}
+.ucard:hover,.ucard.drag{border-color:var(--pk);background:var(--s3);box-shadow:0 0 22px var(--pkg2)}
+.ucard.ok{border-color:var(--gn);border-style:solid;background:var(--s2)}
+.ucard input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.ucard-icon{font-size:28px;margin-bottom:10px;display:block;filter:grayscale(1) brightness(.5);transition:filter .25s}
+.ucard:hover .ucard-icon,.ucard.ok .ucard-icon{filter:none}
+.ucard-badge{display:inline-block;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1.2px;padding:2px 9px;border-radius:99px;background:var(--pkg);color:var(--pk);border:1px solid var(--pk2);margin-bottom:10px}
+.ucard h3{font-size:14px;font-weight:700;margin-bottom:4px}
+.ucard p{font-size:11px;color:var(--tx2);font-family:'DM Mono',monospace}
+.ust{margin-top:10px;font-size:11px;font-family:'DM Mono',monospace;font-weight:500}
+.ok{color:var(--gn)}.er{color:var(--rd)}.wt{color:var(--tx3)}
+
+.tabs-config{background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);padding:18px 20px;margin-bottom:24px}
+.tabs-config-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1.5px;color:var(--tx3);text-transform:uppercase;margin-bottom:12px}
+.tab-inputs{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:600px){.tab-inputs{grid-template-columns:1fr}}
+
+.email-cfg{background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);padding:18px 20px;margin-bottom:24px}
+.slack-cfg{background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);padding:18px 20px;margin-bottom:24px}
+.sheets-cfg{background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);padding:18px 20px;margin-bottom:24px}
+.email-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:600px){.email-grid{grid-template-columns:1fr}}
+
+.fg{display:flex;flex-direction:column;gap:5px}
+.fg label{font-size:11px;color:var(--tx2);font-weight:600;letter-spacing:.3px}
+.fg input,.fg textarea{background:var(--s2);border:1px solid var(--bd2);border-radius:var(--rs);color:var(--tx);
+  font-family:'DM Mono',monospace;font-size:12px;padding:9px 12px;outline:none;transition:border-color .2s,box-shadow .2s;resize:vertical}
+.fg input:focus,.fg textarea:focus{border-color:var(--pk);box-shadow:0 0 0 3px var(--pkg2)}
+.fhint{font-size:11px;color:var(--tx3);font-family:'DM Mono',monospace;margin-top:6px}
+.flabel{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1.5px;color:var(--tx3);text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.flabel::after{content:'';flex:1;height:1px;background:var(--bd)}
+
+.run-area{display:flex;align-items:center;gap:16px;padding:20px 24px;background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);margin-bottom:32px}
+.run-area p{font-size:12px;color:var(--tx2);font-family:'DM Mono',monospace;flex:1}
+
+.btn{display:inline-flex;align-items:center;gap:7px;padding:11px 20px;border-radius:var(--rs);border:none;
+  font-family:'Syne',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all .2s;letter-spacing:.2px}
+.btn-pk{background:var(--pk);color:#fff;box-shadow:0 4px 18px var(--pkg)}
+.btn-pk:hover{background:#f02d8f;transform:translateY(-1px);box-shadow:0 4px 26px rgba(232,25,125,.38)}
+.btn-pk:disabled{background:var(--bd2);color:var(--tx3);box-shadow:none;cursor:not-allowed;transform:none}
+.btn-gn{background:var(--gn);color:var(--bg);font-weight:800}
+.btn-gn:hover{filter:brightness(1.08);transform:translateY(-1px)}
+.btn-sl{background:#4A154B;color:#fff;font-weight:700}
+.btn-sl:hover{background:#611f64;transform:translateY(-1px)}
+.btn-sl:disabled{background:var(--bd2);color:var(--tx3);box-shadow:none;cursor:not-allowed;transform:none}
+.btn-gh{background:var(--s2);color:var(--tx2);border:1px solid var(--bd)}
+.btn-gh:hover{color:var(--tx);border-color:var(--bd2)}
+.btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+
+.vtabs{display:flex;gap:3px;background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);padding:4px;margin-bottom:28px}
+.vtab{flex:1;background:transparent;border:none;color:var(--tx2);font-family:'Syne',sans-serif;font-size:13px;font-weight:600;padding:9px 14px;border-radius:var(--rs);cursor:pointer;transition:all .2s}
+.vtab.on{background:var(--pk);color:#fff;box-shadow:0 0 18px var(--pkg)}
+.vtab:not(.on):hover{color:var(--tx);background:var(--s2)}
+
+.results-wrap{display:none;animation:fi .3s ease}
+.results-wrap.show{display:block}
+@keyframes fi{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+.stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin-bottom:22px}
+.stat{background:var(--s2);border:1px solid var(--bd);border-radius:var(--r);padding:18px;text-align:center}
+.stat .n{font-size:34px;font-weight:800;font-family:'DM Mono',monospace;line-height:1;margin-bottom:4px}
+.stat .l{font-size:10px;color:var(--tx2);letter-spacing:.6px;font-weight:600;text-transform:uppercase}
+.n-pk{color:var(--pk)}.n-gn{color:var(--gn)}.n-yl{color:var(--yl)}.n-bl{color:var(--bl)}
+
+.tbl-wrap{border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;margin-bottom:18px;overflow-x:auto}
+.tbl-wrap table{width:100%;border-collapse:collapse;font-family:'DM Mono',monospace;font-size:12px;min-width:560px}
+.tbl-wrap thead th{background:var(--s2);color:var(--tx2);font-size:10px;letter-spacing:1px;text-transform:uppercase;
+  padding:9px 14px;text-align:left;border-bottom:1px solid var(--bd);font-family:'Syne',sans-serif;white-space:nowrap}
+.tbl-wrap tbody tr{border-bottom:1px solid var(--bd);transition:background .12s}
+.tbl-wrap tbody tr:last-child{border-bottom:none}
+.tbl-wrap tbody tr:hover{background:var(--s2)}
+.tbl-wrap td{padding:9px 14px;color:var(--tx);vertical-align:middle}
+
+.sup-wrap{overflow-x:auto;border:1px solid var(--bd);border-radius:var(--rs);margin-top:10px}
+.sup-tbl{width:100%;border-collapse:collapse;font-family:'DM Mono',monospace;font-size:12px;min-width:520px}
+.sup-tbl th{background:var(--s2);color:var(--tx2);font-size:10px;letter-spacing:1px;text-transform:uppercase;
+  padding:8px 12px;text-align:left;border-bottom:1px solid var(--bd);font-family:'Syne',sans-serif}
+.sup-tbl td{padding:7px 12px;border-bottom:1px solid var(--bd);color:var(--tx)}
+.sup-tbl tr:last-child td{border-bottom:none}
+
+.jall-drop{background:var(--s2);border:1px dashed var(--bd2);border-radius:var(--r);padding:18px;
+  position:relative;cursor:pointer;transition:all .2s;text-align:center;margin-bottom:14px}
+.jall-drop:hover{border-color:var(--pk)}
+.jall-drop input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.jall-drop p{font-size:12px;color:var(--tx2);font-family:'DM Mono',monospace}
+
+.manual{background:var(--s2);border:1px solid var(--bd);border-left:3px solid var(--yl);
+  border-radius:var(--rs);padding:14px 18px;margin-bottom:14px}
+.manual h4{font-size:12px;font-weight:700;color:var(--yl);margin-bottom:8px}
+.manual ol{padding-left:18px;color:var(--tx2);font-size:12px;font-family:'DM Mono',monospace;line-height:1.9}
+.manual ol li strong{color:var(--tx)}
+
+.sb{background:var(--s1);border:1px solid var(--bd);border-radius:var(--r);padding:20px;margin-bottom:16px}
+
+.al{display:flex;gap:10px;align-items:flex-start;padding:12px 15px;border-radius:var(--rs);margin-bottom:14px;font-size:13px}
+.al-ok{background:var(--gnd);border:1px solid rgba(29,233,160,.28);color:var(--gn)}
+.al-info{background:var(--bld);border:1px solid rgba(91,141,238,.28);color:var(--bl)}
+.al-err{background:var(--rdd);border:1px solid rgba(255,77,109,.28);color:var(--rd)}
+.al-warn{background:var(--yld);border:1px solid rgba(245,200,66,.28);color:var(--yl)}
+.al-icon{font-size:15px;flex-shrink:0;margin-top:1px}
+.al-body{flex:1;font-size:12px}
+.al-body strong{display:block;font-weight:700;margin-bottom:2px;font-size:13px}
+
+.stepper{display:flex;align-items:center;margin-bottom:28px;overflow-x:auto;padding-bottom:2px}
+.sp{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.sp-n{width:28px;height:28px;border-radius:50%;border:2px solid var(--bd2);display:grid;place-items:center;
+  font-size:11px;font-weight:700;font-family:'DM Mono',monospace;color:var(--tx3);transition:all .25s}
+.sp.on .sp-n{border-color:var(--pk);color:var(--pk);box-shadow:0 0 10px var(--pkg)}
+.sp.dn .sp-n{border-color:var(--gn);background:var(--gn);color:var(--bg)}
+.sp-l{font-size:11px;font-weight:600;color:var(--tx3);white-space:nowrap;transition:color .25s}
+.sp.on .sp-l{color:var(--tx)}.sp.dn .sp-l{color:var(--tx2)}
+.sp-line{flex:1;height:1px;background:var(--bd);min-width:16px;max-width:50px;margin:0 4px}
+
+.panel{display:none}.panel.on{display:block;animation:fi .25s ease}
+.subp{display:none}.subp.on{display:block;animation:fi .25s ease}
+
+/* ── Sheets status card ─────────────────────────────────────────────────── */
+.sheets-status-card{
+  border-radius:var(--rs);padding:14px 16px;margin-bottom:14px;
+  display:flex;align-items:flex-start;gap:10px;font-size:12px;
+  font-family:'DM Mono',monospace;
+}
+.sheets-idle   {background:var(--s2);   border:1px solid var(--bd);   color:var(--tx3)}
+.sheets-loading{background:var(--bld);  border:1px solid rgba(91,141,238,.28); color:var(--bl)}
+.sheets-ok     {background:var(--gnd);  border:1px solid rgba(29,233,160,.28); color:var(--gn)}
+.sheets-err    {background:var(--rdd);  border:1px solid rgba(255,77,109,.28); color:var(--rd)}
+.sheets-warn   {background:var(--yld);  border:1px solid rgba(245,200,66,.28); color:var(--yl)}
+.sheets-icon   {font-size:15px;flex-shrink:0;margin-top:1px}
+.sheets-body   {flex:1}
+.sheets-body strong{display:block;font-weight:700;margin-bottom:2px;font-size:13px}
+
+.loader{display:none;position:fixed;inset:0;background:rgba(245,245,248,.92);backdrop-filter:blur(4px);
+  z-index:200;align-items:center;justify-content:center;flex-direction:column;gap:14px}
+.loader.on{display:flex}
+.spin{width:42px;height:42px;border:3px solid var(--bd);border-top-color:var(--pk);border-radius:50%;animation:sp .75s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.loader p{font-size:13px;color:var(--tx2);font-family:'DM Mono',monospace}
+
+.empty{text-align:center;padding:36px 20px;color:var(--tx3)}
+.empty .ico{font-size:34px;opacity:.35;margin-bottom:8px}
+.empty p{font-size:12px;font-family:'DM Mono',monospace}
+
+.hidden{display:none!important}
+.code-list{font-family:'DM Mono',monospace;font-size:12px;color:var(--tx2);line-height:1.9;white-space:pre-wrap}
+.slack-status{font-size:11px;font-family:'DM Mono',monospace;margin-top:8px;min-height:16px}
+</style>
+</head>
+<body>
+<div class="loader" id="loader"><div class="spin"></div><p id="lmsg">Processando...</p></div>
+
+<div class="wrap">
+
+<div class="hd">
+  <div class="hd-icon">📦</div>
+  <div>
+    <h1>Validação de <em>ARs Logística</em></h1>
+    <p>Confere e gera relatórios para o time de CRM · tudo no navegador</p>
+  </div>
+</div>
+
+<div class="upload-row">
+  <div class="ucard" id="c-log">
+    <input type="file" id="f-log" accept=".xlsx,.xls,.csv" onchange="loadFile('log',this)">
+    <span class="ucard-icon">📋</span>
+    <div class="ucard-badge">PASSO 1</div>
+    <h3>Planilha de Logística</h3>
+    <p>Arquivo XLS ou CSV do sistema</p>
+    <div class="ust wt" id="st-log">Nenhum arquivo carregado</div>
+  </div>
+  <div class="ucard ok" id="c-cons" style="cursor:default;pointer-events:none">
+    <span class="ucard-icon">🌐</span>
+    <div class="ucard-badge" style="background:rgba(29,233,160,.15);color:var(--gn);border-color:var(--gn)">AUTOMÁTICO</div>
+    <h3>Consolidado CRM</h3>
+    <p>Leitura feita direto pelo Google Sheets</p>
+    <div class="ust wt" id="st-cons" style="color:var(--tx3)">Será consultado ao rodar a conferência</div>
+  </div>
+</div>
+
+<div class="email-cfg">
+  <div class="flabel">⚙️ Configuração de e-mail</div>
+  <div class="email-grid">
+    <div class="fg"><label>Destinatário principal</label>
+      <input type="email" id="em-to" placeholder="crm@meutudo.app" oninput="saveConf()"></div>
+    <div class="fg"><label>Outros (separados por vírgula)</label>
+      <input type="text" id="em-cc" placeholder="joao@meutudo.app" oninput="saveConf()"></div>
+  </div>
+  <p class="fhint">💾 Salvo automaticamente no navegador.</p>
+</div>
+
+<div class="slack-cfg">
+  <div class="flabel">💬 Configuração do Slack (opcional)</div>
+  <div class="email-grid">
+    <div class="fg">
+      <label>Webhook URL do Slack</label>
+      <input type="text" id="sl-webhook" placeholder="https://hooks.slack.com/services/..." oninput="saveConf()">
+    </div>
+    <div class="fg">
+      <label>Canal (referência visual)</label>
+      <input type="text" id="sl-canal" placeholder="#crm-logistica" oninput="saveConf()">
+    </div>
+  </div>
+  <p class="fhint">💡 Crie o webhook em api.slack.com/apps → Incoming Webhooks. A URL fica salva no navegador.</p>
+</div>
+
+<!-- ══ SHEETS CONFIG ══ -->
+<div class="sheets-cfg">
+  <div class="flabel">📊 Integração com Google Sheets — Consolidado CRM</div>
+  <div class="fg" style="margin-bottom:12px">
+    <label>URL do Apps Script (Web App)</label>
+    <input type="text" id="gs-url"
+      value="https://script.google.com/macros/s/AKfycbw4owOaRI3v5Ebac1X727X8UWhFYvtZPJGbJ7GeCJhWXSFRzIiaimh3YpDEHcAH2D5N/exec"
+      oninput="saveConf()">
+  </div>
+  <div class="tab-inputs" style="margin-bottom:8px">
+    <div class="fg">
+      <label>Nome da aba — Aguardando Retirada</label>
+      <input type="text" id="tab1" value="Consolidado Aguardando Retirada" oninput="saveConf()">
+    </div>
+    <div class="fg">
+      <label>Nome da aba — Endereço Incorreto</label>
+      <input type="text" id="tab2" value="Consolidado Endereço Incorreto" oninput="saveConf()">
+    </div>
+  </div>
+  <p class="fhint">
+    💡 O Consolidado CRM é consultado e atualizado automaticamente via Apps Script.<br>
+    Se as abas forem renomeadas na planilha, ajuste os campos acima.<br>
+    💾 Tudo salvo automaticamente no navegador.
+  </p>
+</div>
+
+<div class="run-area">
+  <p id="run-hint">Carregue a planilha de Logística para habilitar a conferência.</p>
+  <button class="btn btn-pk" id="run-btn" onclick="runAll()" disabled>▶ Rodar conferência</button>
+</div>
+
+<div class="results-wrap" id="results">
+
+  <div class="vtabs">
+    <button class="vtab on" onclick="switchVTab(0)">📥 Aguardando Retirada</button>
+    <button class="vtab" onclick="switchVTab(1)">📍 Endereço Incorreto</button>
+  </div>
+
+  <!-- VALIDAÇÃO 1 -->
+  <div class="panel on" id="panel-0">
+    <div class="stepper">
+      <div class="sp on" id="v1s0"><div class="sp-n">1</div><div class="sp-l">Resultado</div></div>
+      <div class="sp-line"></div>
+      <div class="sp" id="v1s1"><div class="sp-n">2</div><div class="sp-l">JALL</div></div>
+      <div class="sp-line"></div>
+      <div class="sp" id="v1s2"><div class="sp-n">3</div><div class="sp-l">Superset</div></div>
+      <div class="sp-line"></div>
+      <div class="sp" id="v1s3"><div class="sp-n">4</div><div class="sp-l">Download &amp; E-mail</div></div>
+    </div>
+
+    <div class="subp on" id="v1-r">
+      <div class="stat-row" id="v1-stats"></div>
+      <div id="v1-alert"></div>
+      <div class="sb">
+        <div class="flabel">🆕 ARs novas — não encontradas no consolidado</div>
+        <div id="v1-tbl"></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-pk" onclick="v1ToJall()">Continuar → JALL</button>
+        <button class="btn btn-gh" onclick="backToUpload()">← Voltar</button>
+        <button class="btn btn-gh" onclick="resetAll()">↺ Recomeçar</button>
+      </div>
+    </div>
+
+    <div class="subp" id="v1-j">
+      <div class="manual">
+        <h4>⚠️ Etapa manual — JALL</h4>
+        <ol>
+          <li>Acesse <strong>JALL → Relatórios → PESQBI</strong></li>
+          <li>Tipo: <strong>Encomenda cliente</strong> · Contratos: <strong>Todos</strong></li>
+          <li>Cole as ARs abaixo no campo de busca</li>
+          <li>Campos comuns: <strong>AR</strong> e <strong>Número de terceiros</strong></li>
+          <li>Solicitar → baixar → fazer upload aqui</li>
+        </ol>
+      </div>
+      <div class="sb">
+        <div class="flabel">📋 ARs para pesquisar</div>
+        <div class="code-list" id="v1-arlist"></div>
+      </div>
+      <div class="sb">
+        <div class="flabel">📤 Resultado do JALL</div>
+        <div class="jall-drop">
+          <input type="file" id="f-jall" accept=".xlsx,.xls,.csv" onchange="loadJall(this)">
+          <p>📎 &nbsp;Clique ou arraste o arquivo do JALL</p>
+          <div class="ust wt" id="st-jall" style="margin-top:8px">Aguardando arquivo</div>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-pk" id="v1-jbtn" onclick="procJall()" disabled>Processar JALL →</button>
+        <button class="btn btn-gh" onclick="v1ToSup()">Pular etapa</button>
+        <button class="btn btn-gh" onclick="backTo('v1-r','v1-j','v1',0,4)">← Voltar</button>
+      </div>
+    </div>
+
+    <div class="subp" id="v1-sup">
+      <div class="manual">
+        <h4>⚠️ Etapa manual — Superset</h4>
+        <ol>
+          <li>Acesse o <strong>Superset</strong> e busque os CPFs listados abaixo</li>
+          <li>Copie todos os UserIDs e cole no campo abaixo, <strong>um por linha</strong>, na mesma ordem da tabela</li>
+        </ol>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+        <div class="sb" style="margin-bottom:0">
+          <div class="flabel">📋 Lista de CPFs (na ordem)</div>
+          <div class="sup-wrap">
+            <table class="sup-tbl">
+              <thead><tr><th>#</th><th>AR</th><th>Nome</th><th>CPF</th><th>Nº Correios</th></tr></thead>
+              <tbody id="v1-sbody"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="sb" style="margin-bottom:0">
+          <div class="flabel">👤 Colar UserIDs em lote</div>
+          <p style="font-size:11px;color:var(--tx2);font-family:'DM Mono',monospace;margin-bottom:8px">Cole um UserID por linha, na mesma ordem da tabela ao lado.</p>
+          <textarea id="v1-uid-lote" rows="14" style="width:100%;background:var(--s2);border:1px solid var(--bd2);border-radius:var(--rs);color:var(--tx);font-family:'DM Mono',monospace;font-size:12px;padding:10px 12px;outline:none;resize:vertical;transition:border-color .2s" placeholder="123456&#10;234567&#10;345678&#10;..." oninput="applyLoteV1()"></textarea>
+          <p style="font-size:11px;color:var(--tx3);font-family:'DM Mono',monospace;margin-top:6px" id="v1-lote-status"></p>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-pk" onclick="v1ToDl()">Continuar → Download &amp; E-mail</button>
+        <button class="btn btn-gh" onclick="backTo('v1-j','v1-sup','v1',1,4)">← Voltar</button>
+      </div>
+    </div>
+
+    <div class="subp" id="v1-dl">
+      <div class="al al-ok"><div class="al-icon">✅</div>
+        <div class="al-body"><strong>Pronto!</strong> Baixe o relatório e/ou abra o e-mail.</div>
+      </div>
+      <div class="stat-row" id="v1-fstats"></div>
+      <div class="al al-info" style="margin-top:4px"><div class="al-icon">ℹ️</div>
+        <div class="al-body"><strong>Baixe o relatório desta aba.</strong> O e-mail e o Slack serão enviados junto com o relatório de Endereço Incorreto na próxima aba.</div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-pk" onclick="dlXlsx('v1')">⬇ Baixar .xlsx</button>
+        <button class="btn btn-pk" onclick="switchVTab(1)" style="background:var(--s2);color:var(--tx);border:1px solid var(--bd2);box-shadow:none">Ir para Endereço Incorreto →</button>
+        <button class="btn btn-gh" onclick="backTo('v1-sup','v1-dl','v1',2,4)">← Voltar</button>
+        <button class="btn btn-gh" onclick="resetAll()">↺ Nova validação</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- VALIDAÇÃO 2 -->
+  <div class="panel" id="panel-1">
+    <div class="stepper">
+      <div class="sp on" id="v2s0"><div class="sp-n">1</div><div class="sp-l">Resultado</div></div>
+      <div class="sp-line"></div>
+      <div class="sp" id="v2s1"><div class="sp-n">2</div><div class="sp-l">Superset</div></div>
+      <div class="sp-line"></div>
+      <div class="sp" id="v2s2"><div class="sp-n">3</div><div class="sp-l">Download &amp; E-mail</div></div>
+    </div>
+
+    <div class="subp on" id="v2-r">
+      <div class="stat-row" id="v2-stats"></div>
+      <div id="v2-alert"></div>
+      <div class="sb">
+        <div class="flabel">🆕 ARs novas — não encontradas no consolidado</div>
+        <div id="v2-tbl"></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-pk" onclick="v2ToSup()">Continuar → Superset</button>
+        <button class="btn btn-gh" onclick="backToUpload()">← Voltar</button>
+        <button class="btn btn-gh" onclick="resetAll()">↺ Recomeçar</button>
+      </div>
+    </div>
+
+    <div class="subp" id="v2-sup">
+      <div class="manual">
+        <h4>⚠️ Etapa manual — Superset</h4>
+        <ol>
+          <li>Acesse o <strong>Superset</strong> e busque os CPFs listados abaixo</li>
+          <li>Copie todos os UserIDs e cole no campo abaixo, <strong>um por linha</strong>, na mesma ordem da tabela</li>
+        </ol>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+        <div class="sb" style="margin-bottom:0">
+          <div class="flabel">📋 Lista de CPFs (na ordem)</div>
+          <div class="sup-wrap">
+            <table class="sup-tbl">
+              <thead><tr><th>#</th><th>AR</th><th>Produto</th><th>Nome</th><th>CPF</th></tr></thead>
+              <tbody id="v2-sbody"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="sb" style="margin-bottom:0">
+          <div class="flabel">👤 Colar UserIDs em lote</div>
+          <p style="font-size:11px;color:var(--tx2);font-family:'DM Mono',monospace;margin-bottom:8px">Cole um UserID por linha, na mesma ordem da tabela ao lado.</p>
+          <textarea id="v2-uid-lote" rows="14" style="width:100%;background:var(--s2);border:1px solid var(--bd2);border-radius:var(--rs);color:var(--tx);font-family:'DM Mono',monospace;font-size:12px;padding:10px 12px;outline:none;resize:vertical;transition:border-color .2s" placeholder="123456&#10;234567&#10;345678&#10;..." oninput="applyLoteV2()"></textarea>
+          <p style="font-size:11px;color:var(--tx3);font-family:'DM Mono',monospace;margin-top:6px" id="v2-lote-status"></p>
+        </div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-pk" onclick="v2ToDl()">Continuar → Download &amp; E-mail</button>
+        <button class="btn btn-gh" onclick="backTo('v2-r','v2-sup','v2',0,3)">← Voltar</button>
+      </div>
+    </div>
+
+    <div class="subp" id="v2-dl">
+      <div class="al al-ok"><div class="al-icon">✅</div>
+        <div class="al-body"><strong>Pronto!</strong> Baixe o relatório e/ou abra o e-mail.</div>
+      </div>
+      <div class="stat-row" id="v2-fstats"></div>
+
+      <!-- ══ STATUS DE GRAVAÇÃO NO SHEETS (NOVO) ══ -->
+      <div id="sheets-status-v1"></div>
+      <div id="sheets-status-v2"></div>
+
+      <div class="sb">
+        <div class="flabel">📧 E-mail unificado (ambos os relatórios)</div>
+        <div class="fg" style="margin-bottom:10px"><label>Assunto</label><input type="text" id="email-subj"></div>
+        <div class="fg"><label>Mensagem</label><textarea id="email-msg" rows="10"></textarea></div>
+      </div>
+      <div class="sb">
+        <div class="flabel">💬 Mensagem para o Slack</div>
+        <div class="fg" style="margin-bottom:10px">
+          <label>Mensagem (edite à vontade)</label>
+          <textarea id="slack-msg" rows="8"></textarea>
+        </div>
+        <div class="slack-status" id="slack-status"></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-pk" onclick="dlXlsx('v2')">⬇ Baixar .xlsx Endereço Incorreto</button>
+        <button class="btn btn-gn" onclick="openEmailUnificado()">✉ Abrir no Gmail</button>
+        <button class="btn btn-sl" id="slack-btn" onclick="enviarSlack()" disabled>💬 Enviar no Slack</button>
+        <button class="btn btn-gh" onclick="copiarMsgSlack()">📋 Copiar msg Slack</button>
+        <button class="btn btn-gh" onclick="backTo('v2-sup','v2-dl','v2',1,3)">← Voltar</button>
+        <button class="btn btn-gh" onclick="resetAll()">↺ Nova validação</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<script>
+const D = {
+  log: null, cons: null,
+  v1: { newARs:[], jallMap:{}, report:[] },
+  v2: { newARs:[], report:[] }
+};
+
+const $ = id => document.getElementById(id);
+const today = () => new Date().toLocaleDateString('pt-BR').replace(/\//g,'-');
+const todayFull = () => new Date().toLocaleDateString('pt-BR'); // DD/MM/YYYY para gravar
+
+function load(msg){ $('lmsg').textContent=msg||'Processando...'; $('loader').classList.add('on'); }
+function unload(){ $('loader').classList.remove('on'); }
+function sp(id){ const e=$(id); if(!e)return; e.classList.add('on'); e.classList.remove('hidden'); }
+function hp(id){ const e=$(id); if(!e)return; e.classList.remove('on'); }
+
+function setStep(prefix,cur,max){
+  for(let i=0;i<max;i++){
+    const e=$(`${prefix}s${i}`); if(!e)continue;
+    e.classList.remove('on','dn');
+    if(i<cur) e.classList.add('dn');
+    else if(i===cur) e.classList.add('on');
+  }
+}
+
+function normAR(v){ return String(v??'').trim().toUpperCase(); }
+function normCPF(v){ return String(v??'').replace(/\D/g,''); }
+function fmtD(v){
+  if(!v) return '';
+  if(v instanceof Date) return v.toLocaleDateString('pt-BR');
+  if(typeof v==='number') return new Date((v-25569)*86400*1000).toLocaleDateString('pt-BR');
+  return String(v);
+}
+
+function readWB(file){
+  return new Promise((res,rej)=>{
+    const r=new FileReader();
+    r.onload=e=>{
+      try{ res(XLSX.read(e.target.result,{type:'binary',cellDates:true})); }
+      catch(ex){ rej(ex); }
+    };
+    r.onerror=rej;
+    r.readAsBinaryString(file);
+  });
+}
+
+function wbToRows(wb,sheetIndex){
+  const ws=wb.Sheets[wb.SheetNames[sheetIndex]];
+  return XLSX.utils.sheet_to_json(ws,{header:1,defval:''});
+}
+function wbToRowsByName(wb,name){
+  const ws=wb.Sheets[name]; if(!ws)return null;
+  return XLSX.utils.sheet_to_json(ws,{header:1,defval:''});
+}
+
+function renderStats(id,arr){
+  $(id).innerHTML=arr.map(s=>`<div class="stat"><div class="n ${s.c}">${s.n}</div><div class="l">${s.l}</div></div>`).join('');
+}
+function renderTable(id,rows,cols){
+  const el=$(id);
+  if(!rows||!rows.length){ el.innerHTML='<div class="empty"><div class="ico">🎉</div><p>Nenhuma AR nova encontrada</p></div>'; return; }
+  let h='<div class="tbl-wrap"><table><thead><tr>';
+  cols.forEach(c=>h+=`<th>${c.l}</th>`);
+  h+='</tr></thead><tbody>';
+  rows.forEach(r=>{ h+='<tr>'; cols.forEach(c=>h+=`<td>${r[c.k]??''}</td>`); h+='</tr>'; });
+  h+='</tbody></table></div>';
+  el.innerHTML=h;
+}
+function alertEl(type,title,msg){
+  const icons={ok:'✅',info:'ℹ️',err:'❌',warn:'⚠️'};
+  return `<div class="al al-${type}"><div class="al-icon">${icons[type]||'ℹ️'}</div>
+    <div class="al-body"><strong>${title}</strong>${msg?`<span style="font-family:'DM Mono',monospace;font-size:12px"> ${msg}</span>`:''}</div></div>`;
+}
+
+// ══ SHEETS STATUS HELPERS ════════════════════════════════════════════════════
+function sheetsCard(elId, estado, titulo, detalhe){
+  const icons = { idle:'📊', loading:'⏳', ok:'✅', err:'❌', warn:'⚠️' };
+  $(elId).innerHTML = `
+    <div class="sheets-status-card sheets-${estado}">
+      <div class="sheets-icon">${icons[estado]||'📊'}</div>
+      <div class="sheets-body">
+        <strong>${titulo}</strong>
+        ${detalhe ? `<span>${detalhe}</span>` : ''}
+      </div>
+    </div>`;
+}
+
+// ══ VALIDAÇÃO JALL — bloqueia se NumCorreios vazio em V1 ══════════════════════
+function v1TemCorreiosVazios(){
+  return D.v1.newARs.some(r => !r.NumCorreios || !r.NumCorreios.trim());
+}
+
+// ══ GRAVAÇÃO NO SHEETS ═══════════════════════════════════════════════════════
+async function gravarNoSheets(tipo, rows, statusElId) {
+  const url = $('gs-url').value.trim();
+
+  if (!url || !url.startsWith('https://script.google.com')) {
+    sheetsCard(statusElId, 'warn',
+      'Integração com Sheets não configurada',
+      'Configure a URL do Apps Script nas opções acima para gravar automaticamente no Consolidado CRM.');
+    return;
+  }
+
+  if (!rows || rows.length === 0) {
+    sheetsCard(statusElId, 'idle',
+      tipo === 'retirada' ? 'Aguardando Retirada' : 'Endereço Incorreto',
+      'Nenhuma AR nova para gravar.');
+    return;
+  }
+
+  sheetsCard(statusElId, 'loading',
+    `Gravando ${rows.length} AR(s) no Consolidado CRM...`, '');
+
+  try {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ tipo, rows })
+    });
+
+    const data = await res.json();
+
+    if (data.ok) {
+      const partes = [];
+      if (data.gravadas > 0)   partes.push(`✅ <strong>${data.gravadas} AR(s) incluída(s)</strong> na aba <em>${data.aba}</em>`);
+      if (data.duplicatas > 0) partes.push(`⚠️ ${data.duplicatas} AR(s) ignorada(s) por já existirem`);
+      if (data.gravadas === 0 && data.duplicatas === 0) partes.push('Nenhuma AR nova para gravar.');
+      sheetsCard(statusElId, data.gravadas > 0 ? 'ok' : 'idle',
+        `Consolidado CRM — ${data.aba}`,
+        partes.join('<br>'));
+    } else {
+      throw new Error(data.erro || 'Erro desconhecido no Apps Script.');
+    }
+  } catch(err) {
+    sheetsCard(statusElId, 'err',
+      'Erro ao gravar no Consolidado CRM',
+      `${err.message} — Verifique a URL do Apps Script e as permissões da planilha.`);
+  }
+}
+
+function saveConf(){
+  ['tab1','tab2','em-to','em-cc','sl-webhook','sl-canal','gs-url'].forEach(k=>{
+    const el=$(k); if(el) localStorage.setItem(k,el.value);
+  });
+}
+function loadConf(){
+  ['tab1','tab2','em-to','em-cc','sl-webhook','sl-canal','gs-url'].forEach(k=>{
+    const v=localStorage.getItem(k); if(v&&$(k)) $(k).value=v;
+  });
+}
+
+function switchVTab(idx){
+  document.querySelectorAll('.vtab').forEach((b,i)=>b.classList.toggle('on',i===idx));
+  document.querySelectorAll('.panel').forEach((p,i)=>p.classList.toggle('on',i===idx));
+}
+
+async function loadFile(type,input){
+  const file=input.files[0]; if(!file)return;
+  const st=$(`st-${type}`), card=$(`c-${type}`);
+  st.textContent='Carregando...'; st.className='ust wt';
+  try{
+    const wb=await readWB(file);
+    D.log=wbToRows(wb,0);
+    st.textContent=`✓ ${file.name} · ${D.log.length-1} linhas`;
+    st.className='ust ok'; card.classList.add('ok');
+    checkReady();
+  }catch(e){ st.textContent='✗ Erro ao ler arquivo'; st.className='ust er'; }
+}
+
+function checkReady(){
+  const ready = D.log != null;
+  $('run-btn').disabled = !ready;
+  $('run-hint').textContent = ready
+    ? 'Planilha carregada. Clique em Rodar conferência.'
+    : 'Carregue a planilha de Logística para habilitar a conferência.';
+}
+
+async function runAll(){
+  saveConf();
+
+  const url = $('gs-url').value.trim();
+  if (!url || !url.startsWith('https://script.google.com')) {
+    alert('Configure a URL do Apps Script na seção "Integração com Google Sheets" acima.');
+    return;
+  }
+
+  load('Consultando Consolidado CRM online...');
+  await new Promise(r => setTimeout(r, 150));
+
+  // ── Busca ARs existentes direto do Sheets ──
+  let consOnline;
+  try {
+    const res  = await fetch(`${url}?acao=listar`);
+    const data = await res.json();
+    if (!data.ok) throw new Error(data.erro || 'Erro ao consultar o Consolidado.');
+    consOnline = data;
+    $('st-cons').textContent = `✓ Consolidado consultado online · ${data.retirada.length + data.endereco.length} ARs já registradas`;
+    $('st-cons').style.color = 'var(--gn)';
+  } catch(err) {
+    unload();
+    alert(`Erro ao buscar o Consolidado online:\n${err.message}\n\nVerifique a URL do Apps Script e tente novamente.`);
+    return;
+  }
+
+  load('Cruzando dados...');
+  await new Promise(r => setTimeout(r, 100));
+
+  processV1(consOnline.retirada);
+  processV2(consOnline.endereco);
+
+  unload();
+  $('results').classList.add('show');
+  $('results').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function processV1(existingARsArr){
+  const log=D.log;
+  const start=log[0]&&log[0].some(h=>/AR|status/i.test(String(h)))?1:0;
+  const existing=new Set(existingARsArr.map(a=>String(a).trim().toUpperCase()));
+  let filtered=0; const newARs=[]; const seen=new Set();
+  for(let i=start;i<log.length;i++){
+    const row=log[i];
+    if(String(row[23]??'').trim().toLowerCase()!=='aguardando retirada') continue;
+    filtered++;
+    const ar=normAR(row[10]);
+    if(!ar||existing.has(ar)||seen.has(ar)) continue;
+    seen.add(ar);
+    newARs.push({ AR:ar, Nome:String(row[11]??'').trim(), CPF:normCPF(row[12]),
+      Status:String(row[23]??'').trim(), Data:fmtD(row[6]), NumCorreios:'', UserID:'' });
+  }
+  D.v1.newARs=newARs;
+  renderStats('v1-stats',[{n:filtered,l:'Filtradas',c:'n-bl'},{n:existing.size,l:'Já no consolidado',c:'n-yl'},{n:newARs.length,l:'ARs novas',c:'n-pk'}]);
+  renderTable('v1-tbl',newARs,[{k:'AR',l:'Nº AR'},{k:'Nome',l:'Nome'},{k:'CPF',l:'CPF'},{k:'Status',l:'Status'},{k:'Data',l:'Data'}]);
+  $('v1-alert').innerHTML=newARs.length===0
+    ?alertEl('ok','Tudo em dia!','Nenhuma AR nova para adicionar.')
+    :alertEl('info',`${newARs.length} ARs novas encontradas.`,'Continue para buscar os números dos Correios no JALL.');
+}
+
+function v1ToJall(){
+  setStep('v1',1,4); hp('v1-r'); sp('v1-j');
+  $('v1-arlist').textContent=D.v1.newARs.length?D.v1.newARs.map(r=>r.AR).join('\n'):'Nenhuma AR nova para pesquisar.';
+}
+
+async function loadJall(input){
+  const file=input.files[0]; if(!file)return;
+  const st=$('st-jall'); st.textContent='Carregando...'; st.className='ust wt';
+  try{
+    const wb=await readWB(file);
+    D.v1.jallData=wbToRows(wb,0);
+    st.textContent=`✓ ${file.name}`; st.className='ust ok';
+    $('v1-jbtn').disabled=false;
+  }catch(e){ st.textContent='✗ Erro'; st.className='ust er'; }
+}
+
+function procJall(){
+  const jd=D.v1.jallData; if(!jd)return;
+  const map={};
+  for(let i=1;i<jd.length;i++){ const ar=normAR(jd[i][0]),num=String(jd[i][1]??'').trim(); if(ar)map[ar]=num; }
+  D.v1.jallMap=map;
+  D.v1.newARs.forEach(r=>{ r.NumCorreios=map[r.AR]||''; });
+  v1ToSup();
+}
+
+function v1ToSup(){
+  setStep('v1',2,4); hp('v1-j'); sp('v1-sup');
+  const tb=$('v1-sbody'); tb.innerHTML='';
+  D.v1.newARs.forEach((r,i)=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td style="color:var(--tx3)">${i+1}</td><td>${r.AR}</td><td>${r.Nome}</td><td>${r.CPF}</td><td>${r.NumCorreios||'—'}</td>`;
+    tb.appendChild(tr);
+  });
+  $('v1-uid-lote').value=D.v1.newARs.map(r=>r.UserID).filter(Boolean).join('\n');
+  $('v1-lote-status').textContent='';
+}
+
+function applyLoteV1(){
+  const lines=$('v1-uid-lote').value.split('\n').map(l=>l.trim());
+  let filled=0;
+  D.v1.newARs.forEach((r,i)=>{ r.UserID=lines[i]||''; if(lines[i])filled++; });
+  $('v1-lote-status').textContent=`${filled} de ${D.v1.newARs.length} UserIDs preenchidos`;
+}
+
+// ── V1 → Tela de Download (com validação de Nº Correios + gravação automática) ──
+function v1ToDl(){
+  // ── BLOQUEIO: Nº Correios vazio ──────────────────────────────────────────
+  const semCorreios = D.v1.newARs.filter(r => !r.NumCorreios || !r.NumCorreios.trim());
+  if (semCorreios.length > 0) {
+    const lista = semCorreios.map(r => r.AR).join(', ');
+    $('v1-alert').innerHTML = alertEl('err',
+      `Campo "AR Correios" obrigatório — ${semCorreios.length} AR(s) sem preenchimento`,
+      `Volte à etapa do JALL e preencha o número dos Correios para: ${lista}`
+    );
+    $('v1-alert').scrollIntoView({ behavior:'smooth', block:'center' });
+    return; // interrompe sem avançar
+  }
+
+  setStep('v1',3,4); hp('v1-sup'); sp('v1-dl');
+  renderStats('v1-fstats',[
+    {n:D.v1.newARs.length,l:'ARs no relatório',c:'n-pk'},
+    {n:D.v1.newARs.filter(r=>r.NumCorreios).length,l:'Com Nº Correios',c:'n-gn'},
+    {n:D.v1.newARs.filter(r=>r.UserID).length,l:'Com UserID',c:'n-bl'}
+  ]);
+  D.v1.report=D.v1.newARs.map(r=>({
+    'Número do AR':r.AR,'Nome do Cliente':r.Nome,'CPF':r.CPF,
+    'Último Status':r.Status,'Data':r.Data,'Número Correios':r.NumCorreios,'UserID':r.UserID
+  }));
+}
+
+function processV2(existingARsArr){
+  const log=D.log;
+  const start=log[0]&&log[0].some(h=>/AR|status/i.test(String(h)))?1:0;
+  const existing=new Set(existingARsArr.map(a=>String(a).trim().toUpperCase()));
+  const newARs=[]; const seen=new Set();
+  for(let i=start;i<log.length;i++){
+    const row=log[i]; const ar=normAR(row[10]);
+    if(!ar||existing.has(ar)||seen.has(ar)) continue;
+    seen.add(ar);
+    newARs.push({ AR:ar, Produto:String(row[9]??'').trim(), Nome:String(row[11]??'').trim(),
+      CPF:normCPF(row[12]), TipoBaixa:String(row[22]??'').trim(),
+      UltimoStatus:String(row[23]??'').trim(), MotivoMacro:String(row[25]??'').trim(),
+      Motivo:'Endereço errado/Insuficiente', UserID:'' });
+  }
+  const filtered_ars=newARs.filter(r=>{
+    const tb=r.TipoBaixa.toLowerCase(), st=r.UltimoStatus.toLowerCase(), mo=r.MotivoMacro.toLowerCase();
+    return (tb.includes('custód')||tb.includes('custodia'))
+      &&st.includes('aguardando telemarketing')
+      &&(mo.includes('endereço')||mo.includes('endereco')||mo.includes('insuficiente'));
+  });
+  D.v2.newARs=filtered_ars;
+  renderStats('v2-stats',[{n:newARs.length,l:'ARs novas (sem consolidado)',c:'n-bl'},{n:existing.size,l:'Já no consolidado',c:'n-yl'},{n:filtered_ars.length,l:'ARs endereço incorreto',c:'n-pk'}]);
+  renderTable('v2-tbl',filtered_ars,[{k:'AR',l:'Nº AR'},{k:'Produto',l:'Produto'},{k:'Nome',l:'Nome'},{k:'CPF',l:'CPF'},{k:'Motivo',l:'Motivo'}]);
+  $('v2-alert').innerHTML=filtered_ars.length===0
+    ?alertEl('ok','Tudo em dia!','Nenhuma AR nova.')
+    :alertEl('info',`${filtered_ars.length} ARs novas de endereço incorreto.`,'Continue para preencher UserIDs no Superset.');
+}
+
+function v2ToSup(){
+  setStep('v2',1,3); hp('v2-r'); sp('v2-sup');
+  const tb=$('v2-sbody'); tb.innerHTML='';
+  D.v2.newARs.forEach((r,i)=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td style="color:var(--tx3)">${i+1}</td><td>${r.AR}</td><td>${r.Produto}</td><td>${r.Nome}</td><td>${r.CPF}</td>`;
+    tb.appendChild(tr);
+  });
+  $('v2-uid-lote').value=D.v2.newARs.map(r=>r.UserID).filter(Boolean).join('\n');
+  $('v2-lote-status').textContent='';
+}
+
+function applyLoteV2(){
+  const lines=$('v2-uid-lote').value.split('\n').map(l=>l.trim());
+  let filled=0;
+  D.v2.newARs.forEach((r,i)=>{ r.UserID=lines[i]||''; if(lines[i])filled++; });
+  $('v2-lote-status').textContent=`${filled} de ${D.v2.newARs.length} UserIDs preenchidos`;
+}
+
+// ── V2 → Tela final + gravação automática em ambas as abas ───────────────────
+async function v2ToDl(){
+  setStep('v2',2,3); hp('v2-sup'); sp('v2-dl');
+
+  const t=today();
+  const qtdV1=D.v1.newARs.length, qtdV2=D.v2.newARs.length;
+  $('email-subj').value=`Base CRM — Aguardando Retirada e Endereço Incorreto — ${t}`;
+  $('email-msg').value=`Olá, pessoal! Espero que estejam bem.\n\nSegue em anexo a planilha com a base de clientes para envio de WhatsApp.\nOs casos foram organizados em abas separadas, conforme abaixo:\n\n• ARs com status "Aguardando Retirada": ${qtdV1}\n• ARs com endereço errado/insuficiente: ${qtdV2}\n\nFico à disposição caso tenham qualquer dúvida ou precisem de algum ajuste na base.\n\nAtenciosamente,`;
+  $('slack-msg').value=`📦 *Base CRM — ${t}*\n\nSegue o resumo da conferência de ARs de hoje:\n\n• 📥 *Aguardando Retirada:* ${qtdV1} ARs novas\n• 📍 *Endereço Incorreto:* ${qtdV2} ARs novas\n\nRelatórios gerados e e-mail enviado para o time. Qualquer dúvida, é só chamar! 🙌`;
+
+  const hasWebhook=$('sl-webhook').value.trim().startsWith('https://hooks.slack.com');
+  $('slack-btn').disabled=!hasWebhook;
+  const statusEl=$('slack-status');
+  if(!hasWebhook){
+    statusEl.textContent='⚠️ Configure o Webhook URL do Slack acima para habilitar o envio direto. Ou use "Copiar msg Slack" para colar manualmente.';
+    statusEl.style.color='var(--yl)';
+  } else {
+    statusEl.textContent='';
+  }
+
+  renderStats('v2-fstats',[{n:D.v2.newARs.length,l:'ARs no relatório',c:'n-pk'},{n:D.v2.newARs.filter(r=>r.UserID).length,l:'Com UserID',c:'n-gn'}]);
+
+  D.v2.report=D.v2.newARs.map(r=>({'Produto':r.Produto,'Número do AR':r.AR,'Nome do Cliente':r.Nome,'CPF':r.CPF,'Motivo Devolução':r.Motivo,'UserID':r.UserID}));
+
+  // ── GRAVAÇÃO AUTOMÁTICA NO SHEETS ──────────────────────────────────────
+  const dataEnvio = todayFull();
+
+  // Prepara payload Aguardando Retirada
+  const rowsV1 = D.v1.newARs.map(r => ({
+    'Numero do AR':    r.AR,
+    'Nome do Cliente': r.Nome,
+    'CPF':             r.CPF,
+    'Ultimo Status':   r.Status,
+    'AR Correios':     r.NumCorreios,
+    'Userid':          r.UserID,
+    'Data envio':      dataEnvio
+  }));
+
+  // Prepara payload Endereço Incorreto
+  const rowsV2 = D.v2.newARs.map(r => ({
+    'Numero do AR':    r.AR,
+    'Nome do Cliente': r.Nome,
+    'CPF':             r.CPF,
+    'Produto':         r.Produto,
+    'Motivo devolucao': r.Motivo,
+    'Userid':          r.UserID,
+    'Data envio':      dataEnvio
+  }));
+
+  // Exibe cards de status e dispara em paralelo
+  sheetsCard('sheets-status-v1', 'loading', 'Gravando Aguardando Retirada...', '');
+  sheetsCard('sheets-status-v2', 'loading', 'Gravando Endereço Incorreto...', '');
+
+  gravarNoSheets('retirada', rowsV1, 'sheets-status-v1');
+  gravarNoSheets('endereco', rowsV2, 'sheets-status-v2');
+}
+
+function dlXlsx(v){
+  const rows=D[v].report;
+  if(!rows||!rows.length){ alert('Nenhum dado para exportar.'); return; }
+  const t=today();
+  const name=v==='v1'?`Aguardando Retirada ${t}`:`Endereço Incorreto ${t}`;
+  const ws=XLSX.utils.json_to_sheet(rows);
+  ws['!cols']=Object.keys(rows[0]).map(k=>({wch:Math.max(k.length+2,18)}));
+  const wb=XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb,ws,name.substring(0,31));
+  XLSX.writeFile(wb,`${name}.xlsx`);
+}
+
+function openEmailUnificado(){
+  const to=$('em-to').value.trim(), cc=$('em-cc').value.trim();
+  const subj=$('email-subj').value.trim(), msg=$('email-msg').value.trim();
+  if(!to){ mostrarToast('Preencha o e-mail destinatário na configuração acima.',true); return; }
+  const ccParam=cc?`&cc=${encodeURIComponent(cc)}`:'';
+  const url=`https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(to)}${ccParam}&su=${encodeURIComponent(subj)}&body=${encodeURIComponent(msg)}`;
+  window.open(url,'_blank');
+  mostrarToast('E-mail aberto no Gmail! Lembre de anexar os dois arquivos .xlsx.');
+}
+
+async function enviarSlack(){
+  const webhook=$('sl-webhook').value.trim();
+  const msg=$('slack-msg').value.trim();
+  const statusEl=$('slack-status');
+  if(!webhook){ mostrarToast('Configure o Webhook do Slack.',true); return; }
+  if(!msg){ mostrarToast('A mensagem do Slack está vazia.',true); return; }
+  $('slack-btn').disabled=true;
+  statusEl.textContent='⏳ Enviando...'; statusEl.style.color='var(--tx3)';
+  try{
+    const res=await fetch(webhook,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({text:msg})
+    });
+    if(res.ok){
+      statusEl.textContent='✅ Mensagem enviada com sucesso!'; statusEl.style.color='var(--gn)';
+      mostrarToast('Mensagem enviada no Slack!');
+    } else { throw new Error(`HTTP ${res.status}`); }
+  }catch(e){
+    statusEl.innerHTML='⚠️ CORS bloqueou o envio direto (comum ao abrir o arquivo localmente). <a href="#" onclick="copiarMsgSlack();return false;" style="color:var(--bl)">Clique aqui para copiar a mensagem</a> e cole no canal do Slack.';
+    statusEl.style.color='var(--yl)';
+    mostrarToast('Copie a mensagem e cole no Slack manualmente.',true);
+  }finally{ $('slack-btn').disabled=false; }
+}
+
+function copiarMsgSlack(){
+  const msg=$('slack-msg').value.trim();
+  if(!msg){ mostrarToast('Mensagem vazia.',true); return; }
+  navigator.clipboard.writeText(msg).then(()=>mostrarToast('Mensagem do Slack copiada!')).catch(()=>{
+    const ta=document.createElement('textarea');
+    ta.value=msg; document.body.appendChild(ta); ta.select();
+    document.execCommand('copy'); document.body.removeChild(ta);
+    mostrarToast('Mensagem do Slack copiada!');
+  });
+}
+
+function mostrarToast(msg,erro=false){
+  let toast=$('toast');
+  if(!toast){
+    toast=document.createElement('div'); toast.id='toast';
+    toast.style.cssText='position:fixed;bottom:28px;right:28px;background:var(--s2);border:1px solid var(--bd2);border-radius:var(--rs);padding:12px 18px;font-size:13px;font-family:"DM Mono",monospace;color:var(--tx);z-index:999;opacity:0;transform:translateY(8px);transition:all .3s;pointer-events:none;display:flex;align-items:center;gap:8px;max-width:320px;box-shadow:0 8px 24px rgba(0,0,0,.4)';
+    document.body.appendChild(toast);
+  }
+  toast.style.borderColor=erro?'var(--rd)':'var(--gn)';
+  toast.innerHTML=(erro?'❌':'✅')+' '+msg;
+  requestAnimationFrame(()=>{ toast.style.opacity='1'; toast.style.transform='translateY(0)'; });
+  clearTimeout(toast._t);
+  toast._t=setTimeout(()=>{ toast.style.opacity='0'; toast.style.transform='translateY(8px)'; },3200);
+}
+
+function backTo(showId,hideId,prefix,step,max){
+  hp(hideId); sp(showId); setStep(prefix,step,max);
+  $(showId).scrollIntoView({behavior:'smooth',block:'start'});
+}
+function backToUpload(){
+  $('results').classList.remove('show');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function resetAll(){
+  D.log=null; D.cons=null;
+  D.v1={newARs:[],jallMap:{},report:[]}; D.v2={newARs:[],report:[]};
+  ['f-log','f-jall'].forEach(id=>{ const e=$(id); if(e)e.value=''; });
+  $('c-log').classList.remove('ok');
+  $('st-log').textContent='Nenhum arquivo carregado'; $('st-log').className='ust wt';
+  $('st-cons').textContent='Será consultado ao rodar a conferência'; $('st-cons').style.color='var(--tx3)';
+  $('run-btn').disabled=true;
+  $('run-hint').textContent='Carregue a planilha de Logística para habilitar a conferência.';
+  $('results').classList.remove('show');
+  ['v1-r','v2-r'].forEach(sp);
+  ['v1-j','v1-sup','v1-dl','v2-sup','v2-dl'].forEach(hp);
+  setStep('v1',0,4); setStep('v2',0,3);
+  $('v1-jbtn').disabled=true;
+  $('st-jall').textContent='Aguardando arquivo'; $('st-jall').className='ust wt';
+  ['sheets-status-v1','sheets-status-v2'].forEach(id=>{ const e=$(id); if(e) e.innerHTML=''; });
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function initDrop(){
+  document.querySelectorAll('.ucard,.jall-drop').forEach(card=>{
+    card.addEventListener('dragover',e=>{ e.preventDefault(); card.classList.add('drag'); });
+    card.addEventListener('dragleave',()=>card.classList.remove('drag'));
+    card.addEventListener('drop',e=>{
+      e.preventDefault(); card.classList.remove('drag');
+      const file=e.dataTransfer.files[0];
+      const input=card.querySelector('input[type=file]');
+      if(file&&input){ const dt=new DataTransfer(); dt.items.add(file); input.files=dt.files; input.dispatchEvent(new Event('change')); }
+    });
+  });
+}
+
+document.addEventListener('DOMContentLoaded',()=>{ loadConf(); initDrop(); });
+</script>
+</body>
+</html>
